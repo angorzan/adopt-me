@@ -1,0 +1,1 @@
+Jesteś ekspertem od prompt engineer, AI i planowania i tworzenia projektów z wykorzystaniem AI. Przeanalizuj załączone pliki z materiałami szkoleniowymi.

@@ -6,22 +6,23 @@ AdoptMe to aplikacja webowa wspierająca adopcję psów w Polsce. Użytkownicy r
 Osoby chcące adoptować psa mają problem ze znalezieniem zwierzęcia do swojego stylu życia, brakuje im kompletnych informacji o psach i ich potrzebach. Schroniska toną w wnioskach przesyłanych różnymi kanałami, odpowiadają po długim czasie lub gubią zgłoszenia. Przygotowanie użytkownika do adopcji i zbudowanie relacji z konkretnym schroniskiem jest czasochłonne. AdoptMe rozwiązuje te problemy, dostarczając sprawny katalog, ustrukturyzowany formularz wniosków i moduł edukacyjny.
 
 ## 3. Wymagania funkcjonalne
-### 3.1 Zakres MVP
-1. Rejestracja i logowanie użytkowników z wymaganą akceptacją zgód RODO oraz weryfikacją e-mail.
-2. Profil stylu życia z możliwością edycji, wersjonowaniem danych i logowaniem zmian (typ mieszkania, liczba domowników, aktywność, doświadczenie z psami).
-3. Przejrzysty katalog psów dodawany przez schroniska, z obowiązkowymi polami: zdjęcie, wiek, temperament, wymagania zdrowotne, status adopcji.
-4. Filtrowanie i wyszukiwanie psów według podstawowych kryteriów (lokalizacja schroniska, wielkość psa, wiek, temperament).
-5. Stworzenie wniosku adopcyjnego powiązanego z użytkownikiem i konkretnym psem (dane personalne, powód adopcji, preferowany kontakt, załączniki).
-6. Możliwość edycji lub anulowania wniosku do momentu decyzji schroniska i pełna historia zmian.
-7. Panel schroniska z listą wniosków, możliwością zaakceptowania, odrzucenia lub oznaczenia sprawy do kontaktu, przy SLA maksymalnie 5 dni roboczych.
-8. System powiadomień w aplikacji oraz e-mail dotyczących rejestracji, złożenia wniosku, aktualizacji statusu i przypomnień SLA.
-9. Mechanizm kontroli jakości danych psów: ukrycie kart przy brakach danych, alert do zespołu i opcja ręcznego uzupełnienia informacji.
+### 3.1 Zakres MVP (2 tygodnie)
+1. Rejestracja i logowanie użytkowników z akceptacją zgód RODO oraz weryfikacją e-mail.
+2. Skrócony profil stylu życia z polami: typ mieszkania, liczba domowników (z uwzględnieniem dzieci), doświadczenie z psami, poziom aktywności, preferowany typ psa.
+3. Katalog psów oparty o wbudowany zestaw danych (bez uploadu zdjęć), prezentujący imię, wiek, wielkość, temperament, informacje zdrowotne oraz lokalizację schroniska.
+4. Filtrowanie psów po co najmniej wielkości i wieku; wyszukiwanie po nazwie lub mieście.
+5. Formularz wniosku adopcyjnego zapisujący dane użytkownika, wybranego psa, powód adopcji, preferowany kontakt i uwagi dodatkowe. Wniosek nie podlega edycji po wysłaniu.
+6. Panel schroniska z listą wniosków, możliwością ustawienia statusu (nowy, w trakcie, zaakceptowany, odrzucony) oraz dodaniem krótkiego komentarza.
+7. Prosty moduł rekomendacji AI: po wypełnieniu ankiety z 3–5 pytaniami zamkniętymi system wywołuje usługę AI (np. prompt do modelu przez OpenRouter) i otrzymuje propozycję jednego psa z dostępnych rekordów.
+8. Udostępniony plik `data/dogs.json` (oraz opcjonalnie tabela w Supabase) jako źródło danych dla katalogu i modułu AI.
 
 ### 3.2 Funkcje planowane po MVP
-- Tygodniowe raporty dla schronisk (lista wniosków, adopcje zakończone, średnia ocena dopasowania).
-- Automatyczna ankieta po 30 dniach od adopcji dla użytkowników i schronisk oraz agregacja wyników.
-- Rozszerzone testy dostępności zgodnie z WCAG 2.1 AA i dedykowane sesje z użytkownikami o specjalnych potrzebach.
-- Uwierzytelnianie dwuskładnikowe dla pracowników schronisk.
+- Rozbudowany profil stylu życia (więcej pól, wersjonowanie danych).
+- Edycja lub anulowanie wniosku przez użytkownika i historia zmian.
+- System powiadomień e-mail/in-app z logowaniem doręczeń i przypomnieniami.
+- Mechanizmy kontroli jakości danych psów (alerty, ukrywanie kart, zadania dla schronisk).
+- Tygodniowe raporty dla schronisk oraz automatyczna ankieta po 30 dniach od adopcji.
+- Rozszerzone testy dostępności, 2FA, importy danych i zaawansowany moduł AI (np. wielokryterialne dopasowanie, feedback loop).
 
 ## 4. Granice produktu
 ### 4.1 Zakres wykluczony w MVP
@@ -41,120 +42,105 @@ Osoby chcące adoptować psa mają problem ze znalezieniem zwierzęcia do swojeg
 - Brak rozliczeń za usługi; adopcje traktowane są jako proces społeczny.
 
 ## 5. Historyjki użytkowników
-### 5.1 Zakres MVP
+### 5.1 Zakres MVP (2 tygodnie)
 ### US-001 Rejestracja konta
 Opis: Jako osoba chcąca adoptować psa chcę założyć konto i zaakceptować zgody, aby móc korzystać z systemu.
 Kryteria akceptacji:
-A. Formularz rejestracji zbiera e-mail, hasło, imię i nazwisko, zgody RODO, zgody na powiadomienia.
-B. Email weryfikacyjny wysyłany automatycznie, konto aktywne dopiero po potwierdzeniu.
+A. Formularz rejestracji zbiera e-mail, hasło, imię i nazwisko, zgody RODO.
+B. Email weryfikacyjny wysyłany automatycznie, konto aktywne po potwierdzeniu.
 C. Błędne dane wyświetlają komunikat walidacyjny.
 D. Login wymaga wcześniejszej weryfikacji e-mail.
 
-### US-002 Logowanie i reset hasła
-Opis: Jako zarejestrowany użytkownik chcę się zalogować i móc zresetować hasło.
+### US-002 Skrócony profil stylu życia
+Opis: Jako użytkownik chcę krótko opisać mój styl życia, aby schronisko mogło ocenić dopasowanie psa.
 Kryteria akceptacji:
-A. Formularz loginu przyjmuje e-mail i hasło, weryfikuje dane z bazą.
-B. Link „Nie pamiętam hasła” wysyła jednorazowe hasło resetujące ważne 60 minut.
-C. Po trzech nieudanych próbach konto blokuje się na 15 minut.
-D. Zalogowany użytkownik jest przekierowany do dashboardu.
+A. Formularz zawiera pola: typ mieszkania, liczba domowników (z uwzględnieniem dzieci), doświadczenie z psami, poziom aktywności, preferowany typ psa.
+B. Wszystkie pola są obowiązkowe; przy braku danych system wyświetla komunikat.
+C. Dane można edytować w dowolnym momencie, zapisując nową wersję (bez historii zmian).
+D. Profil jest dostępny w panelu schroniska przy każdym wniosku.
 
-### US-003 Uzupełnienie profilu stylu życia
-Opis: Jako użytkownik chcę podać informacje o stylu życia, aby system lepiej dopasował psa.
+### US-003 Przeglądanie katalogu psów
+Opis: Jako użytkownik chcę zobaczyć listę psów dostępnych do adopcji i znaleźć interesujące mnie przypadki.
 Kryteria akceptacji:
-A. Formularz zawiera pola: typ mieszkania, metraż, liczba domowników, dzieci, godziny pracy, aktywność fizyczna, doświadczenie z psami, inne zwierzęta.
-B. Wypełnienie wszystkich obowiązkowych pól jest wymagane.
-C. Dane są wersjonowane i logowane; historia jest dostępna dla schroniska.
-D. Przy zmianie krytycznych pól system prosi o potwierdzenie dokumentem lub kontakt telefoniczny (flaga do obsługi manualnej).
+A. Lista psów prezentuje imię, wiek, wielkość, temperament, informacje zdrowotne i lokalizację schroniska.
+B. Użytkownik może filtrować psy po wielkości oraz wieku (kategorie np. szczeniak/dorosły/senior).
+C. Wyszukiwanie po nazwie psa lub mieście zwraca dopasowane rekordy.
+D. Dane psów wczytywane są z pliku `data/dogs.json` lub z tabeli Supabase wypełnionej na bazie tego pliku.
 
-### US-004 Przeglądanie katalogu psów
-Opis: Jako użytkownik chcę przeglądać psy i filtrować je według kryteriów.
-Kryteria akceptacji:
-A. Lista psów wyświetla nazwę, zdjęcie, wiek, temperament, lokalizację schroniska i status adopcji.
-B. Filtrowanie według wieku, wielkości, województwa, temperamentów i statusu.
-C. Kliknięcie karty psa otwiera szczegółowy profil (historia, zdrowie, wymagania).
-D. Psy bez pełnych danych są ukryte z informacją o braku danych.
-
-### US-005 Złożenie wniosku adopcyjnego
+### US-004 Złożenie wniosku adopcyjnego
 Opis: Jako użytkownik chcę złożyć wniosek adopcyjny dla wybranego psa.
 Kryteria akceptacji:
-A. Wniosek powiązany jest z kontem użytkownika i identyfikatorem psa.
-B. Formularz zawiera pytania o powód adopcji, przygotowanie na zwierzę, preferowany kontakt, możliwe załączniki (PDF, JPG).
-C. Po wysłaniu wniosku użytkownik dostaje potwierdzenie e-mail i status „Oczekuje”.
-D. Wniosek trafia do panelu schroniska i rozpoczyna się odliczanie SLA 5 dni.
+A. Formularz przypisuje wniosek do zalogowanego użytkownika oraz identyfikatora psa.
+B. Wymagane pola: powód adopcji, preferowany kanał kontaktu, zgoda na przetwarzanie danych, pole na dodatkowe uwagi.
+C. Po wysłaniu wniosku użytkownik otrzymuje informację o zapisaniu zgłoszenia (bez powiadomienia e-mail).
+D. Wniosek nie może być edytowany ani anulowany; status domyślny „nowy”.
 
-### US-006 Edycja lub anulowanie wniosku
-Opis: Jako użytkownik chcę edytować lub anulować wniosek, dopóki nie został rozpatrzony.
+### US-005 Obsługa wniosków przez schronisko
+Opis: Jako pracownik schroniska chcę widzieć listę wniosków i zmieniać ich status.
 Kryteria akceptacji:
-A. Wnioski z statusem „Oczekuje” można edytować lub anulować.
-B. Edycje zapisywane są w historii wniosku, schronisko widzi ostatnią wersję.
-C. Anulowanie zmienia status na „Anulowany przez użytkownika”, system wysyła powiadomienie do schroniska.
-D. Po podjęciu decyzji przez schronisko edycja/anulowanie nie jest możliwe.
+A. Panel prezentuje listę wniosków z informacją o użytkowniku, psie i dacie zgłoszenia.
+B. Pracownik może ustawić status: „w trakcie”, „zaakceptowany”, „odrzucony”.
+C. Zmiana statusu może zawierać krótki komentarz (opcjonalny).
+D. Panel sortuje listę domyślnie po dacie zgłoszenia (najnowsze na górze).
 
-### US-007 Panel schroniska i obsługa wniosków
-Opis: Jako pracownik schroniska chcę widzieć listę wniosków i je rozpatrywać.
+### US-006 Rekomendacja psa przez AI
+Opis: Jako użytkownik chcę otrzymać propozycję psa dopasowanego do moich odpowiedzi na krótką ankietę.
 Kryteria akceptacji:
-A. Panel pokazuje wnioski „Nowe”, „W toku”, „Do kontaktu”, „Zakończone”, „Odrzucone”.
-B. Wniosek zawiera pełne dane użytkownika, historię zmian profilu, notatki.
-C. Pracownik może oznaczyć status (zaakceptowany, odrzucony, potrzebny kontakt) z komentarzem.
-D. System monitoruje SLA – po 4 dniach wysyła przypomnienie; po 5 dniach powiadamia administratora.
-
-### US-008 Powiadomienia transakcyjne
-Opis: Jako użytkownik lub pracownik schroniska chcę otrzymywać powiadomienia o kluczowych zdarzeniach, aby wiedzieć, na jakim etapie jest proces adopcji.
-Kryteria akceptacji:
-A. System wysyła e-mail i notyfikację w aplikacji po rejestracji, złożeniu wniosku, zmianie statusu oraz przed upływem SLA.
-B. Log powiadomień przechowuje datę, kanał, status doręczenia i identyfikator sprawy.
-C. Nieudane wysyłki są ponawiane automatycznie do trzech razy i oznaczane alertem.
-D. Użytkownik może w ustawieniach konta włączyć lub wyłączyć kanał e-mail, pozostawiając powiadomienia w aplikacji jako obowiązkowe.
-
-### US-009 Moderacja profili psów
-Opis: Jako administrator chcę móc czasowo ukryć profil psa, gdy brakuje danych.
-Kryteria akceptacji:
-A. Administrator widzi listę profili z flagą „brak danych”.
-B. Może ukryć profil i przypisać zadanie pracownikowi schroniska.
-C. System loguje datę ukrycia i powiadamia schronisko e-mailem.
-D. Po uzupełnieniu danych profil automatycznie wraca do katalogu po zatwierdzeniu.
+A. Ankieta zawiera 3–5 pytań zamkniętych (np. wielkość psa, poziom energii, relacja z dziećmi).
+B. Po wypełnieniu ankiety aplikacja tworzy prompt i przekazuje go do usługi AI (np. model przez OpenRouter) wraz z listą dostępnych psów.
+C. Model zwraca identyfikator lub opis jednego psa rekomendowanego użytkownikowi; wynik jest prezentowany obok katalogu.
+D. Jeśli model nie zwróci rekomendacji, użytkownik otrzymuje komunikat z sugestią ręcznego przeglądania katalogu.
 
 ### 5.2 Funkcje po MVP
-### US-010 Generowanie raportów
-Opis: Jako schronisko chcę otrzymywać raport tygodniowy.
+### US-007 Edycja lub anulowanie wniosku przez użytkownika
+Opis: Jako użytkownik chcę móc edytować lub anulować wniosek, jeśli sytuacja ulegnie zmianie.
 Kryteria akceptacji:
-A. Raport generowany co poniedziałek o 09:00 i wysyłany na e-mail schroniska oraz dostępny w panelu.
-B. Zawiera liczbę nowych wniosków, wniosków w toku, adopcji zakończonych, średnią ocenę dopasowania z ankiet.
-C. Można pobrać raport w PDF i CSV.
-D. Raport oznaczony jest identyfikatorem tygodnia i przechowywany min. 12 miesięcy.
+A. Dostępne tylko, gdy status wniosku to „nowy” lub „w trakcie”.
+B. Historia zmian przechowywana i widoczna dla schroniska.
+C. Anulowanie generuje powiadomienie dla schroniska.
+D. Przy zmianie statusu przez schronisko opcja edycji jest blokowana.
 
-### US-011 Ankieta po adopcji
-Opis: Jako użytkownik chcę otrzymać ankietę oceny dopasowania 30 dni po adopcji.
+### US-008 System powiadomień transakcyjnych
+Opis: Jako użytkownik lub pracownik schroniska chcę otrzymywać powiadomienia o kluczowych zdarzeniach.
 Kryteria akceptacji:
-A. System wysyła e-mail z linkiem do ankiety, powiązanej z wnioskiem.
-B. Ankieta zawiera 5 pytań zamkniętych (skala 1-5) i pole komentarza.
-C. Wypełnienie ankiety aktualizuje ocenę dopasowania w raporcie.
-D. Brak odpowiedzi w ciągu 7 dni powoduje wysłanie przypomnienia.
+A. System wysyła e-mail i notyfikację w aplikacji po rejestracji, złożeniu wniosku, zmianie statusu.
+B. Log powiadomień przechowuje datę, kanał oraz status doręczenia.
+C. Nieudane wysyłki są ponawiane automatycznie do trzech razy.
+D. Użytkownik może zarządzać zgodami na kanały komunikacji.
 
-### US-012 Dostępność i testy UX
-Opis: Jako zespół produktowy chcę potwierdzić zgodność interfejsu z WCAG 2.1 AA.
+### US-009 Moderacja profili psów
+Opis: Jako administrator chcę ukrywać profile psów z brakującymi danymi i przypisywać zadania schronisku.
 Kryteria akceptacji:
-A. Aplikacja spełnia wymagania kontrastu, nawigacji klawiaturą i alternatywnych opisów.
-B. Zespół przeprowadza testy z co najmniej dwiema osobami o specjalnych potrzebach.
-C. Raport z testów dokumentuje znalezione problemy i działania naprawcze.
-D. Zmiany dostępnościowe przechodzą test regresji.
+A. Administrator widzi listę profili z flagą „brak danych”.
+B. Ukrycie profilu generuje zadanie dla schroniska oraz powiadomienie e-mail.
+C. System loguje datę ukrycia i informację o uzupełnieniu.
+D. Profil wraca do katalogu po zatwierdzeniu zmian.
 
-### US-013 Bezpieczny dostęp dla schronisk
-Opis: Jako pracownik schroniska chcę logować się do panelu z uwierzytelnieniem dwuskładnikowym.
+### US-010 Raporty i ankiety
+Opis: Jako schronisko chcę otrzymywać raporty oraz informacje zwrotne po adopcjach.
 Kryteria akceptacji:
-A. Logowanie wymaga e-maila, hasła i kodu z aplikacji TOTP.
-B. Pierwsze logowanie po włączeniu 2FA wymaga skonfigurowania aplikacji i zapisania kodów zapasowych.
-C. Brak poprawnego kodu uniemożliwia dostęp i generuje alert bezpieczeństwa po trzech próbach.
-D. Administrator może resetować 2FA po weryfikacji tożsamości.
+A. Raport tygodniowy wysyłany automatycznie w poniedziałek rano i dostępny w panelu.
+B. Ankieta wysyłana 30 dni po adopcji, zawiera 5 pytań zamkniętych i pole komentarza.
+C. Wyniki ankiet zasilają metryki dopasowania.
+D. Brak odpowiedzi powoduje wysłanie przypomnienia.
+
+### US-011 Rozszerzone bezpieczeństwo i dostępność
+Opis: Jako zespół chcemy zapewnić 2FA i zgodność z WCAG 2.1 AA.
+Kryteria akceptacji:
+A. Pracownicy schronisk logują się z kodem TOTP.
+B. Przeprowadzamy testy z osobami o specjalnych potrzebach, raportujemy wyniki.
+C. Naprawiamy problemy wykryte w testach dostępności.
+D. Zachowujemy log audytowy zmian w ustawieniach bezpieczeństwa.
 
 ## 6. Metryki sukcesu
-### 6.1 MVP
-1. Minimum 60% zarejestrowanych użytkowników wypełnia pełny profil stylu życia w pierwszych dwóch tygodniach od rejestracji.
-2. Co najmniej 70% wniosków adopcyjnych otrzymuje decyzję w wymaganym SLA 5 dni roboczych.
-3. 95% powiadomień transakcyjnych zostaje doręczonych w ciągu 5 minut od zdarzenia.
-4. Brak istotnych naruszeń RODO (0 incydentów zgłoszonych do organu nadzoru) w ciągu pierwszych 12 miesięcy.
+### 6.1 MVP (2 tygodnie)
+1. Minimum 60% zarejestrowanych użytkowników wypełnia skrócony profil stylu życia w pierwszym tygodniu od rejestracji.
+2. Co najmniej 80% wniosków adopcyjnych otrzymuje zmianę statusu w panelu schroniska w ciągu 7 dni kalendarzowych.
+3. 90% operacji katalogu psów kończy się sukcesem (pobranie listy, filtrowanie, szczegóły) bez błędów krytycznych.
+4. Brak incydentów naruszeń danych (0 zgłoszeń RODO) w czasie realizacji MVP.
 
 ### 6.2 Po wdrożeniu rozszerzeń
 - 50% wniosków zakończonych adopcją skutkuje wypełnieniem ankiety po 30 dniach.
 - Średnia ocena dopasowania z ankiet użytkowników i schronisk wynosi minimum 4 w skali 1-5.
-- 100% raportów tygodniowych jest generowanych i wysyłanych zgodnie z harmonogramem.
+- 100% powiadomień transakcyjnych jest doręczanych w ciągu 5 minut od zdarzenia.
+- Raport tygodniowy generowany i wysyłany bezbłędnie w 100% przypadków.

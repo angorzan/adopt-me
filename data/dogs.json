@@ -1,0 +1,72 @@
+[
+  {
+    "id": "dog-001",
+    "name": "Luna",
+    "age": 2,
+    "size": "średnia",
+    "temperament": ["energiczna", "przyjazna"],
+    "health": "zdrowa, zaszczepiona, wysterylizowana",
+    "shelter": {
+      "name": "Schronisko Happy Paws",
+      "city": "Warszawa",
+      "contactEmail": "kontakt@happypaws.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-002",
+    "name": "Max",
+    "age": 5,
+    "size": "duża",
+    "temperament": ["spokojny", "cierpliwy"],
+    "health": "lekka alergia skórna, wymaga specjalnej karmy",
+    "shelter": {
+      "name": "Azyl Cztery Łapy",
+      "city": "Kraków",
+      "contactEmail": "adopcje@czterylapy.org"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-003",
+    "name": "Mela",
+    "age": 1,
+    "size": "mała",
+    "temperament": ["żywiołowa", "wymaga pracy szkoleniowej"],
+    "health": "zdrowa, po podstawowych szczepieniach",
+    "shelter": {
+      "name": "Fundacja Psi Uśmiech",
+      "city": "Gdańsk",
+      "contactEmail": "fundacja@psi-usmiech.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-004",
+    "name": "Borys",
+    "age": 7,
+    "size": "duża",
+    "temperament": ["zrównoważony", "lubi dzieci"],
+    "health": "stłuszczenie wątroby – wymaga regularnych badań",
+    "shelter": {
+      "name": "Schronisko Podaj Łapę",
+      "city": "Poznań",
+      "contactEmail": "info@podajlape.org"
+    },
+    "adoptionStatus": "w trakcie"
+  },
+  {
+    "id": "dog-005",
+    "name": "Tofi",
+    "age": 3,
+    "size": "średnia",
+    "temperament": ["towarzyska", "dogaduje się z innymi psami"],
+    "health": "zdrowa, czipowana, zaszczepiona",
+    "shelter": {
+      "name": "Schronisko Przytulisko",
+      "city": "Łódź",
+      "contactEmail": "biuro@przytulisko.pl"
+    },
+    "adoptionStatus": "dostępna"
+  }
+]

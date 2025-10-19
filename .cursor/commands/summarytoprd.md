@@ -1,4 +1,3 @@
-{{latest-round-answers}} <- twoja lista odpowiedzi na ostatnią rundę pytań
 
 ---
 

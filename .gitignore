@@ -24,3 +24,9 @@ pnpm-debug.log*
 .idea/
 
 /clues
+
+qemu-10.1.1/
+qemu
+lima/
+
+/vscode

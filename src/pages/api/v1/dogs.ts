@@ -21,6 +21,7 @@ export async function GET(ctx: APIContext): Promise<Response> {
     const ageCategoryFilter = url.searchParams.get('age_category');
     const searchQuery = url.searchParams.get('q');
     const cityFilter = url.searchParams.get('city');
+    const shelterFilter = url.searchParams.get('shelter');
 
     // Build query - only fetch available dogs
     let query = supabase
@@ -56,6 +57,11 @@ export async function GET(ctx: APIContext): Promise<Response> {
     // Apply city filter (filters by shelter city)
     if (cityFilter && cityFilter.trim()) {
       query = query.eq('shelters.city', cityFilter.trim());
+    }
+
+    // Apply shelter filter (filters by shelter name)
+    if (shelterFilter && shelterFilter.trim()) {
+      query = query.eq('shelters.name', shelterFilter.trim());
     }
 
     // Order by created_at descending (newest first)

@@ -7,6 +7,7 @@ async function fetchDogs(filters: DogFiltersViewModel): Promise<DTO.DogResponse[
   if (filters.size && filters.size !== 'all') params.append('size', filters.size);
   if (filters.age_category && filters.age_category !== 'all') params.append('age_category', filters.age_category);
   if (filters.city && filters.city !== 'all') params.append('city', filters.city);
+  if (filters.shelter && filters.shelter !== 'all') params.append('shelter', filters.shelter);
   if (filters.q) params.append('q', filters.q);
 
   const response = await fetch(`/api/v1/dogs?${params.toString()}`);

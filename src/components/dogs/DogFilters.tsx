@@ -11,7 +11,9 @@ interface DogFiltersProps {
 
 export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersProps) => {
   const [cities, setCities] = useState<string[]>([]);
+  const [shelters, setShelters] = useState<{ id: string; name: string }[]>([]);
   const [citiesLoading, setCitiesLoading] = useState(true);
+  const [sheltersLoading, setSheltersLoading] = useState(true);
 
   useEffect(() => {
     // Fetch available cities
@@ -24,6 +26,18 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
       .catch((err) => {
         console.error('Failed to load cities:', err);
         setCitiesLoading(false);
+      });
+
+    // Fetch available shelters
+    fetch('/api/v1/shelters')
+      .then((res) => res.json())
+      .then((data) => {
+        setShelters(data);
+        setSheltersLoading(false);
+      })
+      .catch((err) => {
+        console.error('Failed to load shelters:', err);
+        setSheltersLoading(false);
       });
   }, []);
 
@@ -82,6 +96,23 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
           <SelectItem value="puppy">Szczeniak</SelectItem>
           <SelectItem value="adult">Dorosły</SelectItem>
           <SelectItem value="senior">Senior</SelectItem>
+        </SelectContent>
+      </Select>
+      <Select
+        value={filters.shelter}
+        onValueChange={(value) => onFiltersChange({ shelter: value })}
+        disabled={isLoading || sheltersLoading}
+      >
+        <SelectTrigger className="w-full md:w-[180px]">
+          <SelectValue placeholder="Schronisko" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Wszystkie schroniska</SelectItem>
+          {shelters.map((shelter) => (
+            <SelectItem key={shelter.id} value={shelter.name}>
+              {shelter.name}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>

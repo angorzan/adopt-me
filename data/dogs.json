@@ -68,5 +68,215 @@
       "contactEmail": "biuro@przytulisko.pl"
     },
     "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-006",
+    "name": "Reks",
+    "age": 4,
+    "size": "duża",
+    "temperament": ["aktywny", "wymaga dużo ruchu"],
+    "health": "zdrowy, zaszczepiony, wykastrowany",
+    "shelter": {
+      "name": "Schronisko Happy Paws",
+      "city": "Warszawa",
+      "contactEmail": "kontakt@happypaws.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-007",
+    "name": "Burek",
+    "age": 8,
+    "size": "średnia",
+    "temperament": ["spokojny", "idealny dla seniorów"],
+    "health": "problemy ze stawami, wymaga leków przeciwbólowych",
+    "shelter": {
+      "name": "Azyl Cztery Łapy",
+      "city": "Kraków",
+      "contactEmail": "adopcje@czterylapy.org"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-008",
+    "name": "Fifi",
+    "age": 6,
+    "size": "mała",
+    "temperament": ["delikatna", "lubi przytulanie"],
+    "health": "zdrowa, wszystkie szczepienia aktualne",
+    "shelter": {
+      "name": "Fundacja Ratuj Zwierzaki",
+      "city": "Wrocław",
+      "contactEmail": "kontakt@ratujzwierzaki.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-009",
+    "name": "Azor",
+    "age": 2,
+    "size": "duża",
+    "temperament": ["czujny", "dobry stróż"],
+    "health": "zdrowy, zaszczepiony, czipowany",
+    "shelter": {
+      "name": "Schronisko Podaj Łapę",
+      "city": "Poznań",
+      "contactEmail": "info@podajlape.org"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-010",
+    "name": "Pola",
+    "age": 1,
+    "size": "mała",
+    "temperament": ["wesoła", "dobra z dziećmi"],
+    "health": "zdrowa, po podstawowych szczepieniach",
+    "shelter": {
+      "name": "Schronisko Przytulisko",
+      "city": "Łódź",
+      "contactEmail": "biuro@przytulisko.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-011",
+    "name": "Mika",
+    "age": 1,
+    "size": "mała",
+    "temperament": ["ciekawska", "bawiąca się"],
+    "health": "zdrowa, pierwsze szczepienia",
+    "shelter": {
+      "name": "Fundacja Psi Uśmiech",
+      "city": "Gdańsk",
+      "contactEmail": "fundacja@psi-usmiech.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-012",
+    "name": "Piotruś",
+    "age": 1,
+    "size": "średnia",
+    "temperament": ["energiczny", "uczy się"],
+    "health": "zdrowy, rozpoczęty program szczepień",
+    "shelter": {
+      "name": "Schronisko Happy Paws",
+      "city": "Warszawa",
+      "contactEmail": "kontakt@happypaws.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-013",
+    "name": "Zuzia",
+    "age": 1,
+    "size": "mała",
+    "temperament": ["płochliwa", "potrzebuje czasu"],
+    "health": "zdrowa, w trakcie socjalizacji",
+    "shelter": {
+      "name": "Fundacja Ratuj Zwierzaki",
+      "city": "Wrocław",
+      "contactEmail": "kontakt@ratujzwierzaki.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-014",
+    "name": "Rufus",
+    "age": 1,
+    "size": "duża",
+    "temperament": ["żywiołowy", "lubi zabawy"],
+    "health": "zdrowy, po odrobaczeniu",
+    "shelter": {
+      "name": "Azyl Cztery Łapy",
+      "city": "Kraków",
+      "contactEmail": "adopcje@czterylapy.org"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-015",
+    "name": "Kicia",
+    "age": 1,
+    "size": "średnia",
+    "temperament": ["przytulaśna", "śpi dużo"],
+    "health": "zdrowa, podstawowe szczepienia",
+    "shelter": {
+      "name": "Schronisko Podaj Łapę",
+      "city": "Poznań",
+      "contactEmail": "info@podajlape.org"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-016",
+    "name": "Sultan",
+    "age": 12,
+    "size": "duża",
+    "temperament": ["majestatyczny", "spokojny"],
+    "health": "artretyzm, wymaga łagodnych spacerów",
+    "shelter": {
+      "name": "Schronisko Happy Paws",
+      "city": "Warszawa",
+      "contactEmail": "kontakt@happypaws.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-017",
+    "name": "Babcia",
+    "age": 10,
+    "size": "mała",
+    "temperament": ["łagodna", "ceni spokój"],
+    "health": "problemy z zębami, konieczna miękka karma",
+    "shelter": {
+      "name": "Fundacja Psi Uśmiech",
+      "city": "Gdańsk",
+      "contactEmail": "fundacja@psi-usmiech.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-018",
+    "name": "Weteran",
+    "age": 11,
+    "size": "średnia",
+    "temperament": ["mądry", "doświadczony"],
+    "health": "ogólnie zdrowy, okresowe kontrole weterynaryjne",
+    "shelter": {
+      "name": "Azyl Cztery Łapy",
+      "city": "Kraków",
+      "contactEmail": "adopcje@czterylapy.org"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-019",
+    "name": "Dziadek",
+    "age": 13,
+    "size": "duża",
+    "temperament": ["cierpliwy", "delikatny"],
+    "health": "zaćma, wymaga opieki geriatrycznej",
+    "shelter": {
+      "name": "Fundacja Ratuj Zwierzaki",
+      "city": "Wrocław",
+      "contactEmail": "kontakt@ratujzwierzaki.pl"
+    },
+    "adoptionStatus": "dostępna"
+  },
+  {
+    "id": "dog-020",
+    "name": "Emeryt",
+    "age": 9,
+    "size": "średnia",
+    "temperament": ["zrównoważony", "lubi drzemki"],
+    "health": "zdrowy jak na swój wiek, regularny monitoring",
+    "shelter": {
+      "name": "Schronisko Przytulisko",
+      "city": "Łódź",
+      "contactEmail": "biuro@przytulisko.pl"
+    },
+    "adoptionStatus": "dostępna"
   }
 ]

@@ -1,20 +1,28 @@
 // @ts-check
-import { defineConfig } from "astro/config";
-
-import react from "@astrojs/react";
-import sitemap from "@astrojs/sitemap";
-import tailwindcss from "@tailwindcss/vite";
-import node from "@astrojs/node";
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import node from '@astrojs/node';
+import { fileURLToPath } from 'node:url';
+import tailwindcss from '@tailwindcss/postcss';
+import autoprefixer from 'autoprefixer';
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
-  integrations: [react(), sitemap()],
-  server: { port: 3000 },
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  output: 'server',
+  integrations: [react()],
   adapter: node({
-    mode: "standalone",
+    mode: 'standalone',
   }),
+  vite: {
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
+    css: {
+      postcss: {
+        plugins: [tailwindcss, autoprefixer],
+      },
+    },
+  },
 });

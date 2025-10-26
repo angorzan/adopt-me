@@ -1,5 +1,6 @@
-import { DEFAULT_USER_ID, type SupabaseClient } from '~/db/supabase.client';
-import type { DTO } from '~/types';
+import type { SupabaseClient } from '@/db/supabase.client';
+import type { DTO } from '@/types';
+import { DEFAULT_USER_ID } from '@/db/supabase.client';
 
 type CreateApplicationError =
   | { error: 'dog_not_available' }

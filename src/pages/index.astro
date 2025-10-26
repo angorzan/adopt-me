@@ -1,8 +1,14 @@
 ---
-import Welcome from "../components/Welcome.astro";
-import Layout from "../layouts/Layout.astro";
+import Layout from '@/layouts/Layout.astro';
+import DogCatalogContainer from '@/components/dogs/DogCatalogContainer';
 ---
 
-<Layout>
-  <Welcome />
+<Layout title="AdoptMe - Znajdź przyjaciela">
+	<main class="container mx-auto px-4 py-8">
+		<section class="text-center mb-12">
+			<h1 class="text-4xl font-bold mb-4">Znajdź swojego czworonożnego przyjaciela</h1>
+			<p class="text-lg text-muted-foreground">Przeglądaj psy dostępne do adopcji w schroniskach w całej Polsce.</p>
+		</section>
+		<DogCatalogContainer client:only="react" />
+	</main>
 </Layout>

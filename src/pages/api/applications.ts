@@ -1,6 +1,6 @@
 import type { APIContext } from 'astro';
-import { ApplicationCreateSchema } from '~/lib/validators/application';
-import { createApplication } from '~/lib/services/adoptionService';
+import { ApplicationCreateSchema } from '@/lib/validators/application';
+import { createApplication } from '@/lib/services/adoptionService';
 
 export const prerender = false;
 

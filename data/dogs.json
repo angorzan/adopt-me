@@ -142,7 +142,7 @@
   {
     "id": "dog-011",
     "name": "Mika",
-    "age": 1,
+    "age": 0.5,
     "size": "mała",
     "temperament": ["ciekawska", "bawiąca się"],
     "health": "zdrowa, pierwsze szczepienia",
@@ -156,7 +156,7 @@
   {
     "id": "dog-012",
     "name": "Piotruś",
-    "age": 1,
+    "age": 0.3,
     "size": "średnia",
     "temperament": ["energiczny", "uczy się"],
     "health": "zdrowy, rozpoczęty program szczepień",
@@ -170,7 +170,7 @@
   {
     "id": "dog-013",
     "name": "Zuzia",
-    "age": 1,
+    "age": 0.8,
     "size": "mała",
     "temperament": ["płochliwa", "potrzebuje czasu"],
     "health": "zdrowa, w trakcie socjalizacji",
@@ -184,7 +184,7 @@
   {
     "id": "dog-014",
     "name": "Rufus",
-    "age": 1,
+    "age": 0.6,
     "size": "duża",
     "temperament": ["żywiołowy", "lubi zabawy"],
     "health": "zdrowy, po odrobaczeniu",
@@ -198,7 +198,7 @@
   {
     "id": "dog-015",
     "name": "Kicia",
-    "age": 1,
+    "age": 0.4,
     "size": "średnia",
     "temperament": ["przytulaśna", "śpi dużo"],
     "health": "zdrowa, podstawowe szczepienia",

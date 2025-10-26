@@ -9,6 +9,7 @@ const DogCatalogView = () => {
     q: '',
     size: 'all',
     age_category: 'all',
+    city: 'all',
   });
 
   const [debouncedQuery, setDebouncedQuery] = useState(filters.q);

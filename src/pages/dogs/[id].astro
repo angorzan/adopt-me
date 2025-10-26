@@ -1,0 +1,125 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect('/');
+}
+
+// Fetch dog details directly from Supabase
+const { supabase } = Astro.locals;
+
+const { data: dog, error } = await supabase
+  .from('dogs')
+  .select('*')
+  .eq('id', id)
+  .eq('adoption_status', 'available')
+  .single();
+
+if (error || !dog) {
+  return Astro.redirect('/');
+}
+
+const ageLabel = dog.age_years < 1 ? `${dog.age_years * 12} miesięcy` : `${dog.age_years} ${dog.age_years === 1 ? 'rok' : dog.age_years < 5 ? 'lata' : 'lat'}`;
+const sizeMap: Record<string, string> = { small: 'Mały', medium: 'Średni', large: 'Duży' };
+const ageCategoryMap: Record<string, string> = { puppy: 'Szczeniak', adult: 'Dorosły', senior: 'Senior' };
+---
+
+<Layout title={`${dog.name} - AdoptMe`}>
+  <header class="border-b">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="/" class="text-2xl font-bold hover:opacity-80 transition-opacity">AdoptMe</a>
+      <ThemeToggle client:load />
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+      <a href="/" class="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
+        ← Powrót do listy
+      </a>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-3">
+      <div class="md:col-span-2">
+        <Card>
+          <CardHeader>
+            <div class="flex justify-between items-start">
+              <div>
+                <CardTitle class="text-3xl mb-2">{dog.name}</CardTitle>
+                <CardDescription class="text-lg">
+                  {ageLabel} · {sizeMap[dog.size]} · {ageCategoryMap[dog.age_category]}
+                </CardDescription>
+              </div>
+              <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/30 px-3 py-1 text-sm font-medium text-green-700 dark:text-green-400">
+                Dostępny do adopcji
+              </span>
+            </div>
+          </CardHeader>
+          <CardContent class="space-y-6">
+            <div>
+              <h3 class="font-semibold text-lg mb-2">Temperament</h3>
+              <p class="text-muted-foreground">{dog.temperament}</p>
+            </div>
+
+            {dog.health && (
+              <div>
+                <h3 class="font-semibold text-lg mb-2">Zdrowie</h3>
+                <p class="text-muted-foreground">{dog.health}</p>
+              </div>
+            )}
+
+            <div>
+              <h3 class="font-semibold text-lg mb-2">Szczegóły</h3>
+              <dl class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <dt class="font-medium text-muted-foreground">Wiek</dt>
+                  <dd>{ageLabel}</dd>
+                </div>
+                <div>
+                  <dt class="font-medium text-muted-foreground">Rozmiar</dt>
+                  <dd>{sizeMap[dog.size]}</dd>
+                </div>
+                <div>
+                  <dt class="font-medium text-muted-foreground">Kategoria</dt>
+                  <dd>{ageCategoryMap[dog.age_category]}</dd>
+                </div>
+                <div>
+                  <dt class="font-medium text-muted-foreground">Status</dt>
+                  <dd>Dostępny</dd>
+                </div>
+              </dl>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div class="md:col-span-1">
+        <Card>
+          <CardHeader>
+            <CardTitle>Zainteresowany?</CardTitle>
+            <CardDescription>Skontaktuj się ze schroniskiem</CardDescription>
+          </CardHeader>
+          <CardContent class="space-y-4">
+            <p class="text-sm text-muted-foreground">
+              Aby rozpocząć proces adopcji, skontaktuj się bezpośrednio ze schroniskiem.
+            </p>
+            <Button class="w-full" size="lg">
+              Formularz adopcyjny
+            </Button>
+            <Button variant="outline" class="w-full">
+              Kontakt ze schroniskiem
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </main>
+</Layout>
+

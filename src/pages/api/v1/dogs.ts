@@ -20,6 +20,7 @@ export async function GET(ctx: APIContext): Promise<Response> {
     const sizeFilter = url.searchParams.get('size');
     const ageCategoryFilter = url.searchParams.get('age_category');
     const searchQuery = url.searchParams.get('q');
+    const cityFilter = url.searchParams.get('city');
 
     // Build query - only fetch available dogs
     let query = supabase
@@ -46,10 +47,15 @@ export async function GET(ctx: APIContext): Promise<Response> {
       query = query.eq('age_category', ageCategoryFilter);
     }
 
-    // Apply search query (searches in dog name or shelter city)
+    // Apply search query (searches in dog name)
     if (searchQuery && searchQuery.trim()) {
-      const searchTerm = searchQuery.trim().toLowerCase();
-      query = query.or(`name.ilike.%${searchTerm}%,shelters.city.ilike.%${searchTerm}%`);
+      const searchTerm = searchQuery.trim();
+      query = query.ilike('name', `%${searchTerm}%`);
+    }
+
+    // Apply city filter (filters by shelter city)
+    if (cityFilter && cityFilter.trim()) {
+      query = query.eq('shelters.city', cityFilter.trim());
     }
 
     // Order by created_at descending (newest first)

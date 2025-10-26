@@ -29,7 +29,7 @@ export namespace DTO {
 
   // ---------------- Adoption Applications ----------------
   export type ApplicationResponse = Row<'adoption_applications'>
-  export type ApplicationCreateCommand = Omit<Insert<'adoption_applications'>, 'id' | 'status' | 'created_at' | 'updated_at' | 'shelter_comment'>
+  export type ApplicationCreateCommand = Pick<Insert<'adoption_applications'>, 'dog_id' | 'motivation' | 'contact_preference' | 'extra_notes'>
   export interface ApplicationUpdateStatusCommand {
     status: Enums<'application_status'>
     shelter_comment?: string | null

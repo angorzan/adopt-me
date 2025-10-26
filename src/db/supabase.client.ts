@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
 
 import type { Database } from './database.types';
 
@@ -11,7 +12,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
+// Temporary constant for development, remove when auth is implemented
+export const DEFAULT_USER_ID = crypto.createHash('md5').update('default_adopter').digest('hex');
+
 export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 export type SupabaseClient = typeof supabaseClient;
-

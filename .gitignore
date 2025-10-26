@@ -20,13 +20,12 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# jetbrains setting folder
+# IDE settings
 .idea/
+.vscode/
 
+# project-specific
 /clues
-
 qemu-10.1.1/
 qemu
 lima/
-
-/vscode

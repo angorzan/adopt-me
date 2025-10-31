@@ -1,6 +1,6 @@
 # Dokument wymagań produktu (PRD) - AdoptMe
 ## 1. Przegląd produktu
-AdoptMe to aplikacja webowa wspierająca adopcję psów w Polsce. Użytkownicy rejestrują konto, opisują swój styl życia i składają wnioski adopcyjne. Schroniska zarządzają katalogiem psów, przeglądają napływające wnioski oraz potwierdzają adopcje. System dba o transparentność procesu, wspiera komunikację i edukuje w temacie odpowiedzialnej adopcji. Aplikacja jest zgodna z RODO, obsługuje użytkowników końcowych i pracowników schronisk oraz gromadzi dane do raportów.
+AdoptMe to aplikacja webowa wspierająca adopcję psów w Polsce. Użytkownicy rejestrują konto, opisują swój styl życia i składają wnioski adopcyjne, wybierając psa do adopcji z istniejącej bazy psów. Schroniska zarządzają katalogiem psów, przeglądają napływające wnioski oraz potwierdzają adopcje. System dba o transparentność procesu, wspiera komunikację i edukuje w temacie odpowiedzialnej adopcji. Aplikacja jest zgodna z RODO, obsługuje użytkowników końcowych i pracowników schronisk oraz gromadzi dane do raportów.
 
 ## 2. Problem użytkownika
 Osoby chcące adoptować psa mają problem ze znalezieniem zwierzęcia do swojego stylu życia, brakuje im kompletnych informacji o psach i ich potrzebach. Schroniska toną w wnioskach przesyłanych różnymi kanałami, odpowiadają po długim czasie lub gubią zgłoszenia. Przygotowanie użytkownika do adopcji i zbudowanie relacji z konkretnym schroniskiem jest czasochłonne. AdoptMe rozwiązuje te problemy, dostarczając sprawny katalog, ustrukturyzowany formularz wniosków i moduł edukacyjny.
@@ -24,15 +24,64 @@ Osoby chcące adoptować psa mają problem ze znalezieniem zwierzęcia do swojeg
 - Tygodniowe raporty dla schronisk oraz automatyczna ankieta po 30 dniach od adopcji.
 - Rozszerzone testy dostępności, 2FA, importy danych i zaawansowany moduł AI (np. wielokryterialne dopasowanie, feedback loop).
 
-## 4. Granice produktu
-### 4.1 Zakres wykluczony w MVP
+## 4. Bezpieczny dostęp i uwierzytelnianie
+### 4.1 Model dostępu
+System AdoptMe implementuje model dostępu oparty na rolach użytkowników z różnymi poziomami uprawnień:
+
+#### 4.1.1 Użytkownik anonimowy (bez logowania)
+- **Dostęp do katalogu psów**: Pełne przeglądanie listy psów dostępnych do adopcji
+- **Filtrowanie i wyszukiwanie**: Możliwość filtrowania psów po wielkości, wieku oraz wyszukiwania po nazwie lub mieście
+- **Podgląd szczegółów**: Dostęp do pełnych informacji o psach (imię, wiek, wielkość, temperament, informacje zdrowotne, lokalizacja schroniska)
+- **Ograniczenia**: Brak możliwości składania wniosków adopcyjnych, tworzenia profilu stylu życia lub korzystania z rekomendacji AI
+
+#### 4.1.2 Użytkownik adopter (po zalogowaniu)
+- **Wszystkie uprawnienia użytkownika anonimowego**
+- **Zarządzanie profilem**: Tworzenie i edycja profilu stylu życia
+- **Składanie wniosków**: Możliwość złożenia wniosku adopcyjnego dla wybranego psa
+- **Rekomendacje AI**: Dostęp do modułu rekomendacji psów na podstawie ankiety
+- **Historia wniosków**: Podgląd statusu złożonych wniosków adopcyjnych
+
+#### 4.1.3 Użytkownik schroniska (po zalogowaniu)
+- **Zarządzanie katalogiem**: Dodawanie, edycja i usuwanie profili psów w katalogu
+- **Obsługa wniosków**: Przeglądanie wniosków adopcyjnych, zmiana statusów i dodawanie komentarzy
+- **Panel administracyjny**: Dostęp do panelu zarządzania schroniskiem
+- **Raporty**: Dostęp do raportów i statystyk adopcji (funkcja po MVP)
+
+### 4.2 Mechanizmy uwierzytelniania
+#### 4.2.1 MVP (2 tygodnie)
+- **Rejestracja z weryfikacją e-mail**: Obowiązkowe potwierdzenie adresu e-mail przed aktywacją konta
+- **Logowanie hasłem**: Standardowe uwierzytelnianie e-mail + hasło
+- **Sesje użytkowników**: Bezpieczne zarządzanie sesjami z automatycznym wylogowaniem po okresie nieaktywności
+- **Walidacja danych**: Kontrola siły hasła i walidacja formatu e-mail
+- Kryteria akceptacji:
+  - Logowanie i rejestracja odbywają się na dedykowanych stronach.
+  - Logowanie wymaga podania adresu email i hasła.
+  - Rejestracja wymaga podania adresu email, hasła i potwierdzenia hasła.
+  - Użytkownik może logować się do systemu poprzez przycisk w prawym górnym rogu.
+  - Użytkownik może się wylogować z systemu poprzez przycisk w prawym górnym rogu w głównym @Layout.astro.
+  - Nie korzystamy z zewnętrznych serwisów logowania (np. Google, GitHub).
+  - Odzyskiwanie hasła powinno być możliwe.
+
+#### 4.2.2 Po MVP
+- **Dwuskładnikowe uwierzytelnianie (2FA)**: Obowiązkowe dla użytkowników schronisk, opcjonalne dla adopters
+- **Resetowanie hasła**: Bezpieczny proces odzyskiwania dostępu przez e-mail
+- **Audit log**: Rejestrowanie wszystkich operacji logowania i zmian bezpieczeństwa
+
+### 4.3 Ochrona danych i prywatność
+- **Zgodność z RODO**: Wszystkie dane osobowe przetwarzane zgodnie z rozporządzeniem
+- **Szyfrowanie**: Hasła przechowywane w postaci zahashowanej (bcrypt)
+- **Kontrola dostępu**: Każdy użytkownik ma dostęp tylko do swoich danych i funkcji zgodnych z rolą
+- **Anonimizacja**: Możliwość usunięcia konta z anonimizacją danych historycznych
+
+## 5. Granice produktu
+### 5.1 Zakres wykluczony w MVP
 - Moduł rekomendacji AI analizujący dane stylu życia użytkownika i proponujący psy.
 - Automatyczne importy danych ze schronisk (API, CSV) oraz integracje z zewnętrznymi rejestrami.
 - Funkcje społecznościowe (udział społeczności, opinie publiczne, współdzielenie profili psów).
 - Powiadomienia SMS/push i natywna aplikacja mobilna.
 - Rozszerzenie adopcji na inne gatunki zwierząt oraz dodatkowe procesy (domy tymczasowe, wolontariat).
 
-### 4.2 Założenia i ograniczenia
+### 5.2 Założenia i ograniczenia
 - Brak modułu płatności i darowizn.
 - Brak wsparcia dla adopcji innych zwierząt w MVP.
 - Brak automatycznych integracji z zewnętrznymi bazami danych schronisk (import planowany w kolejnej iteracji).
@@ -41,8 +90,8 @@ Osoby chcące adoptować psa mają problem ze znalezieniem zwierzęcia do swojeg
 - Brak obsługi czatu na żywo pomiędzy użytkownikami a schroniskami (tylko notyfikacje i statusy).
 - Brak rozliczeń za usługi; adopcje traktowane są jako proces społeczny.
 
-## 5. Historyjki użytkowników
-### 5.1 Zakres MVP (2 tygodnie)
+## 6. Historyjki użytkowników
+### 6.1 Zakres MVP (2 tygodnie)
 ### US-001 Rejestracja konta
 Opis: Jako osoba chcąca adoptować psa chcę założyć konto i zaakceptować zgody, aby móc korzystać z systemu.
 Kryteria akceptacji:
@@ -91,7 +140,7 @@ B. Po wypełnieniu ankiety aplikacja tworzy prompt i przekazuje go do usługi AI
 C. Model zwraca identyfikator lub opis jednego psa rekomendowanego użytkownikowi; wynik jest prezentowany obok katalogu.
 D. Jeśli model nie zwróci rekomendacji, użytkownik otrzymuje komunikat z sugestią ręcznego przeglądania katalogu.
 
-### 5.2 Funkcje po MVP
+### 6.2 Funkcje po MVP
 ### US-007 Edycja lub anulowanie wniosku przez użytkownika
 Opis: Jako użytkownik chcę móc edytować lub anulować wniosek, jeśli sytuacja ulegnie zmianie.
 Kryteria akceptacji:
@@ -132,14 +181,14 @@ B. Przeprowadzamy testy z osobami o specjalnych potrzebach, raportujemy wyniki.
 C. Naprawiamy problemy wykryte w testach dostępności.
 D. Zachowujemy log audytowy zmian w ustawieniach bezpieczeństwa.
 
-## 6. Metryki sukcesu
-### 6.1 MVP (2 tygodnie)
+## 7. Metryki sukcesu
+### 7.1 MVP (2 tygodnie)
 1. Minimum 60% zarejestrowanych użytkowników wypełnia skrócony profil stylu życia w pierwszym tygodniu od rejestracji.
 2. Co najmniej 80% wniosków adopcyjnych otrzymuje zmianę statusu w panelu schroniska w ciągu 7 dni kalendarzowych.
 3. 90% operacji katalogu psów kończy się sukcesem (pobranie listy, filtrowanie, szczegóły) bez błędów krytycznych.
 4. Brak incydentów naruszeń danych (0 zgłoszeń RODO) w czasie realizacji MVP.
 
-### 6.2 Po wdrożeniu rozszerzeń
+### 7.2 Po wdrożeniu rozszerzeń
 - 50% wniosków zakończonych adopcją skutkuje wypełnieniem ankiety po 30 dniach.
 - Średnia ocena dopasowania z ankiet użytkowników i schronisk wynosi minimum 4 w skali 1-5.
 - 100% powiadomień transakcyjnych jest doręczanych w ciągu 5 minut od zdarzenia.

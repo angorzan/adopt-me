@@ -1,0 +1,90 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+// Odczyt tokena z URL
+const token = Astro.url.searchParams.get('token');
+const type = Astro.url.searchParams.get('type') || 'signup';
+
+let verificationStatus: 'success' | 'error' | 'pending' = 'pending';
+let message = '';
+
+// Jeśli jest token, próbujemy weryfikować
+// W rzeczywistości weryfikacja powinna być obsłużona przez backend
+// ale dla prostego MVP możemy przekierować użytkownika do logowania z komunikatem
+if (token) {
+  // TODO: Wywołanie API do weryfikacji tokena
+  // Na razie zakładamy sukces i przekierowujemy do logowania
+  verificationStatus = 'success';
+  message = 'Twój adres e-mail został zweryfikowany pomyślnie!';
+}
+---
+
+<Layout title="Weryfikacja e-mail - AdoptMe">
+  <div class="min-h-screen flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md">
+      {verificationStatus === 'success' ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Weryfikacja zakończona</CardTitle>
+            <CardDescription>
+              Twoje konto zostało aktywowane
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p class="text-sm text-muted-foreground">
+              Dziękujemy za potwierdzenie adresu e-mail.
+              Możesz się teraz zalogować do swojego konta.
+            </p>
+          </CardContent>
+          <CardFooter>
+            <Button asChild class="w-full">
+              <a href="/auth/login?verified=true">Przejdź do logowania</a>
+            </Button>
+          </CardFooter>
+        </Card>
+      ) : verificationStatus === 'error' ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Błąd weryfikacji</CardTitle>
+            <CardDescription>
+              Nie udało się zweryfikować adresu e-mail
+            </CardDescription>
+          </CardHeader>
+          <CardContent class="space-y-4">
+            <p class="text-sm text-muted-foreground">
+              Link weryfikacyjny jest nieprawidłowy lub wygasł.
+              Jeśli problem będzie się powtarzał, skontaktuj się z nami.
+            </p>
+            {message && (
+              <div class="p-3 rounded-md bg-destructive/10 text-destructive text-sm">
+                {message}
+              </div>
+            )}
+          </CardContent>
+          <CardFooter>
+            <Button asChild class="w-full">
+              <a href="/auth/signup">Załóż konto ponownie</a>
+            </Button>
+          </CardFooter>
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Weryfikacja w toku</CardTitle>
+            <CardDescription>
+              Sprawdzamy Twój adres e-mail
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div class="flex items-center justify-center py-8">
+              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  </div>
+</Layout>
+

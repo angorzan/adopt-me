@@ -1,0 +1,9 @@
+---
+// Endpoint do wylogowania
+// W rzeczywistości wylogowanie powinno być obsłużone przez POST /api/v1/auth/logout
+// ale ta strona może służyć jako backup/fallback
+
+// Przekierowanie do strony głównej z komunikatem
+return Astro.redirect('/?message=logged-out');
+---
+

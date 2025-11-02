@@ -1,11 +1,13 @@
 ---
 import "../styles/global.css";
+import { AuthButton } from '@/components/auth/AuthButton';
 
 interface Props {
   title?: string;
 }
 
 const { title = "10x Astro Starter" } = Astro.props;
+const user = Astro.locals.user;
 ---
 
 <!doctype html>
@@ -24,7 +26,35 @@ const { title = "10x Astro Starter" } = Astro.props;
     </script>
   </head>
   <body class="bg-background text-foreground">
-    <slot />
+    <header class="border-b">
+      <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+        <nav class="flex items-center gap-6">
+          <a href="/" class="text-xl font-bold">
+            AdoptMe
+          </a>
+          <a href="/dogs" class="text-sm hover:text-primary transition-colors">
+            Psy do adopcji
+          </a>
+          {user && (user.role === 'adopter' || user.role === 'admin') && (
+            <a href="/generate" class="text-sm hover:text-primary transition-colors">
+              Rekomendacje AI
+            </a>
+          )}
+          {user && user.role === 'shelter_staff' && (
+            <a href="/shelter/dashboard" class="text-sm hover:text-primary transition-colors">
+              Panel schroniska
+            </a>
+          )}
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <AuthButton client:load user={user} />
+        </div>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
   </body>
 </html>
 

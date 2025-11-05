@@ -21,6 +21,11 @@ AdoptMe is a web application that streamlines dog adoption in Poland. It connect
 ## Features
 
 ### ✅ Currently Available (v0.1.0)
+- **👤 User Authentication**
+  - User registration with email
+  - Email verification (auto-confirmed in MVP)
+  - Secure login/logout with session management
+  - Role-based access (adopter, shelter_staff, admin)
 - 🐕 **Dog Catalog** - Browse 20+ dogs from 6 shelters across Poland
 - 🔍 **Advanced Filtering**:
   - By size (small, medium, large)
@@ -28,18 +33,19 @@ AdoptMe is a web application that streamlines dog adoption in Poland. It connect
   - By city (dropdown with available locations)
   - By name (real-time search)
 - 📄 **Dog Details Page** - View comprehensive information about each dog
+- 📋 **Adoption Application Form** - Submit adoption applications with lifestyle details
 - 🌓 **Dark Mode** - Toggle between light and dark themes with persistent preference
 - 📱 **Responsive Design** - Optimized for mobile, tablet, and desktop
 - ⚡ **Fast Loading** - Skeleton loaders and optimized data fetching
 - 🎨 **Modern UI** - Built with shadcn/ui components and Tailwind CSS
 
 ### 🚧 Coming Soon
-- 👤 User authentication and profiles
-- 📋 Adoption application form
 - 🧠 AI-powered dog recommendations
 - 🏢 Shelter management dashboard
 - 📧 Email notifications
 - 📊 Application tracking
+- 👤 User profiles and profile editing
+- 📱 My applications page
 
 ## Tech Stack
 - **Astro 5** – Static-first framework powering the UI
@@ -54,7 +60,9 @@ AdoptMe is a web application that streamlines dog adoption in Poland. It connect
 Prerequisites:
 - Node.js 22.14.0 or later
 - npm (v10+)
+- Supabase project with database initialized
 
+### Setup Steps
 ```bash
 # clone repository
 git clone https://github.com/angorzan/10x-project-adopt-me.git
@@ -63,10 +71,30 @@ cd adoptme
 # install dependencies
 npm install
 
-# start development server
+# configure environment variables
+# Create .env file with your Supabase credentials:
+# SUPABASE_URL=https://your-project.supabase.co
+# SUPABASE_KEY=your-anon-key
+# PUBLIC_APP_URL=http://localhost:4323
+```
+
+### Configuration
+1. **Supabase Setup:**
+   - Create a Supabase project at https://supabase.com
+   - Apply migrations from `supabase/migrations/`
+   - Disable email confirmation requirement (Settings → Auth → Email Confirmations Required: OFF)
+   - Add redirect URL in Settings → Auth → Redirect URLs: `http://localhost:4323`
+
+2. **Environment Variables:**
+   - Copy `.env.example` to `.env`
+   - Fill in your Supabase URL and anonymous key
+   - Set `PUBLIC_APP_URL=http://localhost:4323`
+
+### Start Development Server
+```bash
 npm run dev
 ```
-The app will be available at `http://localhost:3000/` by default.
+The app will be available at `http://localhost:4323/` (or next available port if 4323 is in use).
 
 ### Building for Production
 ```bash
@@ -114,25 +142,49 @@ npm run seed
 **Current Version:** 0.1.0 (MVP Phase)
 
 **Completed:**
-- ✅ Database schema and Supabase integration
+- ✅ Database schema and Supabase integration with RLS policies
+- ✅ User registration endpoint with email validation
+- ✅ User login/logout with session management
+- ✅ Email verification flow (auto-confirmed in MVP)
+- ✅ Authentication middleware for session management
 - ✅ Dog catalog with filtering and search
-- ✅ Dog details page
+- ✅ Dog details page with dynamic routing
+- ✅ Adoption application form and submission
 - ✅ Dark mode implementation
 - ✅ Responsive design
 - ✅ Data seeding script
+- ✅ Role-based UI (adopter, shelter_staff, admin)
 
 **In Progress:**
-- 🚧 User authentication
-- 🚧 Adoption application form
 - 🚧 AI recommendations
+- 🚧 Shelter management dashboard
+- 🚧 Application status tracking
 
 **Roadmap:**
-- Q1 2025: User authentication, adoption applications
-- Q2 2025: Shelter management dashboard, notifications
-- Q3 2025: AI recommendations, advanced search
+- Q1 2025: AI recommendations, shelter dashboard
+- Q2 2025: Email notifications, advanced search
+- Q3 2025: User profiles, application history
 - Q4 2025: Post-adoption surveys, reporting
 
 For detailed changes, see [CHANGELOG.md](CHANGELOG.md).
+
+## Important Notes
+
+### Database Fixes Applied (v0.1.0)
+- Fixed RLS (Row Level Security) policies that caused infinite recursion in user queries
+- Fixed trigger `handle_new_user` to properly create user records on Supabase Auth signup
+- Implemented middleware for session management and user context
+- Email verification auto-confirmation enabled for MVP (can be disabled in Supabase settings)
+
+### Known Issues
+- Email verification currently auto-confirms in MVP phase (for faster testing)
+- Admin dashboard and shelter staff features coming soon
+
+### Development Tips
+- Dev server runs on port 4323 (configurable if needed)
+- All API endpoints are in `/src/pages/api/v1/`
+- Authentication is handled via Supabase Auth + custom session middleware
+- Database migrations should be applied before running the app
 
 ## License
 Distributed under the MIT License. See `LICENSE` for more information.

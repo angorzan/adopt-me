@@ -358,7 +358,7 @@ Any protected page
 # 1. Uruchom dev server
 npm run dev
 
-# 2. Otwórz http://localhost:4321/auth/login
+# 2. Otwórz http://localhost:4323/auth/login
 
 # 3. Spróbuj zalogować się (jeśli masz test account w Supabase)
 
@@ -371,7 +371,7 @@ npm run dev
 
 ### Testowanie endpointu przez curl:
 ```bash
-curl -X POST http://localhost:4321/api/v1/auth/login \
+curl -X POST http://localhost:4323/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"Test1234"}'
 ```

@@ -987,7 +987,7 @@ SUPABASE_JWT_SECRET=your-jwt-secret
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 # URL aplikacji (dla redirectów w e-mailach)
-PUBLIC_APP_URL=http://localhost:4321
+PUBLIC_APP_URL=http://localhost:4323
 ```
 
 #### 3.1.2 Konfiguracja Supabase Dashboard
@@ -1018,10 +1018,10 @@ URL: `{{ .SiteURL }}/auth/verify-email?token={{ .Token }}`
 URL: `{{ .SiteURL }}/auth/reset-password?token={{ .Token }}`
 
 **Authentication → URL Configuration**:
-- Site URL: `https://adoptme.pl` (production) lub `http://localhost:4321` (development)
+- Site URL: `https://adoptme.pl` (production) lub `http://localhost:4323` (development)
 - Redirect URLs:
   - `https://adoptme.pl/auth/**`
-  - `http://localhost:4321/auth/**`
+  - `http://localhost:4323/auth/**`
 
 **Authentication → Settings**:
 - Enable Email Confirmations: **Włączone**
@@ -1347,7 +1347,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 if (['POST', 'PUT', 'DELETE'].includes(context.request.method)) {
   const origin = context.request.headers.get('origin');
   const allowedOrigins = [
-    'http://localhost:4321',
+    'http://localhost:4323',
     'https://adoptme.pl'
   ];
 

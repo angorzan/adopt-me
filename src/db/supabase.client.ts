@@ -1,8 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { createServerClient, type CookieOptionsWithName } from '@supabase/ssr';
 import type { AstroCookies } from 'astro';
-import crypto from 'crypto';
-
 import type { Database } from './database.types';
 import { getEnv, isProd } from '../lib/utils/env';
 
@@ -14,10 +12,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
     'Missing Supabase environment variables. Please set SUPABASE_URL and SUPABASE_KEY in your .env file.'
   );
 }
-
-// Temporary constant for development, keep as fallback until full migration
-// TODO: Remove after creating real test user and migrating existing data
-export const DEFAULT_USER_ID = crypto.createHash('md5').update('default_adopter').digest('hex');
 
 // Legacy client for non-auth operations (catalog, etc.)
 export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);

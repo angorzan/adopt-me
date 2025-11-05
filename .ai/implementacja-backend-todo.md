@@ -126,7 +126,7 @@ Kolejna faza implementacji modułu autentykacji - backend API, middleware, serwi
   - [ ] Konfiguracja URL redirectów
 
 - [ ] **Authentication → URL Configuration**
-  - [ ] Site URL: `https://adoptme.pl` lub `http://localhost:4321`
+  - [ ] Site URL: `https://adoptme.pl` lub `http://localhost:4323`
   - [ ] Redirect URLs: `/auth/**`
 
 - [ ] **Authentication → Settings**
@@ -197,7 +197,7 @@ Kolejna faza implementacji modułu autentykacji - backend API, middleware, serwi
 ### CSRF Protection
 - [ ] **src/middleware/index.ts** - Rozszerzenie
   - [ ] Sprawdzenie origin header dla POST/PUT/DELETE
-  - [ ] Allowed origins: localhost:4321, adoptme.pl
+  - [ ] Allowed origins: localhost:4323, adoptme.pl
   - [ ] Return 403 jeśli origin nieprawidłowy
 
 ### Rate Limiting (opcjonalne dla MVP)

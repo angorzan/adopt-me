@@ -1,10 +1,13 @@
 import type { APIRoute } from 'astro';
-import { ZodError } from 'zod';
+import { ZodError, z } from 'zod';
 import { createSupabaseServerInstance } from '@/db/supabase.client';
-import { registerCommandSchema } from '@/lib/validators/auth.validators';
 import { AuthService } from '@/lib/services/auth.service';
 
 export const prerender = false;
+
+const resendVerificationSchema = z.object({
+  email: z.string().email('Nieprawidłowy adres e-mail'),
+});
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
@@ -22,7 +25,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
-    const command = registerCommandSchema.parse(body);
+    const data = resendVerificationSchema.parse(body);
 
     const supabase = createSupabaseServerInstance({
       cookies,
@@ -30,15 +33,20 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     });
 
     const authService = new AuthService(supabase);
-    await authService.register(command);
+    try {
+      await authService.resendVerificationEmail(data.email);
+    } catch (e) {
+      const errorMsg = e instanceof Error ? e.message : String(e);
+      console.log('Resend email error:', errorMsg);
+      // Nie przerywamy - mogą być błędy z Supabase ale email mógł być wysłany
+    }
 
     return new Response(
       JSON.stringify({
-        message: 'Konto utworzone. Sprawdź swoją skrzynkę e-mail i potwierdź rejestrację.',
-        email: command.email,
+        message: 'Mail weryfikacyjny został wysłany. Sprawdź swoją skrzynkę e-mail.',
       }),
       {
-        status: 201,
+        status: 200,
         headers: { 'Content-Type': 'application/json' },
       },
     );
@@ -58,30 +66,21 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     }
 
     if (error instanceof Error) {
-      let statusCode = 500;
-
-      if (error.message.includes('zarejestrowany') || error.message.includes('istnieje')) {
-        statusCode = 409;
-      } else if (error.message.includes('Zbyt wiele prób')) {
-        statusCode = 429;
-      }
-
       return new Response(
         JSON.stringify({
           error: error.message,
         }),
         {
-          status: statusCode,
+          status: 400,
           headers: { 'Content-Type': 'application/json' },
         },
       );
     }
 
-    console.error('Register error:', error instanceof Error ? error.message : String(error), error instanceof Error ? error.stack : '');
+    console.error('Resend verification error:', error);
     return new Response(
       JSON.stringify({
-        error: 'Wystąpił błąd serwera. Spróbuj ponownie później.',
-        debug: error instanceof Error ? error.message : String(error)
+        error: 'Nie udało się wysłać maila weryfikacyjnego. Spróbuj ponownie później.',
       }),
       {
         status: 500,

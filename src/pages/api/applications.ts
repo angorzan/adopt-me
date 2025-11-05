@@ -10,7 +10,14 @@ export const prerender = false;
  */
 export async function POST(ctx: APIContext) {
   try {
-    const { supabase } = ctx.locals;
+    const { supabase, user } = ctx.locals;
+
+    if (!user) {
+      return new Response(
+        JSON.stringify({ error: 'auth_required' }),
+        { status: 401 },
+      );
+    }
 
     // 1. Parse and validate request body
     const body = await ctx.request.json();
@@ -24,7 +31,7 @@ export async function POST(ctx: APIContext) {
     }
 
     // 2. Create application
-    const response = await createApplication(supabase, result.data);
+    const response = await createApplication(supabase, user.id, result.data);
 
     if ('error' in response) {
       const status = response.error === 'server_error' ? 500

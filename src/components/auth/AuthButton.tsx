@@ -128,7 +128,7 @@ export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
               <button
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className="w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors disabled:opacity-50"
+                className="w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoggingOut ? 'Wylogowywanie...' : 'Wyloguj się'}
               </button>

@@ -37,7 +37,13 @@ export class AuthService {
       .eq('id', authData.user.id)
       .single();
 
-    if (userError || !userData) {
+    if (userError) {
+      console.error('Login fetch user error:', userError.message, 'User ID:', authData.user.id);
+      throw new Error('Nie udało się pobrać danych użytkownika');
+    }
+
+    if (!userData) {
+      console.error('Login no user data found for ID:', authData.user.id);
       throw new Error('Nie udało się pobrać danych użytkownika');
     }
 
@@ -57,7 +63,7 @@ export class AuthService {
    */
   async register(command: RegisterCommand): Promise<void> {
     // 1. Rejestracja przez Supabase Auth (automatycznie wysyła email weryfikacyjny)
-    const appUrl = getEnv('PUBLIC_APP_URL') || 'http://localhost:4321';
+    const appUrl = getEnv('PUBLIC_APP_URL') || 'http://localhost:4323';
     const { data, error } = await this.supabase.auth.signUp({
       email: command.email,
       password: command.password,
@@ -93,7 +99,7 @@ export class AuthService {
    * Inicjowanie resetowania hasła
    */
   async forgotPassword(email: string): Promise<void> {
-    const appUrl = getEnv('PUBLIC_APP_URL') || 'http://localhost:4321';
+    const appUrl = getEnv('PUBLIC_APP_URL') || 'http://localhost:4323';
     const { error } = await this.supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${appUrl}/auth/reset-password`,
     });
@@ -114,6 +120,26 @@ export class AuthService {
 
     if (error) {
       throw new Error('Nie udało się zmienić hasła. Token mógł wygasnąć.');
+    }
+  }
+
+  /**
+   * Ponowne wysłanie maila weryfikacyjnego
+   */
+  async resendVerificationEmail(email: string): Promise<void> {
+    const appUrl = getEnv('PUBLIC_APP_URL') || 'http://localhost:4323';
+
+    // Wysyłamy magic link na email (signInWithOtp)
+    // Supabase wyśle email niezależnie czy user istnieje czy nie
+    const { error } = await this.supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${appUrl}/auth/verify-email`,
+      },
+    });
+
+    if (error) {
+      throw new Error(this.mapAuthError(error.message));
     }
   }
 

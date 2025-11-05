@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { AdoptionForm } from '@/components/applications/AdoptionForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -13,7 +14,7 @@ if (!id) {
 }
 
 // Fetch dog details directly from Supabase
-const { supabase } = Astro.locals;
+const { supabase, user } = Astro.locals;
 
 const { data: dog, error } = await supabase
   .from('dogs')
@@ -100,19 +101,19 @@ const ageCategoryMap: Record<string, string> = { puppy: 'Szczeniak', adult: 'Dor
         </Card>
       </div>
 
-      <div class="md:col-span-1">
+      <div class="md:col-span-1 space-y-6">
+        <AdoptionForm client:load dogId={dog.id} dogName={dog.name} isAuthenticated={Boolean(user)} />
+
         <Card>
           <CardHeader>
-            <CardTitle>Zainteresowany?</CardTitle>
-            <CardDescription>Skontaktuj się ze schroniskiem</CardDescription>
+            <CardTitle>Potrzebujesz więcej informacji?</CardTitle>
+            <CardDescription>Skontaktuj się bezpośrednio ze schroniskiem</CardDescription>
           </CardHeader>
           <CardContent class="space-y-4">
             <p class="text-sm text-muted-foreground">
-              Aby rozpocząć proces adopcji, skontaktuj się bezpośrednio ze schroniskiem.
+              Jeśli masz dodatkowe pytania o {dog.name} lub status adopcji, napisz do opiekunów ze
+              schroniska. Chętnie pomogą Ci przygotować się do spotkania.
             </p>
-            <Button class="w-full" size="lg">
-              Formularz adopcyjny
-            </Button>
             <Button variant="outline" class="w-full">
               Kontakt ze schroniskiem
             </Button>

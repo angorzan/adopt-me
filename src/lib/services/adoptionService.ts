@@ -1,7 +1,5 @@
 import type { SupabaseClient } from '@/db/supabase.client';
 import type { DTO } from '@/types';
-import { DEFAULT_USER_ID } from '@/db/supabase.client';
-
 type CreateApplicationError =
   | { error: 'dog_not_available' }
   | { error: 'duplicate_application' }
@@ -19,6 +17,7 @@ type CreateApplicationResult =
  */
 export async function createApplication(
   supabase: SupabaseClient,
+  userId: string,
   payload: DTO.ApplicationCreateCommand,
 ): Promise<CreateApplicationResult> {
   // 1. Verify dog exists and is available
@@ -36,7 +35,7 @@ export async function createApplication(
   const { data: duplicates } = await supabase
     .from('adoption_applications')
     .select('id')
-    .eq('user_id', DEFAULT_USER_ID)
+    .eq('user_id', userId)
     .eq('dog_id', payload.dog_id)
     .in('status', ['new', 'in_progress'])
     .limit(1);
@@ -50,7 +49,7 @@ export async function createApplication(
     .from('adoption_applications')
     .insert({
       ...payload,
-      user_id: DEFAULT_USER_ID,
+      user_id: userId,
       status: 'new',
     })
     .select()

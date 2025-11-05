@@ -74,20 +74,6 @@ export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
               {user.role === 'adopter' && (
                 <>
                   <a
-                    href="/profile"
-                    className="block px-4 py-2 text-sm hover:bg-accent transition-colors"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    Mój profil
-                  </a>
-                  <a
-                    href="/applications"
-                    className="block px-4 py-2 text-sm hover:bg-accent transition-colors"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    Moje wnioski
-                  </a>
-                  <a
                     href="/recommendations"
                     className="block px-4 py-2 text-sm hover:bg-accent transition-colors"
                     onClick={() => setShowDropdown(false)}

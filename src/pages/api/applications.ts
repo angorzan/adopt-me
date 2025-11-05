@@ -1,6 +1,7 @@
 import type { APIContext } from 'astro';
 import { ApplicationCreateSchema } from '@/lib/validators/application';
 import { createApplication } from '@/lib/services/adoptionService';
+import { createSupabaseServerInstance } from '@/db/supabase.client';
 
 export const prerender = false;
 
@@ -10,7 +11,11 @@ export const prerender = false;
  */
 export async function POST(ctx: APIContext) {
   try {
-    const { supabase, user } = ctx.locals;
+    const supabase = createSupabaseServerInstance({
+      cookies: ctx.cookies,
+      headers: ctx.request.headers,
+    });
+    const user = ctx.locals.user;
 
     if (!user) {
       return new Response(

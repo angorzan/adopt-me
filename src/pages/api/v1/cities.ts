@@ -1,4 +1,5 @@
 import type { APIContext } from 'astro';
+import { createSupabaseServerInstance } from '@/db/supabase.client';
 
 export const prerender = false;
 
@@ -8,7 +9,10 @@ export const prerender = false;
  */
 export async function GET(ctx: APIContext): Promise<Response> {
   try {
-    const { supabase } = ctx.locals;
+    const supabase = createSupabaseServerInstance({
+      cookies: ctx.cookies,
+      headers: ctx.request.headers,
+    });
 
     // Get unique cities from shelters that have available dogs
     const { data: shelters, error } = await supabase

@@ -1,5 +1,6 @@
 import type { APIContext } from 'astro';
 import type { DTO } from '@/types';
+import { createSupabaseServerInstance } from '@/db/supabase.client';
 
 export const prerender = false;
 
@@ -13,7 +14,10 @@ export const prerender = false;
  */
 export async function GET(ctx: APIContext): Promise<Response> {
   try {
-    const { supabase } = ctx.locals;
+    const supabase = createSupabaseServerInstance({
+      cookies: ctx.cookies,
+      headers: ctx.request.headers,
+    });
     const url = new URL(ctx.request.url);
 
     // Extract query parameters

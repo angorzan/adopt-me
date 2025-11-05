@@ -1,9 +1,13 @@
 import type { APIRoute } from 'astro';
 import type { Database } from '../../../db/database.types';
+import { createSupabaseServerInstance } from '../../../db/supabase.client';
 
-export const GET: APIRoute = async ({ locals }) => {
+export const GET: APIRoute = async ({ cookies, request }) => {
   try {
-    const { supabase } = locals;
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+    });
 
     // Fetch only shelters that have available dogs
     const { data: shelters, error } = await supabase

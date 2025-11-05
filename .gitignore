@@ -29,3 +29,19 @@ pnpm-debug.log*
 qemu-10.1.1/
 qemu
 lima/
+
+# test coverage
+coverage/
+.nyc_output/
+
+# vitest
+vitest.config.ts.timestamp-*
+
+# playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/tests/e2e/**/*.png
+/tests/e2e/**/*.jpeg
+/tests/e2e/**/*.jpg
+!/tests/e2e/**/*-expected.png

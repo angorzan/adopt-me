@@ -48,6 +48,8 @@ AdoptMe is a web application that streamlines dog adoption in Poland. It connect
 - 📱 My applications page
 
 ## Tech Stack
+
+### Core Technologies
 - **Astro 5** – Static-first framework powering the UI
 - **React 19** – Islands of interactivity inside Astro pages
 - **TypeScript 5** – Typed JavaScript for reliability
@@ -55,6 +57,13 @@ AdoptMe is a web application that streamlines dog adoption in Poland. It connect
 - **Supabase** – PostgreSQL database, authentication, and edge functions
 - **Node.js 22 (≥22.14.0)** – Runtime environment
 - **ESLint / Prettier** – Linting & formatting
+
+### Testing Stack
+- **Vitest** – Fast unit and integration testing framework
+- **React Testing Library** – Component testing with user-centric approach
+- **Supertest** – HTTP assertions for API endpoint testing
+- **Playwright** – End-to-end testing for complete user flows
+- **c8 / Vitest coverage** – Code coverage reporting (target: 70%+)
 
 ## Getting Started Locally
 Prerequisites:
@@ -113,12 +122,41 @@ The static output will be generated in `dist/`.
 | `lint` | Lint all source files |
 | `lint:fix` | Lint and automatically fix issues |
 | `format` | Run Prettier on the entire codebase |
+| `test:unit` | Run unit tests with Vitest |
+| `test:integration` | Run integration tests with Supertest |
+| `test:e2e` | Run end-to-end tests with Playwright |
+| `test:coverage` | Generate code coverage report |
 
 ### Database Setup
 ```bash
 # Populate the database with sample data (20 dogs, 6 shelters)
 npm run seed
 ```
+
+### Testing
+The project uses a comprehensive testing strategy to ensure code quality and reliability:
+
+```bash
+# Run all unit tests
+npm run test:unit
+
+# Run integration tests (requires test Supabase instance)
+npm run test:integration
+
+# Run end-to-end tests with Playwright
+npm run test:e2e
+
+# Generate code coverage report
+npm run test:coverage
+```
+
+**Testing Strategy:**
+- **Unit Tests** – Test individual components, validators, and utility functions
+- **Integration Tests** – Test API endpoints with Supabase integration
+- **E2E Tests** – Test complete user flows from registration to adoption application
+- **Coverage Target** – Minimum 70% code coverage for endpoints, 80% for auth service
+
+For detailed testing documentation, see [`.ai/test-plan-gemini.md`](.ai/test-plan-gemini.md).
 
 ## Project Scope
 ### MVP (first 2 weeks)

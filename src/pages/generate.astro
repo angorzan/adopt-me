@@ -1,5 +1,5 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+import Layout from "@/layouts/Layout.astro";
 
 // Zabezpieczenie strony - wymaga zalogowania
 const user = Astro.locals.user;
@@ -11,8 +11,8 @@ if (!user) {
 }
 
 // Opcjonalnie: sprawdzenie roli (jeśli tylko dla adopters)
-if (user.role !== 'adopter' && user.role !== 'admin') {
-  return Astro.redirect('/403'); // lub inna strona błędu
+if (user.role !== "adopter" && user.role !== "admin") {
+  return Astro.redirect("/403"); // lub inna strona błędu
 }
 ---
 
@@ -29,15 +29,12 @@ if (user.role !== 'adopter' && user.role !== 'admin') {
 
       <div class="space-y-6">
         <p class="text-muted-foreground">
-          Ta strona jest chroniona i wymaga zalogowania.
-          Tutaj będzie moduł rekomendacji AI psów na podstawie ankiety.
+          Ta strona jest chroniona i wymaga zalogowania. Tutaj będzie moduł rekomendacji AI psów na podstawie ankiety.
         </p>
 
         <div class="p-6 border rounded-lg">
           <h2 class="text-xl font-semibold mb-4">Funkcjonalność w przygotowaniu</h2>
-          <p class="text-sm text-muted-foreground">
-            Moduł rekomendacji AI będzie dostępny w kolejnej fazie projektu.
-          </p>
+          <p class="text-sm text-muted-foreground">Moduł rekomendacji AI będzie dostępny w kolejnej fazie projektu.</p>
         </div>
 
         <div class="flex gap-3">
@@ -58,4 +55,3 @@ if (user.role !== 'adopter' && user.role !== 'admin') {
     </div>
   </div>
 </Layout>
-

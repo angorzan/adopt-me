@@ -1,6 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
-import { config } from 'dotenv';
-import type { Database } from '../src/db/database.types';
+import { createClient } from "@supabase/supabase-js";
+import { config } from "dotenv";
+import type { Database } from "../src/db/database.types";
 
 // Load environment variables from .env file
 config();
@@ -12,9 +12,8 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABAS
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error(
-    'Missing Supabase environment variables. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_KEY) in your .env file.'
+    "Missing Supabase environment variables. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_KEY) in your .env file."
   );
 }
 
 export const supabaseClient = createClient<Database>(supabaseUrl, supabaseKey);
-

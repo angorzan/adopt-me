@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import type { DTO } from '@/types';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import type { DTO } from "@/types";
 
 interface AuthButtonProps {
   user: DTO.UserResponse | null;
-  variant?: 'header' | 'mobile';
+  variant?: "header" | "mobile";
 }
 
-export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
+export const AuthButton = ({ user, variant = "header" }: AuthButtonProps) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await fetch('/api/v1/auth/logout', { method: 'POST' });
-      window.location.href = '/';
+      await fetch("/api/v1/auth/logout", { method: "POST" });
+      window.location.href = "/";
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       setIsLoggingOut(false);
     }
   };
@@ -38,15 +38,11 @@ export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
   // Zalogowany użytkownik
   return (
     <div className="relative">
-      <Button
-        variant="outline"
-        onClick={() => setShowDropdown(!showDropdown)}
-        className="gap-2"
-      >
+      <Button variant="outline" onClick={() => setShowDropdown(!showDropdown)} className="gap-2">
         <span className="hidden md:inline">{user.email}</span>
         <span className="md:hidden">Menu</span>
         <svg
-          className={`size-4 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
+          className={`size-4 transition-transform ${showDropdown ? "rotate-180" : ""}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -58,10 +54,7 @@ export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
       {showDropdown && (
         <>
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setShowDropdown(false)}
-          />
+          <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
 
           {/* Dropdown menu */}
           <div className="absolute right-0 mt-2 w-56 rounded-md border bg-card shadow-lg z-20">
@@ -71,7 +64,7 @@ export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
                 <div className="text-xs mt-1">Rola: {user.role}</div>
               </div>
 
-              {user.role === 'adopter' && (
+              {user.role === "adopter" && (
                 <>
                   <a
                     href="/recommendations"
@@ -83,7 +76,7 @@ export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
                 </>
               )}
 
-              {user.role === 'shelter_staff' && (
+              {user.role === "shelter_staff" && (
                 <>
                   <a
                     href="/shelter/dashboard"
@@ -116,7 +109,7 @@ export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
                 disabled={isLoggingOut}
                 className="w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoggingOut ? 'Wylogowywanie...' : 'Wyloguj się'}
+                {isLoggingOut ? "Wylogowywanie..." : "Wyloguj się"}
               </button>
             </div>
           </div>
@@ -125,4 +118,3 @@ export const AuthButton = ({ user, variant = 'header' }: AuthButtonProps) => {
     </div>
   );
 };
-

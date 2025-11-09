@@ -1,11 +1,11 @@
-import React, { useState, type FormEvent } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const ForgotPasswordForm = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -16,16 +16,16 @@ export const ForgotPasswordForm = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/v1/auth/forgot-password', {
-        method: 'POST',
+      const response = await fetch("/api/v1/auth/forgot-password", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
-        let errorMessage = 'Wystąpił błąd';
+        let errorMessage = "Wystąpił błąd";
         try {
           const data = await response.json();
           errorMessage = data.error || errorMessage;
@@ -38,7 +38,7 @@ export const ForgotPasswordForm = () => {
 
       setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Wystąpił nieznany błąd');
+      setError(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
     } finally {
       setIsLoading(false);
     }
@@ -49,19 +49,14 @@ export const ForgotPasswordForm = () => {
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
           <CardTitle>Sprawdź swoją skrzynkę e-mail</CardTitle>
-          <CardDescription>
-            Link do resetowania hasła został wysłany
-          </CardDescription>
+          <CardDescription>Link do resetowania hasła został wysłany</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Jeśli konto z adresem <strong>{email}</strong> istnieje,
-              wysłaliśmy na nie link do resetowania hasła.
+              Jeśli konto z adresem <strong>{email}</strong> istnieje, wysłaliśmy na nie link do resetowania hasła.
             </p>
-            <p className="text-sm text-muted-foreground">
-              Link wygaśnie za 1 godzinę.
-            </p>
+            <p className="text-sm text-muted-foreground">Link wygaśnie za 1 godzinę.</p>
           </div>
         </CardContent>
         <CardFooter>
@@ -77,9 +72,7 @@ export const ForgotPasswordForm = () => {
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle>Odzyskiwanie hasła</CardTitle>
-        <CardDescription>
-          Podaj adres e-mail powiązany z Twoim kontem
-        </CardDescription>
+        <CardDescription>Podaj adres e-mail powiązany z Twoim kontem</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent>
@@ -115,19 +108,12 @@ export const ForgotPasswordForm = () => {
         </CardContent>
 
         <CardFooter className="flex flex-col gap-3">
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Wysyłanie...' : 'Wyślij link'}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Wysyłanie..." : "Wyślij link"}
           </Button>
 
           <div className="text-sm text-center text-muted-foreground">
-            <a
-              href="/auth/login"
-              className="text-primary hover:underline"
-            >
+            <a href="/auth/login" className="text-primary hover:underline">
               Powrót do logowania
             </a>
           </div>
@@ -136,4 +122,3 @@ export const ForgotPasswordForm = () => {
     </Card>
   );
 };
-

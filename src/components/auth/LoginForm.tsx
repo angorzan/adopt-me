@@ -1,16 +1,16 @@
-import { useState, type FormEvent } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface LoginFormProps {
   redirectTo?: string;
 }
 
 export const LoginForm = ({ redirectTo }: LoginFormProps) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,10 +20,10 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/v1/auth/login', {
-        method: 'POST',
+      const response = await fetch("/api/v1/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -32,18 +32,18 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
       try {
         data = await response.json();
       } catch (parseError) {
-        console.error('Failed to parse response:', parseError);
+        console.error("Failed to parse response:", parseError);
         throw new Error(`Server returned invalid response (${response.status})`);
       }
 
       if (!response.ok) {
         // Obsługa różnych typów błędów
         if (response.status === 401) {
-          throw new Error('Nieprawidłowy e-mail lub hasło');
+          throw new Error("Nieprawidłowy e-mail lub hasło");
         } else if (response.status === 403) {
-          throw new Error('E-mail niezweryfikowany. Sprawdź swoją skrzynkę pocztową.');
+          throw new Error("E-mail niezweryfikowany. Sprawdź swoją skrzynkę pocztową.");
         } else if (response.status === 429) {
-          throw new Error('Zbyt wiele prób logowania. Spróbuj ponownie za chwilę.');
+          throw new Error("Zbyt wiele prób logowania. Spróbuj ponownie za chwilę.");
         } else {
           throw new Error(data.error || `Błąd serwera: ${response.status}`);
         }
@@ -51,12 +51,12 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
 
       // Sukces - server-side reload aby middleware wypełnił Astro.locals.user
       // Używamy window.location.assign() dla full page reload
-      window.location.assign(redirectTo || '/');
+      window.location.assign(redirectTo || "/");
     } catch (err) {
-      console.error('Login error:', err);
-      setError(err instanceof Error ? err.message : 'Wystąpił nieznany błąd');
+      console.error("Login error:", err);
+      setError(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
       // Focus na input email po błędzie (accessibility)
-      const emailInput = document.getElementById('email');
+      const emailInput = document.getElementById("email");
       if (emailInput) {
         emailInput.focus();
       }
@@ -69,9 +69,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
     <Card className="w-full max-w-md mx-auto" data-test-id="login-form-container">
       <CardHeader>
         <CardTitle>Logowanie</CardTitle>
-        <CardDescription>
-          Zaloguj się do swojego konta AdoptMe
-        </CardDescription>
+        <CardDescription>Zaloguj się do swojego konta AdoptMe</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit} data-test-id="login-form">
         <CardContent>
@@ -131,22 +129,13 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
         </CardContent>
 
         <CardFooter className="flex flex-col gap-3">
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-            data-test-id="login-form-submit-button"
-          >
-            {isLoading ? 'Logowanie...' : 'Zaloguj się'}
+          <Button type="submit" className="w-full" disabled={isLoading} data-test-id="login-form-submit-button">
+            {isLoading ? "Logowanie..." : "Zaloguj się"}
           </Button>
 
           <div className="text-sm text-center text-muted-foreground">
-            Nie masz konta?{' '}
-            <a
-              href="/auth/signup"
-              className="text-primary hover:underline"
-              data-test-id="login-form-signup-link"
-            >
+            Nie masz konta?{" "}
+            <a href="/auth/signup" className="text-primary hover:underline" data-test-id="login-form-signup-link">
               Załóż konto
             </a>
           </div>
@@ -155,4 +144,3 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
     </Card>
   );
 };
-

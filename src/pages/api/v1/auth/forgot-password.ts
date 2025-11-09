@@ -1,8 +1,8 @@
-import type { APIRoute } from 'astro';
-import { ZodError } from 'zod';
-import { createSupabaseServerInstance } from '@/db/supabase.client';
-import { forgotPasswordCommandSchema } from '@/lib/validators/auth.validators';
-import { AuthService } from '@/lib/services/auth.service';
+import type { APIRoute } from "astro";
+import { ZodError } from "zod";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
+import { forgotPasswordCommandSchema } from "@/lib/validators/auth.validators";
+import { AuthService } from "@/lib/services/auth.service";
 
 export const prerender = false;
 
@@ -14,11 +14,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     if (!body) {
       return new Response(
         JSON.stringify({
-          error: 'Nieprawidłowe dane wejściowe'
+          error: "Nieprawidłowe dane wejściowe",
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
@@ -39,14 +39,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     // 5. Zwrócenie sukcesu (nie ujawniamy czy email istnieje)
     return new Response(
       JSON.stringify({
-        message: 'Jeśli konto istnieje, link do resetowania hasła został wysłany'
+        message: "Jeśli konto istnieje, link do resetowania hasła został wysłany",
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
-
   } catch (error) {
     // Obsługa błędów walidacji Zod
     if (error instanceof ZodError) {
@@ -58,7 +57,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
@@ -71,20 +70,20 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
 
     // Błędy nieznane
-    console.error('Forgot password error:', error);
+    console.error("Forgot password error:", error);
     return new Response(
       JSON.stringify({
-        error: 'Wystąpił błąd serwera. Spróbuj ponownie później.',
+        error: "Wystąpił błąd serwera. Spróbuj ponownie później.",
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
   }

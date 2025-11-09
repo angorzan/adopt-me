@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useDogs } from '@/lib/hooks/useDogs';
-import type { DogFiltersViewModel } from '@/lib/viewModels';
-import { DogFilters } from './DogFilters';
-import { DogGrid } from './DogGrid';
+import { useEffect, useState } from "react";
+import { useDogs } from "@/lib/hooks/useDogs";
+import type { DogFiltersViewModel } from "@/lib/viewModels";
+import { DogFilters } from "./DogFilters";
+import { DogGrid } from "./DogGrid";
 
 const DogCatalogView = () => {
   const [filters, setFilters] = useState<DogFiltersViewModel>({
-    q: '',
-    size: 'all',
-    age_category: 'all',
-    city: 'all',
+    q: "",
+    size: "all",
+    age_category: "all",
+    city: "all",
   });
 
   const [debouncedQuery, setDebouncedQuery] = useState(filters.q);
@@ -27,7 +27,7 @@ const DogCatalogView = () => {
   const { data: dogs, isLoading, isError } = useDogs(filters);
 
   const handleFiltersChange = (newFilters: Partial<DogFiltersViewModel>) => {
-    if (typeof newFilters.q === 'string') {
+    if (typeof newFilters.q === "string") {
       setDebouncedQuery(newFilters.q);
     } else {
       setFilters((prev) => ({ ...prev, ...newFilters, q: debouncedQuery }));
@@ -35,7 +35,6 @@ const DogCatalogView = () => {
   };
 
   const displayFilters: DogFiltersViewModel = { ...filters, q: debouncedQuery };
-
 
   if (isError) {
     return (

@@ -1,6 +1,6 @@
-import type { DTO } from '@/types';
-import { DogCard } from './DogCard';
-import { DogCardSkeleton } from './DogCardSkeleton';
+import type { DTO } from "@/types";
+import { DogCard } from "./DogCard";
+import { DogCardSkeleton } from "./DogCardSkeleton";
 
 interface DogGridProps {
   dogs: DTO.DogResponse[];

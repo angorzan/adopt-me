@@ -2,11 +2,11 @@
  * OpenRouter API Types
  * @see https://openrouter.ai/docs
  */
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Request types
 export interface JsonSchemaFormat {
-  type: 'json_schema';
+  type: "json_schema";
   json_schema: {
     name: string;
     strict: true;
@@ -56,7 +56,7 @@ export class OpenRouterError extends Error {
     public status?: number
   ) {
     super(message);
-    this.name = 'OpenRouterError';
+    this.name = "OpenRouterError";
   }
 }
 
@@ -66,14 +66,14 @@ export class ValidationError extends Error {
     public rawResponse: unknown
   ) {
     super(message);
-    this.name = 'ValidationError';
+    this.name = "ValidationError";
   }
 }
 
 export class UsageExceededError extends Error {
-  constructor(message = 'Token quota exceeded') {
+  constructor(message = "Token quota exceeded") {
     super(message);
-    this.name = 'UsageExceededError';
+    this.name = "UsageExceededError";
   }
 }
 

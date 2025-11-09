@@ -1,5 +1,5 @@
-import { Page } from '@playwright/test';
-import { LoginPage, SignupPage } from '../pages/AuthPages';
+import { Page } from "@playwright/test";
+import { LoginPage, SignupPage } from "../pages/AuthPages";
 
 export interface TestUser {
   email: string;
@@ -24,8 +24,8 @@ export class AuthHelper {
 
     if (!email || !password) {
       throw new Error(
-        'E2E test user credentials not found in environment variables. ' +
-        'Please ensure E2E_USERNAME and E2E_PASSWORD are set in .env.test'
+        "E2E test user credentials not found in environment variables. " +
+          "Please ensure E2E_USERNAME and E2E_PASSWORD are set in .env.test"
       );
     }
 
@@ -51,7 +51,7 @@ export class AuthHelper {
   static generateTestUser(): TestUser {
     return {
       email: this.generateTestEmail(),
-      password: 'TestPassword123!',
+      password: "TestPassword123!",
     };
   }
 
@@ -84,7 +84,7 @@ export class AuthHelper {
     await loginPage.login(user.email, user.password);
 
     // Wait for successful redirect
-    await loginPage.waitForSuccessfulLogin(redirectTo || '/');
+    await loginPage.waitForSuccessfulLogin(redirectTo || "/");
   }
 
   /**
@@ -108,8 +108,8 @@ export class AuthHelper {
   static async logout(page: Page): Promise<void> {
     // Navigate to logout endpoint or click logout button
     // Adjust based on your actual logout implementation
-    await page.goto('/api/v1/auth/logout');
-    await page.waitForLoadState('networkidle');
+    await page.goto("/api/v1/auth/logout");
+    await page.waitForLoadState("networkidle");
   }
 
   /**
@@ -118,11 +118,11 @@ export class AuthHelper {
   static async isLoggedIn(page: Page): Promise<boolean> {
     // Check for the presence of user-specific elements
     // This might need adjustment based on your actual implementation
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
 
     // Check if login button is visible (not logged in) or user menu is visible (logged in)
-    const loginButton = page.getByRole('link', { name: /zaloguj|login/i });
+    const loginButton = page.getByRole("link", { name: /zaloguj|login/i });
     const loginButtonVisible = await loginButton.isVisible().catch(() => false);
 
     return !loginButtonVisible;
@@ -137,13 +137,13 @@ export class AuthHelper {
     // This will depend on how your app handles authentication
     await page.context().addCookies([
       {
-        name: 'auth_token',
+        name: "auth_token",
         value: authToken,
-        domain: 'localhost',
-        path: '/',
+        domain: "localhost",
+        path: "/",
         httpOnly: true,
         secure: false,
-        sameSite: 'Lax',
+        sameSite: "Lax",
       },
     ]);
   }
@@ -168,7 +168,7 @@ export class AuthHelper {
     const testUser = user || this.getE2ETestUser();
 
     // Login via API
-    const response = await page.request.post('/api/v1/auth/login', {
+    const response = await page.request.post("/api/v1/auth/login", {
       data: {
         email: testUser.email,
         password: testUser.password,
@@ -176,17 +176,15 @@ export class AuthHelper {
     });
 
     if (!response.ok()) {
-      const errorText = await response.text().catch(() => 'Unknown error');
+      const errorText = await response.text().catch(() => "Unknown error");
       throw new Error(
-        `Quick login failed: ${response.status()}\n` +
-        `User: ${testUser.email}\n` +
-        `Response: ${errorText}`
+        `Quick login failed: ${response.status()}\n` + `User: ${testUser.email}\n` + `Response: ${errorText}`
       );
     }
 
     // Navigate to home to ensure cookies are set
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
 
     return testUser;
   }

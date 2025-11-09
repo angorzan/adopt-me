@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 /**
  * Page Object Model for Dogs Catalog Page (Home Page)
@@ -28,27 +28,27 @@ export class DogsPage {
     this.page = page;
 
     // Catalog view
-    this.catalogView = page.getByTestId('dog-catalog-view');
-    this.catalogError = page.getByTestId('dog-catalog-error');
+    this.catalogView = page.getByTestId("dog-catalog-view");
+    this.catalogError = page.getByTestId("dog-catalog-error");
 
     // Dog cards - use data-test-id
-    this.dogCards = page.getByTestId('dog-card');
+    this.dogCards = page.getByTestId("dog-card");
 
     // Filters
-    this.filters = page.getByTestId('dog-filters');
-    this.searchInput = page.getByTestId('dog-filters-search');
-    this.cityFilter = page.getByTestId('dog-filters-city');
-    this.sizeFilter = page.getByTestId('dog-filters-size');
-    this.ageFilter = page.getByTestId('dog-filters-age');
-    this.shelterFilter = page.getByTestId('dog-filters-shelter');
+    this.filters = page.getByTestId("dog-filters");
+    this.searchInput = page.getByTestId("dog-filters-search");
+    this.cityFilter = page.getByTestId("dog-filters-city");
+    this.sizeFilter = page.getByTestId("dog-filters-size");
+    this.ageFilter = page.getByTestId("dog-filters-age");
+    this.shelterFilter = page.getByTestId("dog-filters-shelter");
   }
 
   /**
    * Navigate to the dogs catalog page (home page)
    */
   async goto(): Promise<void> {
-    await this.page.goto('/');
-    await this.page.waitForLoadState('networkidle');
+    await this.page.goto("/");
+    await this.page.waitForLoadState("networkidle");
   }
 
   /**
@@ -72,37 +72,37 @@ export class DogsPage {
    */
   async filterByCity(city: string): Promise<void> {
     await this.cityFilter.click();
-    await this.page.getByRole('option', { name: city }).click();
+    await this.page.getByRole("option", { name: city }).click();
     await this.page.waitForTimeout(300);
   }
 
   /**
    * Filter by size
    */
-  async filterBySize(size: 'small' | 'medium' | 'large' | 'all'): Promise<void> {
+  async filterBySize(size: "small" | "medium" | "large" | "all"): Promise<void> {
     await this.sizeFilter.click();
     const sizeLabels = {
-      small: 'Mały',
-      medium: 'Średni',
-      large: 'Duży',
-      all: 'Wszystkie rozmiary',
+      small: "Mały",
+      medium: "Średni",
+      large: "Duży",
+      all: "Wszystkie rozmiary",
     };
-    await this.page.getByRole('option', { name: sizeLabels[size] }).click();
+    await this.page.getByRole("option", { name: sizeLabels[size] }).click();
     await this.page.waitForTimeout(300);
   }
 
   /**
    * Filter by age category
    */
-  async filterByAge(age: 'puppy' | 'adult' | 'senior' | 'all'): Promise<void> {
+  async filterByAge(age: "puppy" | "adult" | "senior" | "all"): Promise<void> {
     await this.ageFilter.click();
     const ageLabels = {
-      puppy: 'Szczeniak',
-      adult: 'Dorosły',
-      senior: 'Senior',
-      all: 'Każdy wiek',
+      puppy: "Szczeniak",
+      adult: "Dorosły",
+      senior: "Senior",
+      all: "Każdy wiek",
     };
-    await this.page.getByRole('option', { name: ageLabels[age] }).click();
+    await this.page.getByRole("option", { name: ageLabels[age] }).click();
     await this.page.waitForTimeout(300);
   }
 
@@ -118,7 +118,7 @@ export class DogsPage {
    */
   async clickViewDetails(index: number): Promise<void> {
     const card = this.dogCards.nth(index);
-    await card.getByTestId('dog-card-view-details-button').click();
+    await card.getByTestId("dog-card-view-details-button").click();
   }
 
   /**
@@ -126,7 +126,7 @@ export class DogsPage {
    */
   async getDogName(index: number): Promise<string | null> {
     const dogCard = this.dogCards.nth(index);
-    const nameElement = dogCard.getByTestId('dog-card-name');
+    const nameElement = dogCard.getByTestId("dog-card-name");
     return await nameElement.textContent();
   }
 
@@ -135,7 +135,7 @@ export class DogsPage {
    */
   async getDogMetadata(index: number): Promise<string | null> {
     const dogCard = this.dogCards.nth(index);
-    const metadataElement = dogCard.getByTestId('dog-card-metadata');
+    const metadataElement = dogCard.getByTestId("dog-card-metadata");
     return await metadataElement.textContent();
   }
 
@@ -144,7 +144,7 @@ export class DogsPage {
    */
   async getDogTemperament(index: number): Promise<string | null> {
     const dogCard = this.dogCards.nth(index);
-    const temperamentElement = dogCard.getByTestId('dog-card-temperament');
+    const temperamentElement = dogCard.getByTestId("dog-card-temperament");
     return await temperamentElement.textContent();
   }
 
@@ -161,7 +161,7 @@ export class DogsPage {
     // Extract ID from URL
     const url = this.page.url();
     const match = url.match(/\/dogs\/(.+)/);
-    return match ? match[1] : '';
+    return match ? match[1] : "";
   }
 
   /**
@@ -203,5 +203,3 @@ export class DogsPage {
     expect(count).toBe(0);
   }
 }
-
-

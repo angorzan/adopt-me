@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import type { DogFiltersViewModel } from '@/lib/viewModels';
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { DogFiltersViewModel } from "@/lib/viewModels";
 
 interface DogFiltersProps {
-    filters: DogFiltersViewModel;
-    onFiltersChange: (newFilters: Partial<DogFiltersViewModel>) => void;
-    isLoading: boolean;
+  filters: DogFiltersViewModel;
+  onFiltersChange: (newFilters: Partial<DogFiltersViewModel>) => void;
+  isLoading: boolean;
 }
 
 export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersProps) => {
@@ -17,26 +17,26 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
 
   useEffect(() => {
     // Fetch available cities
-    fetch('/api/v1/cities')
+    fetch("/api/v1/cities")
       .then((res) => res.json())
       .then((data) => {
         setCities(data);
         setCitiesLoading(false);
       })
       .catch((err) => {
-        console.error('Failed to load cities:', err);
+        console.error("Failed to load cities:", err);
         setCitiesLoading(false);
       });
 
     // Fetch available shelters
-    fetch('/api/v1/shelters')
+    fetch("/api/v1/shelters")
       .then((res) => res.json())
       .then((data) => {
         setShelters(data);
         setSheltersLoading(false);
       })
       .catch((err) => {
-        console.error('Failed to load shelters:', err);
+        console.error("Failed to load shelters:", err);
         setSheltersLoading(false);
       });
   }, []);
@@ -71,7 +71,7 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
       </Select>
       <Select
         value={filters.size}
-        onValueChange={(value) => onFiltersChange({ size: value as DogFiltersViewModel['size'] })}
+        onValueChange={(value) => onFiltersChange({ size: value as DogFiltersViewModel["size"] })}
         disabled={isLoading}
       >
         <SelectTrigger className="w-full md:w-[180px]" data-test-id="dog-filters-size">
@@ -86,7 +86,7 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
       </Select>
       <Select
         value={filters.age_category}
-        onValueChange={(value) => onFiltersChange({ age_category: value as DogFiltersViewModel['age_category'] })}
+        onValueChange={(value) => onFiltersChange({ age_category: value as DogFiltersViewModel["age_category"] })}
         disabled={isLoading}
       >
         <SelectTrigger className="w-full md:w-[180px]" data-test-id="dog-filters-age">

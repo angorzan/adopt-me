@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 /**
  * Page Object Model for Adoption Form
@@ -46,37 +46,37 @@ export class AdoptionFormPage {
     this.page = page;
 
     // Unauthenticated state
-    this.unauthenticatedCard = page.getByTestId('adoption-form-unauthenticated');
-    this.loginButton = page.getByTestId('adoption-form-login-button');
-    this.signupButton = page.getByTestId('adoption-form-signup-button');
+    this.unauthenticatedCard = page.getByTestId("adoption-form-unauthenticated");
+    this.loginButton = page.getByTestId("adoption-form-login-button");
+    this.signupButton = page.getByTestId("adoption-form-signup-button");
 
     // Success state
-    this.successCard = page.getByTestId('adoption-form-success');
-    this.successMessage = page.getByTestId('adoption-form-success-message');
+    this.successCard = page.getByTestId("adoption-form-success");
+    this.successMessage = page.getByTestId("adoption-form-success-message");
 
     // Form elements
-    this.formContainer = page.getByTestId('adoption-form-container');
-    this.form = page.getByTestId('adoption-form');
-    this.globalError = page.getByTestId('adoption-form-global-error');
+    this.formContainer = page.getByTestId("adoption-form-container");
+    this.form = page.getByTestId("adoption-form");
+    this.globalError = page.getByTestId("adoption-form-global-error");
 
     // Form fields
-    this.motivationTextarea = page.getByTestId('adoption-form-motivation');
-    this.motivationCounter = page.getByTestId('adoption-form-motivation-counter');
-    this.motivationError = page.getByTestId('adoption-form-motivation-error');
+    this.motivationTextarea = page.getByTestId("adoption-form-motivation");
+    this.motivationCounter = page.getByTestId("adoption-form-motivation-counter");
+    this.motivationError = page.getByTestId("adoption-form-motivation-error");
 
-    this.contactPreferenceSelect = page.getByTestId('adoption-form-contact-preference');
-    this.contactEmailOption = page.getByTestId('adoption-form-contact-email');
-    this.contactPhoneOption = page.getByTestId('adoption-form-contact-phone');
-    this.contactPreferenceError = page.getByTestId('adoption-form-contact-preference-error');
+    this.contactPreferenceSelect = page.getByTestId("adoption-form-contact-preference");
+    this.contactEmailOption = page.getByTestId("adoption-form-contact-email");
+    this.contactPhoneOption = page.getByTestId("adoption-form-contact-phone");
+    this.contactPreferenceError = page.getByTestId("adoption-form-contact-preference-error");
 
-    this.extraNotesTextarea = page.getByTestId('adoption-form-extra-notes');
-    this.extraNotesCounter = page.getByTestId('adoption-form-extra-notes-counter');
-    this.extraNotesError = page.getByTestId('adoption-form-extra-notes-error');
+    this.extraNotesTextarea = page.getByTestId("adoption-form-extra-notes");
+    this.extraNotesCounter = page.getByTestId("adoption-form-extra-notes-counter");
+    this.extraNotesError = page.getByTestId("adoption-form-extra-notes-error");
 
-    this.gdprConsentCheckbox = page.getByTestId('adoption-form-consent-checkbox');
-    this.gdprConsentError = page.getByTestId('adoption-form-consent-error');
+    this.gdprConsentCheckbox = page.getByTestId("adoption-form-consent-checkbox");
+    this.gdprConsentError = page.getByTestId("adoption-form-consent-error");
 
-    this.submitButton = page.getByTestId('adoption-form-submit-button');
+    this.submitButton = page.getByTestId("adoption-form-submit-button");
   }
 
   /**
@@ -84,7 +84,7 @@ export class AdoptionFormPage {
    */
   async goto(dogId: string): Promise<void> {
     await this.page.goto(`/dogs/${dogId}`);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   /**
@@ -132,10 +132,10 @@ export class AdoptionFormPage {
   /**
    * Select preferred contact method
    */
-  async selectContactPreference(method: 'email' | 'phone'): Promise<void> {
+  async selectContactPreference(method: "email" | "phone"): Promise<void> {
     await this.contactPreferenceSelect.click();
 
-    if (method === 'email') {
+    if (method === "email") {
       await this.contactEmailOption.click();
     } else {
       await this.contactPhoneOption.click();
@@ -175,7 +175,7 @@ export class AdoptionFormPage {
    */
   async fillCompleteForm(data: {
     motivation: string;
-    contactPreference?: 'email' | 'phone';
+    contactPreference?: "email" | "phone";
     extraNotes?: string;
   }): Promise<void> {
     await this.fillMotivation(data.motivation);
@@ -196,7 +196,7 @@ export class AdoptionFormPage {
    */
   async submitCompleteForm(data: {
     motivation: string;
-    contactPreference?: 'email' | 'phone';
+    contactPreference?: "email" | "phone";
     extraNotes?: string;
   }): Promise<void> {
     await this.fillCompleteForm(data);
@@ -243,14 +243,14 @@ export class AdoptionFormPage {
    */
   async getMotivationCharCount(): Promise<string> {
     const text = await this.motivationCounter.textContent();
-    return text || '0/800';
+    return text || "0/800";
   }
 
   /**
    * Wait for the loading state to finish (button shows "Wysyłanie...")
    */
   async waitForSubmitLoading(): Promise<void> {
-    await expect(this.submitButton).toContainText('Wysyłanie');
+    await expect(this.submitButton).toContainText("Wysyłanie");
   }
 
   /**
@@ -295,6 +295,6 @@ export class AdoptionFormPage {
    */
   async expectSuccess(): Promise<void> {
     await expect(this.successCard).toBeVisible();
-    await expect(this.successMessage).toContainText('Twój wniosek adopcyjny');
+    await expect(this.successMessage).toContainText("Twój wniosek adopcyjny");
   }
 }

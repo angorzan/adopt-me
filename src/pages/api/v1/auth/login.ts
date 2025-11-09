@@ -1,8 +1,8 @@
-import type { APIRoute } from 'astro';
-import { ZodError } from 'zod';
-import { createSupabaseServerInstance } from '@/db/supabase.client';
-import { loginCommandSchema } from '@/lib/validators/auth.validators';
-import { AuthService } from '@/lib/services/auth.service';
+import type { APIRoute } from "astro";
+import { ZodError } from "zod";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
+import { loginCommandSchema } from "@/lib/validators/auth.validators";
+import { AuthService } from "@/lib/services/auth.service";
 
 export const prerender = false;
 
@@ -14,11 +14,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     if (!body) {
       return new Response(
         JSON.stringify({
-          error: 'Nieprawidłowe dane wejściowe'
+          error: "Nieprawidłowe dane wejściowe",
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
@@ -44,14 +44,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
           access_token: session.access_token,
           refresh_token: session.refresh_token,
           expires_at: session.expires_at,
-        }
+        },
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
-
   } catch (error) {
     // Obsługa błędów walidacji Zod
     if (error instanceof ZodError) {
@@ -63,7 +62,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
@@ -73,11 +72,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       // Sprawdzenie typu błędu dla odpowiedniego status code
       let statusCode = 500;
 
-      if (error.message.includes('Nieprawidłowy e-mail lub hasło')) {
+      if (error.message.includes("Nieprawidłowy e-mail lub hasło")) {
         statusCode = 401;
-      } else if (error.message.includes('E-mail niezweryfikowany')) {
+      } else if (error.message.includes("E-mail niezweryfikowany")) {
         statusCode = 403;
-      } else if (error.message.includes('Zbyt wiele prób')) {
+      } else if (error.message.includes("Zbyt wiele prób")) {
         statusCode = 429;
       }
 
@@ -87,23 +86,22 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: statusCode,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
 
     // Błędy nieznane
-    console.error('Login error:', error, error instanceof Error ? error.stack : '');
+    console.error("Login error:", error, error instanceof Error ? error.stack : "");
     return new Response(
       JSON.stringify({
-        error: 'Wystąpił błąd serwera. Spróbuj ponownie później.',
-        debug: error instanceof Error ? error.message : String(error)
+        error: "Wystąpił błąd serwera. Spróbuj ponownie później.",
+        debug: error instanceof Error ? error.message : String(error),
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
   }
 };
-

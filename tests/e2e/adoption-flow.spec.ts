@@ -1,9 +1,9 @@
-import { test, expect } from '@playwright/test';
-import { AdoptionFormPage } from './pages/AdoptionFormPage';
-import { SignupPage, LoginPage } from './pages/AuthPages';
-import { DogsPage } from './pages/DogsPage';
-import { AuthHelper } from './helpers/AuthHelper';
-import { validAdoptionData, invalidAdoptionData, errorMessages, successMessages } from './helpers/test-data';
+import { test, expect } from "@playwright/test";
+import { AdoptionFormPage } from "./pages/AdoptionFormPage";
+import { SignupPage, LoginPage } from "./pages/AuthPages";
+import { DogsPage } from "./pages/DogsPage";
+import { AuthHelper } from "./helpers/AuthHelper";
+import { validAdoptionData, invalidAdoptionData, errorMessages, successMessages } from "./helpers/test-data";
 
 // ═════════════════════════════════════════════════════════════════════
 // ADOPTION FLOW - Complete Journey E2E Tests
@@ -25,7 +25,7 @@ import { validAdoptionData, invalidAdoptionData, errorMessages, successMessages 
 //
 // ═════════════════════════════════════════════════════════════════════
 
-test.describe('Adoption Flow - Complete Journey', () => {
+test.describe("Adoption Flow - Complete Journey", () => {
   let dogId: string;
 
   test.beforeEach(async ({ page }) => {
@@ -36,7 +36,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
     // Ensure there are dogs available
     const count = await dogsPage.getDogCount();
     if (count === 0) {
-      test.skip(true, 'No dogs available in catalog');
+      test.skip(true, "No dogs available in catalog");
     }
 
     // Get the first dog's ID
@@ -44,7 +44,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
   });
 
   // Test 1: Happy Path - Authenticated user can submit adoption application
-  test('authenticated user can submit adoption application successfully', async ({ page }) => {
+  test("authenticated user can submit adoption application successfully", async ({ page }) => {
     // Login as test user
     const testUser = await AuthHelper.quickLogin(page);
 
@@ -67,7 +67,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
   });
 
   // Test 2: Unauthenticated user sees login/signup CTAs
-  test('unauthenticated user sees login/signup CTAs instead of form', async ({ page }) => {
+  test("unauthenticated user sees login/signup CTAs instead of form", async ({ page }) => {
     // Ensure user is NOT logged in
     await AuthHelper.clearAuthState(page);
 
@@ -85,7 +85,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
   });
 
   // Test 3: Form validation - required fields
-  test('shows validation errors for required fields', async ({ page }) => {
+  test("shows validation errors for required fields", async ({ page }) => {
     // Login
     await AuthHelper.quickLogin(page);
 
@@ -104,7 +104,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
   });
 
   // Test 4: Form validation - minimum character length for motivation
-  test('validates minimum character length for motivation field', async ({ page }) => {
+  test("validates minimum character length for motivation field", async ({ page }) => {
     // Login
     await AuthHelper.quickLogin(page);
 
@@ -120,11 +120,11 @@ test.describe('Adoption Flow - Complete Journey', () => {
     await adoptionForm.expectMotivationError();
 
     const errorText = await adoptionForm.getMotivationError();
-    expect(errorText).toContain('20 znaków');
+    expect(errorText).toContain("20 znaków");
   });
 
   // Test 5: Duplicate application prevention
-  test.skip('prevents duplicate application for the same dog', async ({ page }) => {
+  test.skip("prevents duplicate application for the same dog", async ({ page }) => {
     // SKIPPED: This test would create duplicate applications in the test database
     // and pollute the E2E test user's application history.
     //
@@ -149,7 +149,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
 
     // Refresh page and try to submit again
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState("networkidle");
 
     // Try to submit second application for same dog
     await adoptionForm.submitCompleteForm(validAdoptionData.short);
@@ -158,11 +158,11 @@ test.describe('Adoption Flow - Complete Journey', () => {
     await adoptionForm.waitForError();
 
     const errorText = await adoptionForm.getGlobalError();
-    expect(errorText).toContain('już');
+    expect(errorText).toContain("już");
   });
 
   // Test 6: Loading state during form submission
-  test('displays loading state during form submission', async ({ page }) => {
+  test("displays loading state during form submission", async ({ page }) => {
     // Login
     await AuthHelper.quickLogin(page);
 
@@ -176,7 +176,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
     await adoptionForm.submit();
 
     // Verify button shows loading text
-    await expect(adoptionForm.submitButton).toContainText('Wysyłanie');
+    await expect(adoptionForm.submitButton).toContainText("Wysyłanie");
 
     // Verify button is disabled during submission
     expect(await adoptionForm.isSubmitButtonDisabled()).toBe(true);
@@ -186,7 +186,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
   });
 
   // Test 7: Preferred contact method selection
-  test('allows user to select preferred contact method', async ({ page }) => {
+  test("allows user to select preferred contact method", async ({ page }) => {
     // Login
     await AuthHelper.quickLogin(page);
 
@@ -196,7 +196,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
     // Select phone as contact method
     await adoptionForm.submitCompleteForm({
       ...validAdoptionData.short,
-      contactPreference: 'phone',
+      contactPreference: "phone",
     });
 
     // Verify success
@@ -205,7 +205,7 @@ test.describe('Adoption Flow - Complete Journey', () => {
   });
 
   // Test 8: Optional additional notes
-  test('allows optional additional notes up to 500 characters', async ({ page }) => {
+  test("allows optional additional notes up to 500 characters", async ({ page }) => {
     // Login
     await AuthHelper.quickLogin(page);
 
@@ -221,9 +221,9 @@ test.describe('Adoption Flow - Complete Journey', () => {
   });
 });
 
-test.describe('Adoption Flow - Registration & Login', () => {
+test.describe("Adoption Flow - Registration & Login", () => {
   // Test 9: Complete registration flow
-  test('new user can register and submit adoption application', async ({ page }) => {
+  test("new user can register and submit adoption application", async ({ page }) => {
     // Generate unique test user
     const testUser = AuthHelper.generateTestUser();
 
@@ -258,22 +258,22 @@ test.describe('Adoption Flow - Registration & Login', () => {
   });
 
   // Test 10: Login validation
-  test('shows validation errors for invalid login credentials', async ({ page }) => {
+  test("shows validation errors for invalid login credentials", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
 
     // Try to login with invalid credentials
-    await loginPage.login('invalid@example.com', 'wrongpassword');
+    await loginPage.login("invalid@example.com", "wrongpassword");
 
     // Wait for and verify error
     await loginPage.waitForError();
-    await loginPage.expectError('Nieprawidłowy');
+    await loginPage.expectError("Nieprawidłowy");
   });
 });
 
-test.describe('Adoption Flow - Dog Selection', () => {
+test.describe("Adoption Flow - Dog Selection", () => {
   // Test 11: Navigate from catalog to dog details
-  test('user can navigate from dog catalog to adoption form', async ({ page }) => {
+  test("user can navigate from dog catalog to adoption form", async ({ page }) => {
     const dogsPage = new DogsPage(page);
     await dogsPage.goto();
 
@@ -295,7 +295,7 @@ test.describe('Adoption Flow - Dog Selection', () => {
   });
 
   // Test 12: Dog catalog search
-  test('user can search dogs and navigate to adoption form', async ({ page }) => {
+  test("user can search dogs and navigate to adoption form", async ({ page }) => {
     const dogsPage = new DogsPage(page);
     await dogsPage.goto();
 
@@ -319,7 +319,7 @@ test.describe('Adoption Flow - Dog Selection', () => {
   });
 });
 
-test.describe('Adoption Flow - Error Handling', () => {
+test.describe("Adoption Flow - Error Handling", () => {
   let dogId: string;
 
   test.beforeEach(async ({ page }) => {
@@ -328,23 +328,23 @@ test.describe('Adoption Flow - Error Handling', () => {
 
     const count = await dogsPage.getDogCount();
     if (count === 0) {
-      test.skip(true, 'No dogs available');
+      test.skip(true, "No dogs available");
     }
 
     dogId = await dogsPage.getFirstDogId();
   });
 
   // Test 13: Network error handling
-  test('shows error message when API request fails', async ({ page }) => {
+  test("shows error message when API request fails", async ({ page }) => {
     // Login
     await AuthHelper.quickLogin(page);
 
     // Mock failed API response
-    await page.route('**/api/applications', (route) => {
+    await page.route("**/api/applications", (route) => {
       route.fulfill({
         status: 500,
-        contentType: 'application/json',
-        body: JSON.stringify({ error: 'server_error' }),
+        contentType: "application/json",
+        body: JSON.stringify({ error: "server_error" }),
       });
     });
 
@@ -358,20 +358,20 @@ test.describe('Adoption Flow - Error Handling', () => {
     await adoptionForm.waitForError();
 
     const errorText = await adoptionForm.getGlobalError();
-    expect(errorText).toContain('błąd');
+    expect(errorText).toContain("błąd");
   });
 
   // Test 14: Unavailable dog
-  test('shows error when dog is no longer available', async ({ page }) => {
+  test("shows error when dog is no longer available", async ({ page }) => {
     // Login
     await AuthHelper.quickLogin(page);
 
     // Mock API response with dog unavailable error
-    await page.route('**/api/applications', (route) => {
+    await page.route("**/api/applications", (route) => {
       route.fulfill({
         status: 400,
-        contentType: 'application/json',
-        body: JSON.stringify({ error: 'dog_not_available' }),
+        contentType: "application/json",
+        body: JSON.stringify({ error: "dog_not_available" }),
       });
     });
 
@@ -385,11 +385,11 @@ test.describe('Adoption Flow - Error Handling', () => {
     await adoptionForm.waitForError();
 
     const errorText = await adoptionForm.getGlobalError();
-    expect(errorText).toContain('niedostępny');
+    expect(errorText).toContain("niedostępny");
   });
 });
 
-test.describe('Adoption Flow - Responsive Design', () => {
+test.describe("Adoption Flow - Responsive Design", () => {
   let dogId: string;
 
   test.beforeEach(async ({ page }) => {
@@ -398,14 +398,14 @@ test.describe('Adoption Flow - Responsive Design', () => {
 
     const count = await dogsPage.getDogCount();
     if (count === 0) {
-      test.skip(true, 'No dogs available');
+      test.skip(true, "No dogs available");
     }
 
     dogId = await dogsPage.getFirstDogId();
   });
 
   // Test 15: Mobile adoption form
-  test('adoption form works correctly on mobile devices', async ({ page }) => {
+  test("adoption form works correctly on mobile devices", async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
 
@@ -427,7 +427,7 @@ test.describe('Adoption Flow - Responsive Design', () => {
   });
 
   // Test 16: Tablet adoption form
-  test('adoption form works correctly on tablet devices', async ({ page }) => {
+  test("adoption form works correctly on tablet devices", async ({ page }) => {
     // Set tablet viewport
     await page.setViewportSize({ width: 768, height: 1024 });
 

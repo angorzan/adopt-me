@@ -1,17 +1,17 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { AdoptionForm } from '@/components/applications/AdoptionForm';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { createSupabaseServerInstance } from '@/db/supabase.client';
+import Layout from "@/layouts/Layout.astro";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { AdoptionForm } from "@/components/applications/AdoptionForm";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
 
 export const prerender = false;
 
 const { id } = Astro.params;
 
 if (!id) {
-  return Astro.redirect('/');
+  return Astro.redirect("/");
 }
 
 // Fetch dog details directly from Supabase
@@ -22,19 +22,22 @@ const supabase = createSupabaseServerInstance({
 const user = Astro.locals.user;
 
 const { data: dog, error } = await supabase
-  .from('dogs')
-  .select('*')
-  .eq('id', id)
-  .eq('adoption_status', 'available')
+  .from("dogs")
+  .select("*")
+  .eq("id", id)
+  .eq("adoption_status", "available")
   .single();
 
 if (error || !dog) {
-  return Astro.redirect('/');
+  return Astro.redirect("/");
 }
 
-const ageLabel = dog.age_years < 1 ? `${dog.age_years * 12} miesięcy` : `${dog.age_years} ${dog.age_years === 1 ? 'rok' : dog.age_years < 5 ? 'lata' : 'lat'}`;
-const sizeMap: Record<string, string> = { small: 'Mały', medium: 'Średni', large: 'Duży' };
-const ageCategoryMap: Record<string, string> = { puppy: 'Szczeniak', adult: 'Dorosły', senior: 'Senior' };
+const ageLabel =
+  dog.age_years < 1
+    ? `${dog.age_years * 12} miesięcy`
+    : `${dog.age_years} ${dog.age_years === 1 ? "rok" : dog.age_years < 5 ? "lata" : "lat"}`;
+const sizeMap: Record<string, string> = { small: "Mały", medium: "Średni", large: "Duży" };
+const ageCategoryMap: Record<string, string> = { puppy: "Szczeniak", adult: "Dorosły", senior: "Senior" };
 ---
 
 <Layout title={`${dog.name} - AdoptMe`}>
@@ -63,7 +66,9 @@ const ageCategoryMap: Record<string, string> = { puppy: 'Szczeniak', adult: 'Dor
                   {ageLabel} · {sizeMap[dog.size]} · {ageCategoryMap[dog.age_category]}
                 </CardDescription>
               </div>
-              <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/30 px-3 py-1 text-sm font-medium text-green-700 dark:text-green-400">
+              <span
+                class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/30 px-3 py-1 text-sm font-medium text-green-700 dark:text-green-400"
+              >
                 Dostępny do adopcji
               </span>
             </div>
@@ -74,12 +79,14 @@ const ageCategoryMap: Record<string, string> = { puppy: 'Szczeniak', adult: 'Dor
               <p class="text-muted-foreground">{dog.temperament}</p>
             </div>
 
-            {dog.health && (
-              <div>
-                <h3 class="font-semibold text-lg mb-2">Zdrowie</h3>
-                <p class="text-muted-foreground">{dog.health}</p>
-              </div>
-            )}
+            {
+              dog.health && (
+                <div>
+                  <h3 class="font-semibold text-lg mb-2">Zdrowie</h3>
+                  <p class="text-muted-foreground">{dog.health}</p>
+                </div>
+              )
+            }
 
             <div>
               <h3 class="font-semibold text-lg mb-2">Szczegóły</h3>
@@ -116,16 +123,13 @@ const ageCategoryMap: Record<string, string> = { puppy: 'Szczeniak', adult: 'Dor
           </CardHeader>
           <CardContent class="space-y-4">
             <p class="text-sm text-muted-foreground">
-              Jeśli masz dodatkowe pytania o {dog.name} lub status adopcji, napisz do opiekunów ze
-              schroniska. Chętnie pomogą Ci przygotować się do spotkania.
+              Jeśli masz dodatkowe pytania o {dog.name} lub status adopcji, napisz do opiekunów ze schroniska. Chętnie pomogą
+              Ci przygotować się do spotkania.
             </p>
-            <Button variant="outline" class="w-full">
-              Kontakt ze schroniskiem
-            </Button>
+            <Button variant="outline" class="w-full"> Kontakt ze schroniskiem </Button>
           </CardContent>
         </Card>
       </div>
     </div>
   </main>
 </Layout>
-

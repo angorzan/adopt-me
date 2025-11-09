@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
-import { DogsPage } from './pages/DogsPage';
+import { test, expect } from "@playwright/test";
+import { DogsPage } from "./pages/DogsPage";
 
-test.describe('Dogs Listing Page', () => {
+test.describe("Dogs Listing Page", () => {
   let dogsPage: DogsPage;
 
   test.beforeEach(async ({ page }) => {
@@ -9,12 +9,12 @@ test.describe('Dogs Listing Page', () => {
     await dogsPage.goto();
   });
 
-  test('should display dog cards', async () => {
+  test("should display dog cards", async () => {
     const dogCount = await dogsPage.getDogCount();
     expect(dogCount).toBeGreaterThan(0);
   });
 
-  test('should display dog images', async ({ page }) => {
+  test("should display dog images", async ({ page }) => {
     const dogCount = await dogsPage.getDogCount();
 
     if (dogCount > 0) {
@@ -23,9 +23,9 @@ test.describe('Dogs Listing Page', () => {
     }
   });
 
-  test('should search for dogs', async () => {
+  test("should search for dogs", async () => {
     // Try to search if search functionality exists
-    await dogsPage.search('Labrador');
+    await dogsPage.search("Labrador");
 
     // Give some time for results to filter
     await dogsPage.page.waitForTimeout(1000);
@@ -35,7 +35,7 @@ test.describe('Dogs Listing Page', () => {
     expect(dogCount).toBeGreaterThanOrEqual(0);
   });
 
-  test('should navigate to dog details on card click', async ({ page }) => {
+  test("should navigate to dog details on card click", async ({ page }) => {
     const dogCount = await dogsPage.getDogCount();
 
     if (dogCount > 0) {
@@ -46,21 +46,21 @@ test.describe('Dogs Listing Page', () => {
 
       // Verify that we either navigated or a modal appeared
       const url = page.url();
-      const hasModal = await page.locator('[role="dialog"], .modal').count() > 0;
+      const hasModal = (await page.locator('[role="dialog"], .modal').count()) > 0;
 
-      expect(url.includes('/dogs/') || hasModal).toBe(true);
+      expect(url.includes("/dogs/") || hasModal).toBe(true);
     }
   });
 
-  test('should be responsive on tablet', async ({ page }) => {
+  test("should be responsive on tablet", async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
 
     const dogCount = await dogsPage.getDogCount();
     expect(dogCount).toBeGreaterThan(0);
   });
 
-  test('should handle no results gracefully', async () => {
-    await dogsPage.search('XYZ_NONEXISTENT_DOG_BREED_12345');
+  test("should handle no results gracefully", async () => {
+    await dogsPage.search("XYZ_NONEXISTENT_DOG_BREED_12345");
 
     await dogsPage.page.waitForTimeout(1000);
 
@@ -70,13 +70,13 @@ test.describe('Dogs Listing Page', () => {
   });
 });
 
-test.describe('Dogs Page API Integration', () => {
-  test('should load dogs from API', async ({ page }) => {
+test.describe("Dogs Page API Integration", () => {
+  test("should load dogs from API", async ({ page }) => {
     // Listen to API requests
     const apiRequests: string[] = [];
 
-    page.on('request', (request) => {
-      if (request.url().includes('/api/') || request.url().includes('supabase')) {
+    page.on("request", (request) => {
+      if (request.url().includes("/api/") || request.url().includes("supabase")) {
         apiRequests.push(request.url());
       }
     });
@@ -92,4 +92,3 @@ test.describe('Dogs Page API Integration', () => {
     expect(dogCount).toBeGreaterThanOrEqual(0);
   });
 });
-

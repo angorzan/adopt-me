@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 /**
  * Page Object Model for Signup Page
@@ -30,30 +30,30 @@ export class SignupPage {
     this.page = page;
 
     // Success state
-    this.successCard = page.getByTestId('signup-form-success');
-    this.successMessage = page.getByTestId('signup-form-success-message');
-    this.successLoginButton = page.getByTestId('signup-form-success-login-button');
+    this.successCard = page.getByTestId("signup-form-success");
+    this.successMessage = page.getByTestId("signup-form-success-message");
+    this.successLoginButton = page.getByTestId("signup-form-success-login-button");
 
     // Form elements
-    this.formContainer = page.getByTestId('signup-form-container');
-    this.form = page.getByTestId('signup-form');
-    this.errorMessage = page.getByTestId('signup-form-error');
+    this.formContainer = page.getByTestId("signup-form-container");
+    this.form = page.getByTestId("signup-form");
+    this.errorMessage = page.getByTestId("signup-form-error");
 
     // Form fields
-    this.emailInput = page.getByTestId('signup-form-email');
-    this.passwordInput = page.getByTestId('signup-form-password');
-    this.passwordConfirmInput = page.getByTestId('signup-form-password-confirm');
-    this.gdprCheckbox = page.getByTestId('signup-form-gdpr-checkbox');
-    this.submitButton = page.getByTestId('signup-form-submit-button');
-    this.loginLink = page.getByTestId('signup-form-login-link');
+    this.emailInput = page.getByTestId("signup-form-email");
+    this.passwordInput = page.getByTestId("signup-form-password");
+    this.passwordConfirmInput = page.getByTestId("signup-form-password-confirm");
+    this.gdprCheckbox = page.getByTestId("signup-form-gdpr-checkbox");
+    this.submitButton = page.getByTestId("signup-form-submit-button");
+    this.loginLink = page.getByTestId("signup-form-login-link");
   }
 
   /**
    * Navigate to the signup page
    */
   async goto(): Promise<void> {
-    await this.page.goto('/auth/signup');
-    await this.page.waitForLoadState('networkidle');
+    await this.page.goto("/auth/signup");
+    await this.page.waitForLoadState("networkidle");
   }
 
   /**
@@ -94,11 +94,7 @@ export class SignupPage {
   /**
    * Fill the complete signup form
    */
-  async fillForm(data: {
-    email: string;
-    password: string;
-    confirmPassword?: string;
-  }): Promise<void> {
+  async fillForm(data: { email: string; password: string; confirmPassword?: string }): Promise<void> {
     await this.fillEmail(data.email);
     await this.fillPassword(data.password);
     await this.fillPasswordConfirm(data.confirmPassword || data.password);
@@ -108,11 +104,7 @@ export class SignupPage {
   /**
    * Fill and submit the complete signup form
    */
-  async signup(data: {
-    email: string;
-    password: string;
-    confirmPassword?: string;
-  }): Promise<void> {
+  async signup(data: { email: string; password: string; confirmPassword?: string }): Promise<void> {
     await this.fillForm(data);
     await this.submit();
   }
@@ -157,7 +149,7 @@ export class SignupPage {
    */
   async expectSuccess(): Promise<void> {
     await expect(this.successCard).toBeVisible();
-    await expect(this.successMessage).toContainText('Konto zostało utworzone');
+    await expect(this.successMessage).toContainText("Konto zostało utworzone");
   }
 
   /**
@@ -195,25 +187,25 @@ export class LoginPage {
     this.page = page;
 
     // Form elements
-    this.formContainer = page.getByTestId('login-form-container');
-    this.form = page.getByTestId('login-form');
-    this.errorMessage = page.getByTestId('login-form-error');
+    this.formContainer = page.getByTestId("login-form-container");
+    this.form = page.getByTestId("login-form");
+    this.errorMessage = page.getByTestId("login-form-error");
 
     // Form fields
-    this.emailInput = page.getByTestId('login-form-email');
-    this.passwordInput = page.getByTestId('login-form-password');
-    this.submitButton = page.getByTestId('login-form-submit-button');
-    this.forgotPasswordLink = page.getByTestId('login-form-forgot-password-link');
-    this.signupLink = page.getByTestId('login-form-signup-link');
+    this.emailInput = page.getByTestId("login-form-email");
+    this.passwordInput = page.getByTestId("login-form-password");
+    this.submitButton = page.getByTestId("login-form-submit-button");
+    this.forgotPasswordLink = page.getByTestId("login-form-forgot-password-link");
+    this.signupLink = page.getByTestId("login-form-signup-link");
   }
 
   /**
    * Navigate to the login page
    */
   async goto(redirectTo?: string): Promise<void> {
-    const url = redirectTo ? `/auth/login?redirect=${redirectTo}` : '/auth/login';
+    const url = redirectTo ? `/auth/login?redirect=${redirectTo}` : "/auth/login";
     await this.page.goto(url);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   /**
@@ -270,7 +262,7 @@ export class LoginPage {
   /**
    * Wait for successful login (redirect to home or specified page)
    */
-  async waitForSuccessfulLogin(expectedUrl: string = '/'): Promise<void> {
+  async waitForSuccessfulLogin(expectedUrl = "/"): Promise<void> {
     await this.page.waitForURL(expectedUrl, { timeout: 10000 });
   }
 
@@ -303,6 +295,6 @@ export class LoginPage {
    */
   async isLoading(): Promise<boolean> {
     const text = await this.submitButton.textContent();
-    return text?.includes('Logowanie...') || false;
+    return text?.includes("Logowanie...") || false;
   }
 }

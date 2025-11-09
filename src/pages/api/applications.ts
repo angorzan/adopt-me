@@ -1,7 +1,7 @@
-import type { APIContext } from 'astro';
-import { ApplicationCreateSchema } from '@/lib/validators/application';
-import { createApplication } from '@/lib/services/adoptionService';
-import { createSupabaseServerInstance } from '@/db/supabase.client';
+import type { APIContext } from "astro";
+import { ApplicationCreateSchema } from "@/lib/validators/application";
+import { createApplication } from "@/lib/services/adoptionService";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -18,10 +18,7 @@ export async function POST(ctx: APIContext) {
     const user = ctx.locals.user;
 
     if (!user) {
-      return new Response(
-        JSON.stringify({ error: 'auth_required' }),
-        { status: 401 },
-      );
+      return new Response(JSON.stringify({ error: "auth_required" }), { status: 401 });
     }
 
     // 1. Parse and validate request body
@@ -29,41 +26,27 @@ export async function POST(ctx: APIContext) {
     const result = ApplicationCreateSchema.safeParse(body);
 
     if (!result.success) {
-      return new Response(
-        JSON.stringify({ error: result.error.flatten() }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: result.error.flatten() }), { status: 400 });
     }
 
     // 2. Create application
     const response = await createApplication(supabase, user.id, result.data);
 
-    if ('error' in response) {
-      const status = response.error === 'server_error' ? 500
-        : response.error === 'dog_not_available' ? 404
-        : 409;
+    if ("error" in response) {
+      const status = response.error === "server_error" ? 500 : response.error === "dog_not_available" ? 404 : 409;
 
-      return new Response(
-        JSON.stringify({ error: response.error }),
-        { status }
-      );
+      return new Response(JSON.stringify({ error: response.error }), { status });
     }
 
     // 3. Return created application
-    return new Response(
-      JSON.stringify(response.data),
-      {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    return new Response(JSON.stringify(response.data), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (error) {
-    console.error('Failed to process application:', error);
-    return new Response(
-      JSON.stringify({ error: 'server_error' }),
-      { status: 500 }
-    );
+    console.error("Failed to process application:", error);
+    return new Response(JSON.stringify({ error: "server_error" }), { status: 500 });
   }
 }

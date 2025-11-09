@@ -1,34 +1,34 @@
 /// <reference path="../env.d.ts" />
-import type { MiddlewareHandler } from 'astro';
-import type { DTO } from '@/types';
-import { supabaseClient, createSupabaseServerInstance } from '../db/supabase.client';
+import type { MiddlewareHandler } from "astro";
+import type { DTO } from "@/types";
+import { supabaseClient, createSupabaseServerInstance } from "../db/supabase.client";
 
 // Public paths that don't require authentication check
 const PUBLIC_PATHS = [
-  '/',
-  '/dogs',
-  '/auth/login',
-  '/auth/register',
-  '/auth/signup',
-  '/auth/forgot-password',
-  '/auth/reset-password',
-  '/auth/verify-email',
-  '/auth/logout',
-  '/api/v1/auth/login',
-  '/api/v1/auth/register',
-  '/api/v1/auth/logout',
-  '/api/v1/auth/forgot-password',
-  '/api/v1/auth/reset-password',
+  "/",
+  "/dogs",
+  "/auth/login",
+  "/auth/register",
+  "/auth/signup",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+  "/auth/verify-email",
+  "/auth/logout",
+  "/api/v1/auth/login",
+  "/api/v1/auth/register",
+  "/api/v1/auth/logout",
+  "/api/v1/auth/forgot-password",
+  "/api/v1/auth/reset-password",
 ];
 
-type AuthLocals = {
+interface AuthLocals {
   supabase: typeof supabaseClient;
   user?: DTO.UserResponse;
   session?: {
     accessToken: string;
     refreshToken: string;
   };
-};
+}
 
 export const onRequest: MiddlewareHandler = async ({ locals, cookies, request }, next) => {
   const authLocals = locals as AuthLocals;
@@ -52,9 +52,9 @@ export const onRequest: MiddlewareHandler = async ({ locals, cookies, request },
     if (authUser && !error) {
       // Fetch full user data from users table
       const { data: userData, error: userError } = await supabaseClient
-        .from('users')
-        .select('id, email, role, shelter_id, created_at, updated_at')
-        .eq('id', authUser.id)
+        .from("users")
+        .select("id, email, role, shelter_id, created_at, updated_at")
+        .eq("id", authUser.id)
         .single();
 
       if (userData && !userError) {
@@ -66,9 +66,8 @@ export const onRequest: MiddlewareHandler = async ({ locals, cookies, request },
     }
   } catch (error) {
     // Log error but don't block request
-    console.error('Middleware auth error:', error);
+    console.error("Middleware auth error:", error);
   }
 
   return next();
 };
-

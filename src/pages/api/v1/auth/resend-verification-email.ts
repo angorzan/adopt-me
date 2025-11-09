@@ -1,12 +1,12 @@
-import type { APIRoute } from 'astro';
-import { ZodError, z } from 'zod';
-import { createSupabaseServerInstance } from '@/db/supabase.client';
-import { AuthService } from '@/lib/services/auth.service';
+import type { APIRoute } from "astro";
+import { ZodError, z } from "zod";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
+import { AuthService } from "@/lib/services/auth.service";
 
 export const prerender = false;
 
 const resendVerificationSchema = z.object({
-  email: z.string().email('Nieprawidłowy adres e-mail'),
+  email: z.string().email("Nieprawidłowy adres e-mail"),
 });
 
 export const POST: APIRoute = async ({ request, cookies }) => {
@@ -16,12 +16,12 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     if (!body) {
       return new Response(
         JSON.stringify({
-          error: 'Nieprawidłowe dane wejściowe',
+          error: "Nieprawidłowe dane wejściowe",
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        },
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
@@ -37,18 +37,18 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       await authService.resendVerificationEmail(data.email);
     } catch (e) {
       const errorMsg = e instanceof Error ? e.message : String(e);
-      console.log('Resend email error:', errorMsg);
+      console.log("Resend email error:", errorMsg);
       // Nie przerywamy - mogą być błędy z Supabase ale email mógł być wysłany
     }
 
     return new Response(
       JSON.stringify({
-        message: 'Mail weryfikacyjny został wysłany. Sprawdź swoją skrzynkę e-mail.',
+        message: "Mail weryfikacyjny został wysłany. Sprawdź swoją skrzynkę e-mail.",
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
+        headers: { "Content-Type": "application/json" },
+      }
     );
   } catch (error) {
     if (error instanceof ZodError) {
@@ -60,8 +60,8 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        },
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
@@ -72,20 +72,20 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        },
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
-    console.error('Resend verification error:', error);
+    console.error("Resend verification error:", error);
     return new Response(
       JSON.stringify({
-        error: 'Nie udało się wysłać maila weryfikacyjnego. Spróbuj ponownie później.',
+        error: "Nie udało się wysłać maila weryfikacyjnego. Spróbuj ponownie później.",
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 };

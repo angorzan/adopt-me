@@ -1,8 +1,8 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/db/database.types';
-import type { DTO } from '@/types';
-import type { LoginCommand, RegisterCommand } from '../validators/auth.validators';
-import { getEnv } from '../utils/env';
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/db/database.types";
+import type { DTO } from "@/types";
+import type { LoginCommand, RegisterCommand } from "../validators/auth.validators";
+import { getEnv } from "../utils/env";
 
 export class AuthService {
   constructor(private supabase: SupabaseClient<Database>) {}
@@ -14,7 +14,7 @@ export class AuthService {
    */
   async login(command: LoginCommand): Promise<{
     session: { access_token: string; refresh_token: string; expires_at: number };
-    user: DTO.UserResponse
+    user: DTO.UserResponse;
   }> {
     // 1. Logowanie przez Supabase Auth
     const { data: authData, error: authError } = await this.supabase.auth.signInWithPassword({
@@ -27,24 +27,24 @@ export class AuthService {
     }
 
     if (!authData.user || !authData.session) {
-      throw new Error('Nieprawidłowy e-mail lub hasło');
+      throw new Error("Nieprawidłowy e-mail lub hasło");
     }
 
     // 2. Pobranie pełnych danych użytkownika z tabeli users
     const { data: userData, error: userError } = await this.supabase
-      .from('users')
-      .select('id, email, role, shelter_id, created_at, updated_at')
-      .eq('id', authData.user.id)
+      .from("users")
+      .select("id, email, role, shelter_id, created_at, updated_at")
+      .eq("id", authData.user.id)
       .single();
 
     if (userError) {
-      console.error('Login fetch user error:', userError.message, 'User ID:', authData.user.id);
-      throw new Error('Nie udało się pobrać danych użytkownika');
+      console.error("Login fetch user error:", userError.message, "User ID:", authData.user.id);
+      throw new Error("Nie udało się pobrać danych użytkownika");
     }
 
     if (!userData) {
-      console.error('Login no user data found for ID:', authData.user.id);
-      throw new Error('Nie udało się pobrać danych użytkownika');
+      console.error("Login no user data found for ID:", authData.user.id);
+      throw new Error("Nie udało się pobrać danych użytkownika");
     }
 
     return {
@@ -63,7 +63,7 @@ export class AuthService {
    */
   async register(command: RegisterCommand): Promise<void> {
     // 1. Rejestracja przez Supabase Auth (automatycznie wysyła email weryfikacyjny)
-    const appUrl = getEnv('PUBLIC_APP_URL') || 'http://localhost:4323';
+    const appUrl = getEnv("PUBLIC_APP_URL") || "http://localhost:4323";
     const { data, error } = await this.supabase.auth.signUp({
       email: command.email,
       password: command.password,
@@ -77,7 +77,7 @@ export class AuthService {
     }
 
     if (!data.user) {
-      throw new Error('Rejestracja nie powiodła się');
+      throw new Error("Rejestracja nie powiodła się");
     }
 
     // Uwaga: Trigger `handle_new_user` w bazie danych automatycznie utworzy rekord w tabeli users
@@ -91,7 +91,7 @@ export class AuthService {
     const { error } = await this.supabase.auth.signOut();
 
     if (error) {
-      throw new Error('Wylogowanie nie powiodło się');
+      throw new Error("Wylogowanie nie powiodło się");
     }
   }
 
@@ -99,14 +99,14 @@ export class AuthService {
    * Inicjowanie resetowania hasła
    */
   async forgotPassword(email: string): Promise<void> {
-    const appUrl = getEnv('PUBLIC_APP_URL') || 'http://localhost:4323';
+    const appUrl = getEnv("PUBLIC_APP_URL") || "http://localhost:4323";
     const { error } = await this.supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${appUrl}/auth/reset-password`,
     });
 
     if (error) {
       // Celowo nie ujawniamy czy email istnieje (security best practice)
-      console.error('Forgot password error:', error);
+      console.error("Forgot password error:", error);
     }
   }
 
@@ -119,7 +119,7 @@ export class AuthService {
     });
 
     if (error) {
-      throw new Error('Nie udało się zmienić hasła. Token mógł wygasnąć.');
+      throw new Error("Nie udało się zmienić hasła. Token mógł wygasnąć.");
     }
   }
 
@@ -127,7 +127,7 @@ export class AuthService {
    * Ponowne wysłanie maila weryfikacyjnego
    */
   async resendVerificationEmail(email: string): Promise<void> {
-    const appUrl = getEnv('PUBLIC_APP_URL') || 'http://localhost:4323';
+    const appUrl = getEnv("PUBLIC_APP_URL") || "http://localhost:4323";
 
     // Wysyłamy magic link na email (signInWithOtp)
     // Supabase wyśle email niezależnie czy user istnieje czy nie
@@ -148,11 +148,11 @@ export class AuthService {
    */
   private mapAuthError(errorMessage: string): string {
     const errorMap: Record<string, string> = {
-      'Invalid login credentials': 'Nieprawidłowy e-mail lub hasło',
-      'Email not confirmed': 'Nieprawidłowy e-mail lub hasło',
-      'User already registered': 'Ten adres e-mail jest już zarejestrowany',
-      'Email rate limit exceeded': 'Zbyt wiele prób. Spróbuj ponownie za chwilę',
-      'Password should be at least 6 characters': 'Hasło musi mieć minimum 6 znaków',
+      "Invalid login credentials": "Nieprawidłowy e-mail lub hasło",
+      "Email not confirmed": "Nieprawidłowy e-mail lub hasło",
+      "User already registered": "Ten adres e-mail jest już zarejestrowany",
+      "Email rate limit exceeded": "Zbyt wiele prób. Spróbuj ponownie za chwilę",
+      "Password should be at least 6 characters": "Hasło musi mieć minimum 6 znaków",
     };
 
     // Szukamy czy message zawiera któryś z known errorów
@@ -162,7 +162,6 @@ export class AuthService {
       }
     }
 
-    return 'Wystąpił błąd. Spróbuj ponownie później.';
+    return "Wystąpił błąd. Spróbuj ponownie później.";
   }
 }
-

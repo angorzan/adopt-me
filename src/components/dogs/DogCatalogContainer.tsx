@@ -1,6 +1,6 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
-import DogCatalogView from './DogCatalogView';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+import DogCatalogView from "./DogCatalogView";
 
 const DogCatalogContainer = () => {
   const [queryClient] = useState(
@@ -23,4 +23,3 @@ const DogCatalogContainer = () => {
 };
 
 export default DogCatalogContainer;
-

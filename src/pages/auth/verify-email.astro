@@ -1,21 +1,21 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { createSupabaseServerInstance } from '@/db/supabase.client';
+import Layout from "@/layouts/Layout.astro";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
 
 // Odczyt kodu weryfikacyjnego z URL (Supabase wysyła parametr 'code')
-const code = Astro.url.searchParams.get('code');
-const error = Astro.url.searchParams.get('error');
-const errorDescription = Astro.url.searchParams.get('error_description');
+const code = Astro.url.searchParams.get("code");
+const error = Astro.url.searchParams.get("error");
+const errorDescription = Astro.url.searchParams.get("error_description");
 
-let verificationStatus: 'success' | 'error' | 'pending' = 'pending';
-let message = '';
+let verificationStatus: "success" | "error" | "pending" = "pending";
+let message = "";
 
 // Sprawdzenie czy były błędy z Supabase
 if (error) {
-  verificationStatus = 'error';
-  message = errorDescription ? decodeURIComponent(errorDescription) : 'Nieznany błąd';
+  verificationStatus = "error";
+  message = errorDescription ? decodeURIComponent(errorDescription) : "Nieznany błąd";
 } else if (code) {
   // Weryfikacja kodu za pomocą Supabase
   try {
@@ -26,19 +26,19 @@ if (error) {
 
     const { error: verifyError } = await supabase.auth.verifyOtp({
       token: code,
-      type: 'email',
+      type: "email",
     });
 
     if (verifyError) {
-      verificationStatus = 'error';
-      message = verifyError.message || 'Nie udało się zweryfikować adresu e-mail';
+      verificationStatus = "error";
+      message = verifyError.message || "Nie udało się zweryfikować adresu e-mail";
     } else {
-      verificationStatus = 'success';
-      message = 'Twój adres e-mail został zweryfikowany pomyślnie!';
+      verificationStatus = "success";
+      message = "Twój adres e-mail został zweryfikowany pomyślnie!";
     }
   } catch (err) {
-    verificationStatus = 'error';
-    message = err instanceof Error ? err.message : 'Błąd weryfikacji';
+    verificationStatus = "error";
+    message = err instanceof Error ? err.message : "Błąd weryfikacji";
   }
 }
 ---
@@ -46,103 +46,96 @@ if (error) {
 <Layout title="Weryfikacja e-mail - AdoptMe">
   <div class="min-h-screen flex items-center justify-center px-4 py-12">
     <div class="w-full max-w-md">
-      {verificationStatus === 'success' ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Weryfikacja zakończona</CardTitle>
-            <CardDescription>
-              Twoje konto zostało aktywowane
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p class="text-sm text-muted-foreground">
-              Dziękujemy za potwierdzenie adresu e-mail.
-              Możesz się teraz zalogować do swojego konta.
-            </p>
-          </CardContent>
-          <CardFooter>
-            <Button asChild class="w-full">
-              <a href="/auth/login?verified=true">Przejdź do logowania</a>
-            </Button>
-          </CardFooter>
-        </Card>
-      ) : verificationStatus === 'error' ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Błąd weryfikacji</CardTitle>
-            <CardDescription>
-              Nie udało się zweryfikować adresu e-mail
-            </CardDescription>
-          </CardHeader>
-          <CardContent class="space-y-4">
-            <p class="text-sm text-muted-foreground">
-              Link weryfikacyjny jest nieprawidłowy lub wygasł.
-              Jeśli problem będzie się powtarzał, skontaktuj się z nami.
-            </p>
-            {message && (
-              <div class="p-3 rounded-md bg-destructive/10 text-destructive text-sm">
-                {message}
-              </div>
-            )}
-          </CardContent>
-          <CardFooter>
-            <Button asChild class="w-full">
-              <a href="/auth/signup">Załóż konto ponownie</a>
-            </Button>
-          </CardFooter>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>Weryfikacja e-mail</CardTitle>
-            <CardDescription>
-              Wpisz swój adres e-mail aby ponownie wysłać link weryfikacyjny
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form class="space-y-4" id="resendForm">
-              <div class="space-y-2">
-                <label for="email" class="text-sm font-medium">Adres e-mail</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="twoj@email.com"
-                  class="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <div id="statusMessage" class="hidden p-3 rounded-md text-sm"></div>
-              <Button type="submit" class="w-full">
-                Wyślij link weryfikacyjny
+      {
+        verificationStatus === "success" ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Weryfikacja zakończona</CardTitle>
+              <CardDescription>Twoje konto zostało aktywowane</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p class="text-sm text-muted-foreground">
+                Dziękujemy za potwierdzenie adresu e-mail. Możesz się teraz zalogować do swojego konta.
+              </p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild class="w-full">
+                <a href="/auth/login?verified=true">Przejdź do logowania</a>
               </Button>
-            </form>
-          </CardContent>
-        </Card>
-      )}
+            </CardFooter>
+          </Card>
+        ) : verificationStatus === "error" ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Błąd weryfikacji</CardTitle>
+              <CardDescription>Nie udało się zweryfikować adresu e-mail</CardDescription>
+            </CardHeader>
+            <CardContent class="space-y-4">
+              <p class="text-sm text-muted-foreground">
+                Link weryfikacyjny jest nieprawidłowy lub wygasł. Jeśli problem będzie się powtarzał, skontaktuj się z
+                nami.
+              </p>
+              {message && <div class="p-3 rounded-md bg-destructive/10 text-destructive text-sm">{message}</div>}
+            </CardContent>
+            <CardFooter>
+              <Button asChild class="w-full">
+                <a href="/auth/signup">Załóż konto ponownie</a>
+              </Button>
+            </CardFooter>
+          </Card>
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle>Weryfikacja e-mail</CardTitle>
+              <CardDescription>Wpisz swój adres e-mail aby ponownie wysłać link weryfikacyjny</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form class="space-y-4" id="resendForm">
+                <div class="space-y-2">
+                  <label for="email" class="text-sm font-medium">
+                    Adres e-mail
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="twoj@email.com"
+                    class="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div id="statusMessage" class="hidden p-3 rounded-md text-sm" />
+                <Button type="submit" class="w-full">
+                  Wyślij link weryfikacyjny
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        )
+      }
     </div>
   </div>
 </Layout>
 
 <script>
-  const form = document.getElementById('resendForm');
-  const statusMessage = document.getElementById('statusMessage');
+  const form = document.getElementById("resendForm");
+  const statusMessage = document.getElementById("statusMessage");
   const submitButton = form?.querySelector('button[type="submit"]');
 
   if (form) {
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const email = (document.getElementById('email') as HTMLInputElement)?.value;
+      const email = (document.getElementById("email") as HTMLInputElement)?.value;
       if (!email) return;
 
       // Disable submit button while processing
       if (submitButton) submitButton.disabled = true;
 
       try {
-        const response = await fetch('/api/v1/auth/resend-verification-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/v1/auth/resend-verification-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
         });
 
@@ -150,29 +143,28 @@ if (error) {
 
         if (response.ok) {
           // Show success message
-          statusMessage!.className = 'p-3 rounded-md text-sm bg-green-50 text-green-800';
-          statusMessage!.textContent = data.message || 'Mail weryfikacyjny został wysłany!';
+          statusMessage!.className = "p-3 rounded-md text-sm bg-green-50 text-green-800";
+          statusMessage!.textContent = data.message || "Mail weryfikacyjny został wysłany!";
           form.reset();
 
           // Hide message after 5 seconds
           setTimeout(() => {
-            statusMessage!.classList.add('hidden');
+            statusMessage!.classList.add("hidden");
           }, 5000);
         } else {
           // Show error message
-          statusMessage!.className = 'p-3 rounded-md text-sm bg-red-50 text-red-800';
-          statusMessage!.textContent = data.error || 'Błąd wysyłania maila';
+          statusMessage!.className = "p-3 rounded-md text-sm bg-red-50 text-red-800";
+          statusMessage!.textContent = data.error || "Błąd wysyłania maila";
         }
 
-        statusMessage!.classList.remove('hidden');
+        statusMessage!.classList.remove("hidden");
       } catch (err) {
-        statusMessage!.className = 'p-3 rounded-md text-sm bg-red-50 text-red-800';
-        statusMessage!.textContent = 'Błąd połączenia. Spróbuj ponownie.';
-        statusMessage!.classList.remove('hidden');
+        statusMessage!.className = "p-3 rounded-md text-sm bg-red-50 text-red-800";
+        statusMessage!.textContent = "Błąd połączenia. Spróbuj ponownie.";
+        statusMessage!.classList.remove("hidden");
       } finally {
         if (submitButton) submitButton.disabled = false;
       }
     });
   }
 </script>
-

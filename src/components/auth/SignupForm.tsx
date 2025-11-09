@@ -1,14 +1,14 @@
-import { useState, type FormEvent } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const SignupForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [gdprConsent, setGdprConsent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -16,7 +16,7 @@ export const SignupForm = () => {
 
   const validatePassword = (pwd: string): string | null => {
     if (pwd.length < 5) {
-      return 'Hasło musi mieć minimum 5 znaków';
+      return "Hasło musi mieć minimum 5 znaków";
     }
     return null;
   };
@@ -33,22 +33,22 @@ export const SignupForm = () => {
     }
 
     if (password !== confirmPassword) {
-      setError('Hasła nie są identyczne');
+      setError("Hasła nie są identyczne");
       return;
     }
 
     if (!gdprConsent) {
-      setError('Musisz zaakceptować przetwarzanie danych osobowych');
+      setError("Musisz zaakceptować przetwarzanie danych osobowych");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/v1/auth/register', {
-        method: 'POST',
+      const response = await fetch("/api/v1/auth/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
@@ -62,16 +62,16 @@ export const SignupForm = () => {
       try {
         data = await response.json();
       } catch (parseError) {
-        console.error('Register response parse error:', parseError);
+        console.error("Register response parse error:", parseError);
         throw new Error(`Serwer zwrócił nieprawidłową odpowiedź (${response.status})`);
       }
 
       if (!response.ok) {
         if (response.status === 409) {
-          throw new Error('Ten adres e-mail jest już zarejestrowany.');
+          throw new Error("Ten adres e-mail jest już zarejestrowany.");
         }
         if (response.status === 429) {
-          throw new Error('Zbyt wiele prób rejestracji. Spróbuj ponownie za kilka minut.');
+          throw new Error("Zbyt wiele prób rejestracji. Spróbuj ponownie za kilka minut.");
         }
 
         throw new Error(data?.error || `Błąd serwera: ${response.status}`);
@@ -79,8 +79,8 @@ export const SignupForm = () => {
 
       setSuccess(true);
     } catch (err) {
-      console.error('Signup error:', err);
-      setError(err instanceof Error ? err.message : 'Wystąpił nieznany błąd');
+      console.error("Signup error:", err);
+      setError(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
     } finally {
       setIsLoading(false);
     }
@@ -91,9 +91,7 @@ export const SignupForm = () => {
       <Card className="w-full max-w-md mx-auto" data-test-id="signup-form-success">
         <CardHeader>
           <CardTitle>Sprawdź swoją skrzynkę e-mail</CardTitle>
-          <CardDescription data-test-id="signup-form-success-message">
-            Konto zostało utworzone.
-          </CardDescription>
+          <CardDescription data-test-id="signup-form-success-message">Konto zostało utworzone.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -121,9 +119,7 @@ export const SignupForm = () => {
     <Card className="w-full max-w-md mx-auto" data-test-id="signup-form-container">
       <CardHeader>
         <CardTitle>Załóż konto</CardTitle>
-        <CardDescription>
-          Utwórz konto, aby adoptować psa i zarządzać wnioskami.
-        </CardDescription>
+        <CardDescription>Utwórz konto, aby adoptować psa i zarządzać wnioskami.</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit} data-test-id="signup-form">
         <CardContent>
@@ -168,9 +164,7 @@ export const SignupForm = () => {
                 autoComplete="new-password"
                 data-test-id="signup-form-password"
               />
-              <p className="text-xs text-muted-foreground">
-                Minimum 5 znaków
-              </p>
+              <p className="text-xs text-muted-foreground">Minimum 5 znaków</p>
             </div>
 
             <div className="space-y-2">
@@ -198,11 +192,8 @@ export const SignupForm = () => {
                 required
                 data-test-id="signup-form-gdpr-checkbox"
               />
-              <Label
-                htmlFor="gdpr"
-                className="text-sm leading-tight cursor-pointer"
-              >
-                Akceptuję przetwarzanie danych osobowych zgodnie z{' '}
+              <Label htmlFor="gdpr" className="text-sm leading-tight cursor-pointer">
+                Akceptuję przetwarzanie danych osobowych zgodnie z{" "}
                 <a
                   href="/privacy-policy"
                   className="text-primary hover:underline"
@@ -215,28 +206,20 @@ export const SignupForm = () => {
             </div>
 
             <div className="rounded-md border border-dashed border-muted p-3 bg-muted/40 text-xs text-muted-foreground">
-              Po utworzeniu konta otrzymasz e-mail z linkiem aktywacyjnym Supabase. Potwierdzenie konta pozwoli na korzystanie z pełnych funkcji aplikacji.
+              Po utworzeniu konta otrzymasz e-mail z linkiem aktywacyjnym Supabase. Potwierdzenie konta pozwoli na
+              korzystanie z pełnych funkcji aplikacji.
             </div>
           </div>
         </CardContent>
 
         <CardFooter className="flex flex-col gap-3">
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-            data-test-id="signup-form-submit-button"
-          >
-            {isLoading ? 'Tworzenie konta...' : 'Utwórz konto'}
+          <Button type="submit" className="w-full" disabled={isLoading} data-test-id="signup-form-submit-button">
+            {isLoading ? "Tworzenie konta..." : "Utwórz konto"}
           </Button>
 
           <div className="text-sm text-center text-muted-foreground">
-            Masz już konto?{' '}
-            <a
-              href="/auth/login"
-              className="text-primary hover:underline"
-              data-test-id="signup-form-login-link"
-            >
+            Masz już konto?{" "}
+            <a href="/auth/login" className="text-primary hover:underline" data-test-id="signup-form-login-link">
               Zaloguj się
             </a>
           </div>

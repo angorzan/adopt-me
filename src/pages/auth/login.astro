@@ -1,37 +1,40 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import { LoginForm } from '@/components/auth/LoginForm';
+import Layout from "@/layouts/Layout.astro";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 // Odczyt query params
-const verified = Astro.url.searchParams.get('verified');
-const message = Astro.url.searchParams.get('message');
-const redirectTo = Astro.url.searchParams.get('redirectTo');
+const verified = Astro.url.searchParams.get("verified");
+const message = Astro.url.searchParams.get("message");
+const redirectTo = Astro.url.searchParams.get("redirectTo");
 
 // Sprawdzenie czy użytkownik jest już zalogowany (redirectIfAuthenticated pattern)
 const user = Astro.locals.user;
 if (user) {
   // Jeśli użytkownik już zalogowany, przekieruj do strony docelowej lub głównej
-  return Astro.redirect(redirectTo || '/');
+  return Astro.redirect(redirectTo || "/");
 }
 ---
 
 <Layout title="Logowanie - AdoptMe">
   <div class="min-h-screen flex items-center justify-center px-4 py-12">
     <div class="w-full max-w-md">
-      {verified === 'true' && (
-        <div class="mb-6 p-4 rounded-md bg-green-50 dark:bg-green-900/20 text-green-900 dark:text-green-100 text-sm">
-          Twój adres e-mail został zweryfikowany. Możesz się teraz zalogować.
-        </div>
-      )}
+      {
+        verified === "true" && (
+          <div class="mb-6 p-4 rounded-md bg-green-50 dark:bg-green-900/20 text-green-900 dark:text-green-100 text-sm">
+            Twój adres e-mail został zweryfikowany. Możesz się teraz zalogować.
+          </div>
+        )
+      }
 
-      {message && (
-        <div class="mb-6 p-4 rounded-md bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100 text-sm">
-          {decodeURIComponent(message)}
-        </div>
-      )}
+      {
+        message && (
+          <div class="mb-6 p-4 rounded-md bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100 text-sm">
+            {decodeURIComponent(message)}
+          </div>
+        )
+      }
 
       <LoginForm client:load redirectTo={redirectTo} />
     </div>
   </div>
 </Layout>
-

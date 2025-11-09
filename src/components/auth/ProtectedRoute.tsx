@@ -1,19 +1,14 @@
-import type { ReactNode } from 'react';
-import type { DTO } from '@/types';
+import type { ReactNode } from "react";
+import type { DTO } from "@/types";
 
 interface ProtectedRouteProps {
   children: ReactNode;
   user: DTO.UserResponse | null;
-  requiredRole?: 'adopter' | 'shelter_staff' | 'admin';
+  requiredRole?: "adopter" | "shelter_staff" | "admin";
   fallback?: ReactNode;
 }
 
-export const ProtectedRoute = ({
-  children,
-  user,
-  requiredRole,
-  fallback
-}: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ children, user, requiredRole, fallback }: ProtectedRouteProps) => {
   // Sprawdzenie czy użytkownik jest zalogowany
   if (!user) {
     if (fallback) {
@@ -24,9 +19,7 @@ export const ProtectedRoute = ({
       <div className="min-h-[60vh] flex items-center justify-center px-4">
         <div className="text-center space-y-4">
           <h2 className="text-2xl font-semibold">Wymagane logowanie</h2>
-          <p className="text-muted-foreground">
-            Musisz być zalogowany, aby uzyskać dostęp do tej sekcji.
-          </p>
+          <p className="text-muted-foreground">Musisz być zalogowany, aby uzyskać dostęp do tej sekcji.</p>
           <div className="flex gap-3 justify-center">
             <a
               href="/auth/login"
@@ -56,9 +49,7 @@ export const ProtectedRoute = ({
       <div className="min-h-[60vh] flex items-center justify-center px-4">
         <div className="text-center space-y-4">
           <h2 className="text-2xl font-semibold">Brak dostępu</h2>
-          <p className="text-muted-foreground">
-            Nie masz uprawnień do tej sekcji.
-          </p>
+          <p className="text-muted-foreground">Nie masz uprawnień do tej sekcji.</p>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90"
@@ -72,4 +63,3 @@ export const ProtectedRoute = ({
 
   return <>{children}</>;
 };
-

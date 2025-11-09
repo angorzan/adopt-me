@@ -11,5 +11,3 @@ export function isProd(): boolean {
   // @ts-expect-error - import.meta.env.PROD is available in Astro
   return import.meta.env.PROD === true;
 }
-
-

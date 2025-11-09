@@ -1,104 +1,97 @@
-import { type FormEvent, useMemo, useState } from "react"
-import { AlertCircle, CheckCircle2 } from "lucide-react"
+import { type FormEvent, useMemo, useState } from "react";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
-type AdoptionFormProps = {
-  dogId: string
-  dogName: string
-  isAuthenticated: boolean
+interface AdoptionFormProps {
+  dogId: string;
+  dogName: string;
+  isAuthenticated: boolean;
 }
 
-type FieldErrors = {
-  motivation?: string
-  contactPreference?: string
-  extraNotes?: string
-  consent?: string
+interface FieldErrors {
+  motivation?: string;
+  contactPreference?: string;
+  extraNotes?: string;
+  consent?: string;
 }
 
-type SubmitStatus = "idle" | "submitting" | "success"
+type SubmitStatus = "idle" | "submitting" | "success";
 
-type ServerError = "dog_not_available" | "duplicate_application" | "server_error" | "auth_required"
+type ServerError = "dog_not_available" | "duplicate_application" | "server_error" | "auth_required";
 
 const serverErrorMessages: Record<ServerError, string> = {
   dog_not_available: "Wybrany pies nie jest obecnie dostępny do adopcji.",
-  duplicate_application:
-    "Masz już aktywny wniosek dla tego psa. Poczekaj na odpowiedź schroniska.",
+  duplicate_application: "Masz już aktywny wniosek dla tego psa. Poczekaj na odpowiedź schroniska.",
   server_error: "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.",
   auth_required: "Musisz być zalogowany, aby wysłać wniosek adopcyjny.",
-}
+};
 
 export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormProps) {
-  const [motivation, setMotivation] = useState("")
-  const [contactPreference, setContactPreference] = useState<"email" | "phone" | "">("")
-  const [extraNotes, setExtraNotes] = useState("")
-  const [consent, setConsent] = useState(false)
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
-  const [globalError, setGlobalError] = useState<string | null>(null)
-  const [status, setStatus] = useState<SubmitStatus>("idle")
+  const [motivation, setMotivation] = useState("");
+  const [contactPreference, setContactPreference] = useState<"email" | "phone" | "">("");
+  const [extraNotes, setExtraNotes] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [globalError, setGlobalError] = useState<string | null>(null);
+  const [status, setStatus] = useState<SubmitStatus>("idle");
 
-  const isSubmitting = status === "submitting"
+  const isSubmitting = status === "submitting";
 
-  const motivationLength = useMemo(() => motivation.trim().length, [motivation])
-  const extraNotesLength = useMemo(() => extraNotes.trim().length, [extraNotes])
+  const motivationLength = useMemo(() => motivation.trim().length, [motivation]);
+  const extraNotesLength = useMemo(() => extraNotes.trim().length, [extraNotes]);
 
   const resetErrors = () => {
-    setFieldErrors({})
-    setGlobalError(null)
-  }
+    setFieldErrors({});
+    setGlobalError(null);
+  };
 
   const validate = (): FieldErrors => {
-    const errors: FieldErrors = {}
+    const errors: FieldErrors = {};
 
     if (motivation.trim().length < 20) {
-      errors.motivation = "Uzasadnienie musi mieć co najmniej 20 znaków."
+      errors.motivation = "Uzasadnienie musi mieć co najmniej 20 znaków.";
     }
 
     if (!contactPreference) {
-      errors.contactPreference = "Wybierz preferowany kanał kontaktu."
+      errors.contactPreference = "Wybierz preferowany kanał kontaktu.";
     }
 
     if (extraNotes.trim().length > 500) {
-      errors.extraNotes = "Dodatkowe informacje mogą mieć maksymalnie 500 znaków."
+      errors.extraNotes = "Dodatkowe informacje mogą mieć maksymalnie 500 znaków.";
     }
 
     if (!consent) {
-      errors.consent = "Musisz wyrazić zgodę na przetwarzanie danych, aby wysłać wniosek."
+      errors.consent = "Musisz wyrazić zgodę na przetwarzanie danych, aby wysłać wniosek.";
     }
 
-    return errors
-  }
+    return errors;
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (isSubmitting || !isAuthenticated) {
       if (!isAuthenticated) {
-        setGlobalError(serverErrorMessages.auth_required)
+        setGlobalError(serverErrorMessages.auth_required);
       }
-      return
+      return;
     }
 
-    resetErrors()
+    resetErrors();
 
-    const errors = validate()
+    const errors = validate();
     if (Object.keys(errors).length) {
-      setFieldErrors(errors)
-      return
+      setFieldErrors(errors);
+      return;
     }
 
-    setStatus("submitting")
+    setStatus("submitting");
 
     try {
       const response = await fetch("/api/applications", {
@@ -112,65 +105,65 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
           contact_preference: contactPreference,
           ...(extraNotes.trim().length ? { extra_notes: extraNotes.trim() } : {}),
         }),
-      })
+      });
 
       if (!response.ok) {
         if (response.status === 401) {
-          setGlobalError(serverErrorMessages.auth_required)
-          setStatus("idle")
-          return
+          setGlobalError(serverErrorMessages.auth_required);
+          setStatus("idle");
+          return;
         }
 
-        const payload = await response.json().catch(() => null)
+        const payload = await response.json().catch(() => null);
 
         if (response.status === 400 && payload?.error) {
-          const { fieldErrors: serverFieldErrors, formErrors } = payload.error
+          const { fieldErrors: serverFieldErrors, formErrors } = payload.error;
 
-          const mappedErrors: FieldErrors = {}
+          const mappedErrors: FieldErrors = {};
 
           if (serverFieldErrors?.motivation?.length) {
-            mappedErrors.motivation = serverFieldErrors.motivation[0]
+            mappedErrors.motivation = serverFieldErrors.motivation[0];
           }
           if (serverFieldErrors?.contact_preference?.length) {
-            mappedErrors.contactPreference = serverFieldErrors.contact_preference[0]
+            mappedErrors.contactPreference = serverFieldErrors.contact_preference[0];
           }
           if (serverFieldErrors?.extra_notes?.length) {
-            mappedErrors.extraNotes = serverFieldErrors.extra_notes[0]
+            mappedErrors.extraNotes = serverFieldErrors.extra_notes[0];
           }
           if (serverFieldErrors?.dog_id?.length) {
-            setGlobalError(serverFieldErrors.dog_id[0])
+            setGlobalError(serverFieldErrors.dog_id[0]);
           }
           if (formErrors?.length) {
-            setGlobalError(formErrors[0])
+            setGlobalError(formErrors[0]);
           }
 
-          setFieldErrors((current) => ({ ...current, ...mappedErrors }))
-          setStatus("idle")
-          return
+          setFieldErrors((current) => ({ ...current, ...mappedErrors }));
+          setStatus("idle");
+          return;
         }
 
-        const errorKey: ServerError | undefined = payload?.error
+        const errorKey: ServerError | undefined = payload?.error;
         if (errorKey && errorKey in serverErrorMessages) {
-          setGlobalError(serverErrorMessages[errorKey as ServerError])
+          setGlobalError(serverErrorMessages[errorKey as ServerError]);
         } else {
-          setGlobalError("Nie udało się wysłać wniosku. Spróbuj ponownie później.")
+          setGlobalError("Nie udało się wysłać wniosku. Spróbuj ponownie później.");
         }
 
-        setStatus("idle")
-        return
+        setStatus("idle");
+        return;
       }
 
-      setStatus("success")
-      setMotivation("")
-      setContactPreference("")
-      setExtraNotes("")
-      setConsent(false)
+      setStatus("success");
+      setMotivation("");
+      setContactPreference("");
+      setExtraNotes("");
+      setConsent(false);
     } catch (error) {
-      console.error("Failed to submit adoption application", error)
-      setGlobalError("Wystąpił problem z połączeniem. Spróbuj ponownie później.")
-      setStatus("idle")
+      console.error("Failed to submit adoption application", error);
+      setGlobalError("Wystąpił problem z połączeniem. Spróbuj ponownie później.");
+      setStatus("idle");
     }
-  }
+  };
 
   if (!isAuthenticated) {
     return (
@@ -178,13 +171,14 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
         <CardHeader>
           <CardTitle>Zaloguj się, aby wysłać wniosek</CardTitle>
           <CardDescription>
-            Formularz adopcyjny jest dostępny tylko dla zalogowanych użytkowników. Zaloguj się lub utwórz konto,
-            aby kontynuować.
+            Formularz adopcyjny jest dostępny tylko dla zalogowanych użytkowników. Zaloguj się lub utwórz konto, aby
+            kontynuować.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="rounded-md border border-muted px-3 py-2 text-sm text-muted-foreground">
-            Po zalogowaniu będziesz mógł wysłać wniosek adopcyjny dla psa {dogName} oraz śledzić status zgłoszenia w swoim profilu.
+            Po zalogowaniu będziesz mógł wysłać wniosek adopcyjny dla psa {dogName} oraz śledzić status zgłoszenia w
+            swoim profilu.
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button asChild className="w-full sm:w-auto" data-test-id="adoption-form-login-button">
@@ -196,24 +190,27 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   if (status === "success") {
     return (
-      <Card className="border-green-200 bg-green-50 dark:border-green-900/50 dark:bg-green-950/30" data-test-id="adoption-form-success">
+      <Card
+        className="border-green-200 bg-green-50 dark:border-green-900/50 dark:bg-green-950/30"
+        data-test-id="adoption-form-success"
+      >
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-300">
             <CheckCircle2 className="size-5" aria-hidden="true" />
             Wniosek wysłany
           </CardTitle>
           <CardDescription data-test-id="adoption-form-success-message">
-            Dziękujemy! Twój wniosek adopcyjny dla psa {dogName} został zapisany. Schronisko skontaktuje się
-            z Tobą w wybrany sposób po przeanalizowaniu zgłoszenia.
+            Dziękujemy! Twój wniosek adopcyjny dla psa {dogName} został zapisany. Schronisko skontaktuje się z Tobą w
+            wybrany sposób po przeanalizowaniu zgłoszenia.
           </CardDescription>
         </CardHeader>
       </Card>
-    )
+    );
   }
 
   return (
@@ -227,7 +224,10 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
         </CardHeader>
         <CardContent className="space-y-6">
           {globalError && (
-            <div className="flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" data-test-id="adoption-form-global-error">
+            <div
+              className="flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+              data-test-id="adoption-form-global-error"
+            >
               <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <span>{globalError}</span>
             </div>
@@ -252,7 +252,11 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
               <span data-test-id="adoption-form-motivation-counter">{motivationLength}/800</span>
             </div>
             {fieldErrors.motivation && (
-              <p id="motivation-error" className="text-sm text-destructive" data-test-id="adoption-form-motivation-error">
+              <p
+                id="motivation-error"
+                className="text-sm text-destructive"
+                data-test-id="adoption-form-motivation-error"
+              >
                 {fieldErrors.motivation}
               </p>
             )}
@@ -274,12 +278,20 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
                 <SelectValue placeholder="Wybierz kanał kontaktu" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="email" data-test-id="adoption-form-contact-email">E-mail</SelectItem>
-                <SelectItem value="phone" data-test-id="adoption-form-contact-phone">Telefon</SelectItem>
+                <SelectItem value="email" data-test-id="adoption-form-contact-email">
+                  E-mail
+                </SelectItem>
+                <SelectItem value="phone" data-test-id="adoption-form-contact-phone">
+                  Telefon
+                </SelectItem>
               </SelectContent>
             </Select>
             {fieldErrors.contactPreference && (
-              <p id="contact-preference-error" className="text-sm text-destructive" data-test-id="adoption-form-contact-preference-error">
+              <p
+                id="contact-preference-error"
+                className="text-sm text-destructive"
+                data-test-id="adoption-form-contact-preference-error"
+              >
                 {fieldErrors.contactPreference}
               </p>
             )}
@@ -303,7 +315,11 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
               <span data-test-id="adoption-form-extra-notes-counter">{extraNotesLength}/500</span>
             </div>
             {fieldErrors.extraNotes && (
-              <p id="extra-notes-error" className="text-sm text-destructive" data-test-id="adoption-form-extra-notes-error">
+              <p
+                id="extra-notes-error"
+                className="text-sm text-destructive"
+                data-test-id="adoption-form-extra-notes-error"
+              >
                 {fieldErrors.extraNotes}
               </p>
             )}
@@ -331,13 +347,17 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
           </div>
         </CardContent>
         <div className="flex justify-end px-6 pb-6">
-          <Button type="submit" size="lg" disabled={isSubmitting} className="w-full md:w-auto" data-test-id="adoption-form-submit-button">
+          <Button
+            type="submit"
+            size="lg"
+            disabled={isSubmitting}
+            className="w-full md:w-auto"
+            data-test-id="adoption-form-submit-button"
+          >
             {isSubmitting ? "Wysyłanie…" : "Wyślij wniosek"}
           </Button>
         </div>
       </form>
     </Card>
-  )
+  );
 }
-
-

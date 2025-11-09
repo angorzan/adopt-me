@@ -1,8 +1,8 @@
-import type { APIRoute } from 'astro';
-import { ZodError } from 'zod';
-import { createSupabaseServerInstance } from '@/db/supabase.client';
-import { registerCommandSchema } from '@/lib/validators/auth.validators';
-import { AuthService } from '@/lib/services/auth.service';
+import type { APIRoute } from "astro";
+import { ZodError } from "zod";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
+import { registerCommandSchema } from "@/lib/validators/auth.validators";
+import { AuthService } from "@/lib/services/auth.service";
 
 export const prerender = false;
 
@@ -13,12 +13,12 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     if (!body) {
       return new Response(
         JSON.stringify({
-          error: 'Nieprawidłowe dane wejściowe',
+          error: "Nieprawidłowe dane wejściowe",
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        },
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
@@ -34,13 +34,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     return new Response(
       JSON.stringify({
-        message: 'Konto utworzone. Sprawdź swoją skrzynkę e-mail i potwierdź rejestrację.',
+        message: "Konto utworzone. Sprawdź swoją skrzynkę e-mail i potwierdź rejestrację.",
         email: command.email,
       }),
       {
         status: 201,
-        headers: { 'Content-Type': 'application/json' },
-      },
+        headers: { "Content-Type": "application/json" },
+      }
     );
   } catch (error) {
     if (error instanceof ZodError) {
@@ -52,17 +52,17 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        },
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
     if (error instanceof Error) {
       let statusCode = 500;
 
-      if (error.message.includes('zarejestrowany') || error.message.includes('istnieje')) {
+      if (error.message.includes("zarejestrowany") || error.message.includes("istnieje")) {
         statusCode = 409;
-      } else if (error.message.includes('Zbyt wiele prób')) {
+      } else if (error.message.includes("Zbyt wiele prób")) {
         statusCode = 429;
       }
 
@@ -72,21 +72,25 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: statusCode,
-          headers: { 'Content-Type': 'application/json' },
-        },
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
-    console.error('Register error:', error instanceof Error ? error.message : String(error), error instanceof Error ? error.stack : '');
+    console.error(
+      "Register error:",
+      error instanceof Error ? error.message : String(error),
+      error instanceof Error ? error.stack : ""
+    );
     return new Response(
       JSON.stringify({
-        error: 'Wystąpił błąd serwera. Spróbuj ponownie później.',
-        debug: error instanceof Error ? error.message : String(error)
+        error: "Wystąpił błąd serwera. Spróbuj ponownie później.",
+        debug: error instanceof Error ? error.message : String(error),
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 };

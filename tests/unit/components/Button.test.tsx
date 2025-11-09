@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
-import React from 'react';
-import { renderWithProviders, screen, userEvent } from '../../helpers/test-utils';
+import { describe, it, expect, vi } from "vitest";
+import React from "react";
+import { renderWithProviders, screen, userEvent } from "../../helpers/test-utils";
 
 /**
  * Example Button component for testing
@@ -9,10 +9,10 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary';
+  variant?: "primary" | "secondary";
 }
 
-function Button({ children, onClick, disabled = false, variant = 'primary' }: ButtonProps) {
+function Button({ children, onClick, disabled = false, variant = "primary" }: ButtonProps) {
   return (
     <button
       type="button"
@@ -26,63 +26,66 @@ function Button({ children, onClick, disabled = false, variant = 'primary' }: Bu
   );
 }
 
-describe('Button Component', () => {
-  it('should render button with text', () => {
+describe("Button Component", () => {
+  it("should render button with text", () => {
     renderWithProviders(<Button>Click me</Button>);
 
-    const button = screen.getByTestId('test-button');
+    const button = screen.getByTestId("test-button");
     expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent('Click me');
+    expect(button).toHaveTextContent("Click me");
   });
 
-  it('should call onClick when clicked', async () => {
+  it("should call onClick when clicked", async () => {
     const handleClick = vi.fn();
     const user = userEvent.setup();
 
     renderWithProviders(<Button onClick={handleClick}>Click me</Button>);
 
-    const button = screen.getByTestId('test-button');
+    const button = screen.getByTestId("test-button");
     await user.click(button);
 
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('should not call onClick when disabled', async () => {
+  it("should not call onClick when disabled", async () => {
     const handleClick = vi.fn();
     const user = userEvent.setup();
 
-    renderWithProviders(<Button onClick={handleClick} disabled>Click me</Button>);
+    renderWithProviders(
+      <Button onClick={handleClick} disabled>
+        Click me
+      </Button>
+    );
 
-    const button = screen.getByTestId('test-button');
+    const button = screen.getByTestId("test-button");
     await user.click(button);
 
     expect(handleClick).not.toHaveBeenCalled();
   });
 
-  it('should apply correct variant class', () => {
+  it("should apply correct variant class", () => {
     const { rerender } = renderWithProviders(<Button variant="primary">Primary</Button>);
 
-    let button = screen.getByTestId('test-button');
-    expect(button).toHaveClass('btn-primary');
+    let button = screen.getByTestId("test-button");
+    expect(button).toHaveClass("btn-primary");
 
     rerender(<Button variant="secondary">Secondary</Button>);
 
-    button = screen.getByTestId('test-button');
-    expect(button).toHaveClass('btn-secondary');
+    button = screen.getByTestId("test-button");
+    expect(button).toHaveClass("btn-secondary");
   });
 
-  it('should be disabled when disabled prop is true', () => {
+  it("should be disabled when disabled prop is true", () => {
     renderWithProviders(<Button disabled>Disabled</Button>);
 
-    const button = screen.getByTestId('test-button');
+    const button = screen.getByTestId("test-button");
     expect(button).toBeDisabled();
   });
 
-  it('should have correct accessibility attributes', () => {
+  it("should have correct accessibility attributes", () => {
     renderWithProviders(<Button>Accessible Button</Button>);
 
-    const button = screen.getByTestId('test-button');
-    expect(button).toHaveAttribute('type', 'button');
+    const button = screen.getByTestId("test-button");
+    expect(button).toHaveAttribute("type", "button");
   });
 });
-

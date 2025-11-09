@@ -11,3 +11,4 @@
 .env.example.development
 .env.example.test
 .env.example.production
+.env.test

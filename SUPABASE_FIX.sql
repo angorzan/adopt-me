@@ -1,3 +1,4 @@
+
 -- INSTRUKCJA: Zaaplikuj ten SQL bezpośrednio w Supabase SQL Editor
 -- URL: https://app.supabase.com/project/mgdfizbspwomirgzcomx/sql/new
 --

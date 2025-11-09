@@ -208,7 +208,7 @@ For detailed changes, see [CHANGELOG.md](CHANGELOG.md).
 
 ## Important Notes
 
-### Database Fixes Applied (v0.1.0)
+### Database Fixes Applied (v0.1.0) 
 - Fixed RLS (Row Level Security) policies that caused infinite recursion in user queries
 - Fixed trigger `handle_new_user` to properly create user records on Supabase Auth signup
 - Implemented middleware for session management and user context

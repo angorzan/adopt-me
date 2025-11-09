@@ -1,6 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { SignupForm } from "@/components/auth/SignupForm";
+import { isFeatureEnabled } from "@/features";
+
+// Feature flag check - redirect if auth is disabled
+if (!isFeatureEnabled("auth")) {
+  return Astro.redirect("/");
+}
 
 const user = Astro.locals.user;
 if (user) {

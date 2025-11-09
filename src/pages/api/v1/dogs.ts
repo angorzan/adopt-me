@@ -1,6 +1,7 @@
 import type { APIContext } from "astro";
 import type { DTO } from "@/types";
 import { createSupabaseServerInstance } from "@/db/supabase.client";
+import { isFeatureEnabled } from "@/features";
 
 export const prerender = false;
 
@@ -13,6 +14,10 @@ export const prerender = false;
  * - q: search query (filters by dog name or shelter city)
  */
 export async function GET(ctx: APIContext): Promise<Response> {
+  // Feature flag check - return 404 if collections is disabled
+  if (!isFeatureEnabled("collections")) {
+    return new Response("Feature disabled", { status: 404 });
+  }
   try {
     const supabase = createSupabaseServerInstance({
       cookies: ctx.cookies,

@@ -1,6 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { isFeatureEnabled } from "@/features";
+
+// Feature flag check - redirect if auth is disabled
+if (!isFeatureEnabled("auth")) {
+  return Astro.redirect("/");
+}
 
 // Odczyt query params
 const verified = Astro.url.searchParams.get("verified");

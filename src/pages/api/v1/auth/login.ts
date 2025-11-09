@@ -3,10 +3,15 @@ import { ZodError } from "zod";
 import { createSupabaseServerInstance } from "@/db/supabase.client";
 import { loginCommandSchema } from "@/lib/validators/auth.validators";
 import { AuthService } from "@/lib/services/auth.service";
+import { isFeatureEnabled } from "@/features";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, cookies }) => {
+  // Feature flag check - return 404 if auth is disabled
+  if (!isFeatureEnabled("auth")) {
+    return new Response("Feature disabled", { status: 404 });
+  }
   try {
     // 1. Parse request body
     const body = await request.json().catch(() => null);

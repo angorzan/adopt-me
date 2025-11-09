@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { ZodError, z } from "zod";
 import { createSupabaseServerInstance } from "@/db/supabase.client";
 import { AuthService } from "@/lib/services/auth.service";
+import { isFeatureEnabled } from "@/features";
 
 export const prerender = false;
 
@@ -10,6 +11,10 @@ const resendVerificationSchema = z.object({
 });
 
 export const POST: APIRoute = async ({ request, cookies }) => {
+  // Feature flag check - return 404 if auth is disabled
+  if (!isFeatureEnabled("auth")) {
+    return new Response("Feature disabled", { status: 404 });
+  }
   try {
     const body = await request.json().catch(() => null);
 

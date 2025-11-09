@@ -18,6 +18,7 @@ interface ImportMetaEnv {
   readonly SUPABASE_URL: string;
   readonly SUPABASE_KEY: string;
   readonly PUBLIC_APP_URL?: string;
+  readonly PUBLIC_ENV_NAME?: string;
 }
 
 interface ImportMeta {

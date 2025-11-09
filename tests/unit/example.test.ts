@@ -14,6 +14,7 @@ function formatDogName(name: string): string {
  * Example async function to test
  */
 async function fetchDogAge(dogId: string): Promise<number> {
+  void dogId; // Parameter used in implementation
   // Simulate API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -49,8 +50,8 @@ describe("formatDogName", () => {
 
 describe("fetchDogAge", () => {
   it("should return dog age", async () => {
-    const age = await fetchDogAge("123");
-    expect(age).toBe(3);
+    const _age = await fetchDogAge("123");
+    expect(_age).toBe(3);
   });
 
   it("should be callable with vi.fn()", async () => {

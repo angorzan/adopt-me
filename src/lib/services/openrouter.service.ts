@@ -1,5 +1,4 @@
 import { EventEmitter } from "eventemitter3";
-import { z } from "zod";
 import Ajv from "ajv";
 import { encoding_for_model } from "tiktoken";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -9,10 +8,9 @@ import type {
   UsageStats,
   OpenRouterServiceConfig,
   AILogEntry,
-  AIUsageEntry,
   JsonSchemaFormat,
 } from "../types/openrouter.types";
-import { OpenRouterError, ValidationError, UsageExceededError } from "../types/openrouter.types";
+import { OpenRouterError, ValidationError } from "../types/openrouter.types";
 
 // Service implementation
 export class OpenRouterService {
@@ -25,7 +23,7 @@ export class OpenRouterService {
   readonly #maxRetries = 3;
   readonly #maxTokenLength = 4096;
   readonly #ajv: Ajv;
-  readonly #encodingCache = new Map<string, any>();
+  readonly #encodingCache = new Map<string, unknown>();
 
   // Event emitter for error tracking
   public readonly onError = new EventEmitter<"openrouter-error">();
@@ -160,6 +158,7 @@ export class OpenRouterService {
 
   public async usage(userId: string): Promise<UsageStats> {
     // TODO: Implement usage stats from ai_usage table
+    void userId; // Mark as intentionally unused for future implementation
     throw new Error("Not implemented");
   }
 

@@ -23,23 +23,23 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 // Mock IntersectionObserver
+/* eslint-disable @typescript-eslint/no-empty-function */
 global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  takeRecords() {
+  disconnect(): void {}
+  observe(): void {}
+  takeRecords(): IntersectionObserverEntry[] {
     return [];
   }
-  unobserve() {}
-} as any;
+  unobserve(): void {}
+} as unknown as typeof IntersectionObserver;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-} as any;
+  disconnect(): void {}
+  observe(): void {}
+  unobserve(): void {}
+} as unknown as typeof ResizeObserver;
+/* eslint-enable @typescript-eslint/no-empty-function */
 
 // Environment variables for tests
 process.env.PUBLIC_SUPABASE_URL = "http://localhost:54321";

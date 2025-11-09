@@ -4,10 +4,9 @@ import type { DTO } from "@/types";
 
 interface AuthButtonProps {
   user: DTO.UserResponse | null;
-  variant?: "header" | "mobile";
 }
 
-export const AuthButton = ({ user, variant = "header" }: AuthButtonProps) => {
+export const AuthButton = ({ user }: AuthButtonProps) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -54,7 +53,12 @@ export const AuthButton = ({ user, variant = "header" }: AuthButtonProps) => {
       {showDropdown && (
         <>
           {/* Backdrop */}
-          <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
+          <button
+            type="button"
+            className="fixed inset-0 z-10"
+            onClick={() => setShowDropdown(false)}
+            aria-label="Close menu"
+          />
 
           {/* Dropdown menu */}
           <div className="absolute right-0 mt-2 w-56 rounded-md border bg-card shadow-lg z-20">

@@ -46,7 +46,7 @@ export const invalidAdoptionData = {
   },
   empty: {
     motivation: "",
-    contactPreference: "" as any,
+    contactPreference: "" as unknown,
   },
 };
 

@@ -87,7 +87,7 @@ export async function GET(ctx: APIContext): Promise<Response> {
 
     // Transform data to match DTO.DogResponse format
     // The query includes shelters data in nested format, but we need flat structure
-    const dogs: DTO.DogResponse[] = data.map((dog: any) => ({
+    const dogs: DTO.DogResponse[] = data.map((dog: Record<string, unknown>) => ({
       id: dog.id,
       name: dog.name,
       age_years: dog.age_years,

@@ -141,29 +141,34 @@ if (error) {
 
         const data = await response.json();
 
+        if (!statusMessage) return;
+
         if (response.ok) {
           // Show success message
-          statusMessage!.className = "p-3 rounded-md text-sm bg-green-50 text-green-800";
-          statusMessage!.textContent = data.message || "Mail weryfikacyjny został wysłany!";
+          statusMessage.className = "p-3 rounded-md text-sm bg-green-50 text-green-800";
+          statusMessage.textContent = data.message || "Mail weryfikacyjny został wysłany!";
           form.reset();
 
           // Hide message after 5 seconds
           setTimeout(() => {
-            statusMessage!.classList.add("hidden");
+            statusMessage.classList.add("hidden");
           }, 5000);
         } else {
           // Show error message
-          statusMessage!.className = "p-3 rounded-md text-sm bg-red-50 text-red-800";
-          statusMessage!.textContent = data.error || "Błąd wysyłania maila";
+          statusMessage.className = "p-3 rounded-md text-sm bg-red-50 text-red-800";
+          statusMessage.textContent = data.error || "Błąd wysyłania maila";
         }
 
-        statusMessage!.classList.remove("hidden");
-      } catch (err) {
-        statusMessage!.className = "p-3 rounded-md text-sm bg-red-50 text-red-800";
-        statusMessage!.textContent = "Błąd połączenia. Spróbuj ponownie.";
-        statusMessage!.classList.remove("hidden");
+        statusMessage.classList.remove("hidden");
+      } catch {
+        if (!statusMessage) return;
+        statusMessage.className = "p-3 rounded-md text-sm bg-red-50 text-red-800";
+        statusMessage.textContent = "Błąd połączenia. Spróbuj ponownie.";
+        statusMessage.classList.remove("hidden");
       } finally {
-        if (submitButton) submitButton.disabled = false;
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
       }
     });
   }

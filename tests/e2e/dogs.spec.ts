@@ -14,7 +14,7 @@ test.describe("Dogs Listing Page", () => {
     expect(dogCount).toBeGreaterThan(0);
   });
 
-  test("should display dog images", async ({ page }) => {
+  test("should display dog images", async () => {
     const dogCount = await dogsPage.getDogCount();
 
     if (dogCount > 0) {

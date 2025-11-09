@@ -4,7 +4,6 @@ import dogsData from "../data/dogs.json";
 import type { Database } from "../src/db/database.types";
 
 type DogSize = Database["public"]["Enums"]["dog_size"];
-type DogAgeCategory = Database["public"]["Enums"]["dog_age_category"];
 type DogStatus = Database["public"]["Enums"]["dog_status"];
 
 // Mapping functions
@@ -15,12 +14,6 @@ function mapSize(size: string): DogSize {
     duża: "large",
   };
   return sizeMap[size] || "medium";
-}
-
-function mapAgeCategory(age: number): DogAgeCategory {
-  if (age <= 1) return "puppy";
-  if (age <= 7) return "adult";
-  return "senior";
 }
 
 function mapStatus(status: string): DogStatus {
@@ -44,7 +37,7 @@ async function seedDatabase() {
       const shelterName = dog.shelter.name;
 
       if (!sheltersMap.has(shelterName)) {
-        const { data: existingShelter, error: findError } = await supabaseClient
+        const { data: existingShelter } = await supabaseClient
           .from("shelters")
           .select("id")
           .eq("name", shelterName)

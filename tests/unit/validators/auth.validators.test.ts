@@ -6,8 +6,6 @@ import {
   resetPasswordCommandSchema,
   type LoginCommand,
   type RegisterCommand,
-  type ForgotPasswordCommand,
-  type ResetPasswordCommand,
 } from "@lib/validators/auth.validators";
 
 describe("Auth Validators", () => {
@@ -172,6 +170,7 @@ describe("Auth Validators", () => {
     });
 
     it("should reject if gdprConsent is missing", () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { gdprConsent, ...noConsentData } = validRegisterData;
 
       const result = registerCommandSchema.safeParse(noConsentData);

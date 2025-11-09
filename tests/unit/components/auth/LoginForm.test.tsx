@@ -3,14 +3,14 @@ import { renderWithProviders, screen, userEvent, waitFor } from "../../../helper
 import { LoginForm } from "@components/auth/LoginForm";
 
 // Mock window.location.assign
-delete (window as any).location;
-window.location = { assign: vi.fn() } as any;
+delete (window as unknown as { location?: unknown }).location;
+window.location = { assign: vi.fn() } as unknown as Location;
 
 describe("LoginForm Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset window.location mock
-    (window.location.assign as any).mockClear();
+    (window.location.assign as unknown as { mockClear: () => void }).mockClear();
   });
 
   describe("Rendering", () => {
@@ -485,8 +485,8 @@ describe("LoginForm Component", () => {
       await user.click(submitButton);
 
       await waitFor(() => {
-        const lastCall = (global.fetch as any).mock.calls[0];
-        const bodyArg = JSON.parse(lastCall[1].body);
+        const lastCall = (global.fetch as unknown as { mock: { calls: unknown[][] } }).mock.calls[0];
+        const bodyArg = JSON.parse((lastCall[1] as { body: string }).body);
         // Email value is typed as-is from input
         expect(bodyArg.email).toBe("  user@example.com  ");
       });

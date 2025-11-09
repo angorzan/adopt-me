@@ -19,6 +19,7 @@ describe("Application Validators", () => {
     });
 
     it("should validate without extra_notes (optional field)", () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { extra_notes, ...dataWithoutNotes } = validApplicationData;
       const result = ApplicationCreateSchema.safeParse(dataWithoutNotes);
       expect(result.success).toBe(true);
@@ -181,7 +182,7 @@ describe("Application Validators", () => {
         invalidPreferences.forEach((preference) => {
           const data = {
             ...validApplicationData,
-            contact_preference: preference as any,
+            contact_preference: preference as unknown,
           };
 
           const result = ApplicationCreateSchema.safeParse(data);
@@ -193,6 +194,7 @@ describe("Application Validators", () => {
       });
 
       it("should require contact_preference", () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { contact_preference, ...dataWithoutPreference } = validApplicationData;
 
         const result = ApplicationCreateSchema.safeParse(dataWithoutPreference);
@@ -287,7 +289,8 @@ describe("Application Validators", () => {
 
         requiredFields.forEach((field) => {
           const testData = { ...validApplicationData };
-          delete (testData as any)[field];
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+          delete (testData as Record<string, unknown>)[field];
 
           const result = ApplicationCreateSchema.safeParse(testData);
           expect(result.success).toBe(false);

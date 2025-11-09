@@ -1,25 +1,6 @@
-/// <reference path="../env.d.ts" />
 import type { MiddlewareHandler } from "astro";
 import type { DTO } from "@/types";
 import { supabaseClient, createSupabaseServerInstance } from "../db/supabase.client";
-
-// Public paths that don't require authentication check
-const PUBLIC_PATHS = [
-  "/",
-  "/dogs",
-  "/auth/login",
-  "/auth/register",
-  "/auth/signup",
-  "/auth/forgot-password",
-  "/auth/reset-password",
-  "/auth/verify-email",
-  "/auth/logout",
-  "/api/v1/auth/login",
-  "/api/v1/auth/register",
-  "/api/v1/auth/logout",
-  "/api/v1/auth/forgot-password",
-  "/api/v1/auth/reset-password",
-];
 
 interface AuthLocals {
   supabase: typeof supabaseClient;

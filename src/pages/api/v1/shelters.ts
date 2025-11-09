@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro";
-import type { Database } from "../../../db/database.types";
 import { createSupabaseServerInstance } from "../../../db/supabase.client";
 
 export const GET: APIRoute = async ({ cookies, request }) => {
@@ -29,6 +28,7 @@ export const GET: APIRoute = async ({ cookies, request }) => {
       shelters?.reduce(
         (acc, shelter) => {
           if (!acc.some((s) => s.id === shelter.id)) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { dogs, ...rest } = shelter;
             acc.push(rest);
           }

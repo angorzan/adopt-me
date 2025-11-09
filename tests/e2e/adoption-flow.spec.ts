@@ -3,7 +3,7 @@ import { AdoptionFormPage } from "./pages/AdoptionFormPage";
 import { SignupPage, LoginPage } from "./pages/AuthPages";
 import { DogsPage } from "./pages/DogsPage";
 import { AuthHelper } from "./helpers/AuthHelper";
-import { validAdoptionData, invalidAdoptionData, errorMessages, successMessages } from "./helpers/test-data";
+import { validAdoptionData, invalidAdoptionData, successMessages } from "./helpers/test-data";
 
 // ═════════════════════════════════════════════════════════════════════
 // ADOPTION FLOW - Complete Journey E2E Tests
@@ -46,7 +46,7 @@ test.describe("Adoption Flow - Complete Journey", () => {
   // Test 1: Happy Path - Authenticated user can submit adoption application
   test("authenticated user can submit adoption application successfully", async ({ page }) => {
     // Login as test user
-    const testUser = await AuthHelper.quickLogin(page);
+    await AuthHelper.quickLogin(page);
 
     const adoptionForm = new AdoptionFormPage(page);
     await adoptionForm.goto(dogId);
@@ -246,7 +246,6 @@ test.describe("Adoption Flow - Registration & Login", () => {
     // Navigate to dogs catalog and get a dog
     const dogsPage = new DogsPage(page);
     await dogsPage.goto();
-    const dogId = await dogsPage.getFirstDogId();
 
     // Submit adoption application
     const adoptionForm = new AdoptionFormPage(page);

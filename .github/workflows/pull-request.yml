@@ -1,0 +1,195 @@
+name: Pull Request CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  lint:
+    name: 🧹 Lint Code
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🟦 Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🧹 Run linter
+        run: npm run lint
+
+  unit-tests:
+    name: 🔬 Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    env:
+      CI: true
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🟦 Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔬 Run unit tests with coverage
+        run: npm run test:coverage
+
+      - name: 📊 Upload unit test coverage
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: unit-test-coverage
+          path: coverage/
+          retention-days: 30
+
+  e2e-tests:
+    name: 🎭 E2E Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    env:
+      CI: true
+      NODE_ENV: integration
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🟦 Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🎭 Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: 🎭 Run E2E tests
+        run: npm run test:e2e
+
+      - name: 📊 Upload E2E test results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: 📊 Upload E2E test coverage
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: e2e-test-results
+          path: test-results/
+          retention-days: 30
+
+  status-comment:
+    name: 💬 Status Comment
+    runs-on: ubuntu-latest
+    needs: [lint, unit-tests, e2e-tests]
+    if: always()
+    permissions:
+      pull-requests: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: 📥 Download unit test coverage
+        uses: actions/download-artifact@v6
+        if: needs.unit-tests.result == 'success'
+        with:
+          name: unit-test-coverage
+          path: coverage/
+        continue-on-error: true
+
+      - name: 💬 Post success comment
+        if: needs.lint.result == 'success' && needs.unit-tests.result == 'success' && needs.e2e-tests.result == 'success'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Get PR details
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            const comment = `## ✅ All checks passed!
+
+            **PR:** #${pr.number} - ${pr.title}
+            **Author:** @${pr.user.login}
+            **Branch:** \`${pr.head.ref}\` → \`${pr.base.ref}\`
+
+            | Check | Status |
+            |-------|--------|
+            | 🧹 Linting | ✅ Passed |
+            | 🔬 Unit Tests | ✅ Passed |
+            | 🎭 E2E Tests | ✅ Passed |
+
+            All quality checks have passed successfully. This PR is ready for review! 🚀`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: 💬 Post failure comment
+        if: needs.lint.result != 'success' || needs.unit-tests.result != 'success' || needs.e2e-tests.result != 'success'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Get PR details
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            const lintStatus = '${{ needs.lint.result }}' === 'success' ? '✅ Passed' : '❌ Failed';
+            const unitStatus = '${{ needs.unit-tests.result }}' === 'success' ? '✅ Passed' : '❌ Failed';
+            const e2eStatus = '${{ needs.e2e-tests.result }}' === 'success' ? '✅ Passed' : '❌ Failed';
+
+            const comment = `## ❌ Some checks failed
+
+            **PR:** #${pr.number} - ${pr.title}
+            **Author:** @${pr.user.login}
+            **Branch:** \`${pr.head.ref}\` → \`${pr.base.ref}\`
+
+            | Check | Status |
+            |-------|--------|
+            | 🧹 Linting | ${lintStatus} |
+            | 🔬 Unit Tests | ${unitStatus} |
+            | 🎭 E2E Tests | ${e2eStatus} |
+
+            Please review the failed checks and fix the issues before merging. 🔧`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+

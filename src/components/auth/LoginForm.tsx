@@ -66,14 +66,14 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto" data-test-id="login-form-container">
       <CardHeader>
         <CardTitle>Logowanie</CardTitle>
         <CardDescription>
           Zaloguj się do swojego konta AdoptMe
         </CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-test-id="login-form">
         <CardContent>
           <div className="space-y-4">
             {error && (
@@ -81,6 +81,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
                 className="p-3 rounded-md bg-destructive/10 text-destructive text-sm"
                 role="alert"
                 aria-live="polite"
+                data-test-id="login-form-error"
               >
                 {error}
               </div>
@@ -97,6 +98,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
                 disabled={isLoading}
                 required
                 autoComplete="email"
+                data-test-id="login-form-email"
               />
             </div>
 
@@ -112,6 +114,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
                 required
                 minLength={5}
                 autoComplete="current-password"
+                data-test-id="login-form-password"
               />
             </div>
 
@@ -119,6 +122,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
               <a
                 href="/auth/forgot-password"
                 className="text-primary hover:underline"
+                data-test-id="login-form-forgot-password-link"
               >
                 Zapomniałeś hasła?
               </a>
@@ -131,6 +135,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
             type="submit"
             className="w-full"
             disabled={isLoading}
+            data-test-id="login-form-submit-button"
           >
             {isLoading ? 'Logowanie...' : 'Zaloguj się'}
           </Button>
@@ -140,6 +145,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
             <a
               href="/auth/signup"
               className="text-primary hover:underline"
+              data-test-id="login-form-signup-link"
             >
               Załóż konto
             </a>

@@ -1,4 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+// Load test environment variables from .env.test
+dotenv.config({ path: path.resolve(__dirname, '.env.test') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -42,6 +47,19 @@ export default defineConfig({
 
     // Video on failure
     video: 'retain-on-failure',
+
+    // Pass test environment variables to tests
+    // These will be available via process.env in tests
+  },
+
+  // Make environment variables available in tests
+  // This ensures test database credentials are accessible
+  env: {
+    E2E_USERNAME: process.env.E2E_USERNAME || '',
+    E2E_PASSWORD: process.env.E2E_PASSWORD || '',
+    E2E_USERNAME_ID: process.env.E2E_USERNAME_ID || '',
+    SUPABASE_URL: process.env.SUPABASE_URL || '',
+    SUPABASE_PUBLIC_KEY: process.env.SUPABASE_PUBLIC_KEY || '',
   },
 
   // Configure projects for major browsers - tylko Chromium zgodnie z wytycznymi
@@ -54,10 +72,18 @@ export default defineConfig({
 
   // Run your local dev server before starting the tests
   webServer: {
+    // Use test environment variables when starting dev server
     command: 'npm run dev',
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
+    env: {
+      // Pass test database credentials to dev server
+      SUPABASE_URL: process.env.SUPABASE_URL || '',
+      SUPABASE_PUBLIC_KEY: process.env.SUPABASE_PUBLIC_KEY || '',
+      // Ensure we're in test mode
+      NODE_ENV: 'test',
+    },
   },
 });
 

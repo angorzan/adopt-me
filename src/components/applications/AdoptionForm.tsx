@@ -174,7 +174,7 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
 
   if (!isAuthenticated) {
     return (
-      <Card>
+      <Card data-test-id="adoption-form-unauthenticated">
         <CardHeader>
           <CardTitle>Zaloguj się, aby wysłać wniosek</CardTitle>
           <CardDescription>
@@ -187,10 +187,10 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
             Po zalogowaniu będziesz mógł wysłać wniosek adopcyjny dla psa {dogName} oraz śledzić status zgłoszenia w swoim profilu.
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <Button asChild className="w-full sm:w-auto">
+            <Button asChild className="w-full sm:w-auto" data-test-id="adoption-form-login-button">
               <a href="/auth/login">Zaloguj się</a>
             </Button>
-            <Button asChild variant="outline" className="w-full sm:w-auto">
+            <Button asChild variant="outline" className="w-full sm:w-auto" data-test-id="adoption-form-signup-button">
               <a href="/auth/signup">Załóż konto</a>
             </Button>
           </div>
@@ -201,13 +201,13 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
 
   if (status === "success") {
     return (
-      <Card className="border-green-200 bg-green-50 dark:border-green-900/50 dark:bg-green-950/30">
+      <Card className="border-green-200 bg-green-50 dark:border-green-900/50 dark:bg-green-950/30" data-test-id="adoption-form-success">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-300">
             <CheckCircle2 className="size-5" aria-hidden="true" />
             Wniosek wysłany
           </CardTitle>
-          <CardDescription>
+          <CardDescription data-test-id="adoption-form-success-message">
             Dziękujemy! Twój wniosek adopcyjny dla psa {dogName} został zapisany. Schronisko skontaktuje się
             z Tobą w wybrany sposób po przeanalizowaniu zgłoszenia.
           </CardDescription>
@@ -217,8 +217,8 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
   }
 
   return (
-    <Card>
-      <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
+    <Card data-test-id="adoption-form-container">
+      <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate data-test-id="adoption-form">
         <CardHeader>
           <CardTitle>Formularz adopcyjny</CardTitle>
           <CardDescription>
@@ -227,7 +227,7 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
         </CardHeader>
         <CardContent className="space-y-6">
           {globalError && (
-            <div className="flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            <div className="flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" data-test-id="adoption-form-global-error">
               <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <span>{globalError}</span>
             </div>
@@ -245,13 +245,14 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
               onChange={(event) => setMotivation(event.target.value)}
               disabled={isSubmitting}
               maxLength={800}
+              data-test-id="adoption-form-motivation"
             />
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Minimum 20 znaków</span>
-              <span>{motivationLength}/800</span>
+              <span data-test-id="adoption-form-motivation-counter">{motivationLength}/800</span>
             </div>
             {fieldErrors.motivation && (
-              <p id="motivation-error" className="text-sm text-destructive">
+              <p id="motivation-error" className="text-sm text-destructive" data-test-id="adoption-form-motivation-error">
                 {fieldErrors.motivation}
               </p>
             )}
@@ -268,16 +269,17 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
                 className="w-full"
                 aria-invalid={fieldErrors.contactPreference ? "true" : undefined}
                 aria-describedby={fieldErrors.contactPreference ? "contact-preference-error" : undefined}
+                data-test-id="adoption-form-contact-preference"
               >
                 <SelectValue placeholder="Wybierz kanał kontaktu" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="email">E-mail</SelectItem>
-                <SelectItem value="phone">Telefon</SelectItem>
+                <SelectItem value="email" data-test-id="adoption-form-contact-email">E-mail</SelectItem>
+                <SelectItem value="phone" data-test-id="adoption-form-contact-phone">Telefon</SelectItem>
               </SelectContent>
             </Select>
             {fieldErrors.contactPreference && (
-              <p id="contact-preference-error" className="text-sm text-destructive">
+              <p id="contact-preference-error" className="text-sm text-destructive" data-test-id="adoption-form-contact-preference-error">
                 {fieldErrors.contactPreference}
               </p>
             )}
@@ -295,12 +297,13 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
               onChange={(event) => setExtraNotes(event.target.value)}
               disabled={isSubmitting}
               maxLength={500}
+              data-test-id="adoption-form-extra-notes"
             />
             <div className="flex items-center justify-end text-xs text-muted-foreground">
-              <span>{extraNotesLength}/500</span>
+              <span data-test-id="adoption-form-extra-notes-counter">{extraNotesLength}/500</span>
             </div>
             {fieldErrors.extraNotes && (
-              <p id="extra-notes-error" className="text-sm text-destructive">
+              <p id="extra-notes-error" className="text-sm text-destructive" data-test-id="adoption-form-extra-notes-error">
                 {fieldErrors.extraNotes}
               </p>
             )}
@@ -314,20 +317,21 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
                 onCheckedChange={(checked) => setConsent(Boolean(checked))}
                 disabled={isSubmitting}
                 aria-describedby={fieldErrors.consent ? "consent-error" : undefined}
+                data-test-id="adoption-form-consent-checkbox"
               />
               <Label htmlFor="consent" className="cursor-pointer">
                 Wyrażam zgodę na przetwarzanie moich danych osobowych na potrzeby procesu adopcyjnego.
               </Label>
             </div>
             {fieldErrors.consent && (
-              <p id="consent-error" className="text-sm text-destructive">
+              <p id="consent-error" className="text-sm text-destructive" data-test-id="adoption-form-consent-error">
                 {fieldErrors.consent}
               </p>
             )}
           </div>
         </CardContent>
         <div className="flex justify-end px-6 pb-6">
-          <Button type="submit" size="lg" disabled={isSubmitting} className="w-full md:w-auto">
+          <Button type="submit" size="lg" disabled={isSubmitting} className="w-full md:w-auto" data-test-id="adoption-form-submit-button">
             {isSubmitting ? "Wysyłanie…" : "Wyślij wniosek"}
           </Button>
         </div>

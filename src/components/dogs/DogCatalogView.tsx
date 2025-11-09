@@ -39,7 +39,7 @@ const DogCatalogView = () => {
 
   if (isError) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12" data-test-id="dog-catalog-error">
         <h2 className="text-xl font-semibold text-destructive">Wystąpił błąd</h2>
         <p className="text-muted-foreground">Nie udało się pobrać danych o psach. Spróbuj odświeżyć stronę.</p>
       </div>
@@ -47,7 +47,7 @@ const DogCatalogView = () => {
   }
 
   return (
-    <div>
+    <div data-test-id="dog-catalog-view">
       <DogFilters filters={displayFilters} onFiltersChange={handleFiltersChange} isLoading={isLoading} />
       <DogGrid dogs={dogs ?? []} isLoading={isLoading} />
     </div>

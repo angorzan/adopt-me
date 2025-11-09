@@ -8,18 +8,18 @@ interface DogCardProps {
 
 export const DogCard = ({ dog }: DogCardProps) => {
   return (
-    <Card>
+    <Card data-test-id="dog-card">
       <CardHeader>
-        <CardTitle>{dog.name}</CardTitle>
-        <CardDescription>
+        <CardTitle data-test-id="dog-card-name">{dog.name}</CardTitle>
+        <CardDescription data-test-id="dog-card-metadata">
           {dog.age_years} lat · {dog.size} · {dog.shelter_id}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="line-clamp-3">{dog.temperament}</p>
+        <p className="line-clamp-3" data-test-id="dog-card-temperament">{dog.temperament}</p>
       </CardContent>
       <CardFooter>
-        <Button asChild className="w-full">
+        <Button asChild className="w-full" data-test-id="dog-card-view-details-button">
           <a href={`/dogs/${dog.id}`}>Zobacz szczegóły</a>
         </Button>
       </CardFooter>

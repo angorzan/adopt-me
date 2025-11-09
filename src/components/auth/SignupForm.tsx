@@ -88,10 +88,10 @@ export const SignupForm = () => {
 
   if (success) {
     return (
-      <Card className="w-full max-w-md mx-auto">
+      <Card className="w-full max-w-md mx-auto" data-test-id="signup-form-success">
         <CardHeader>
           <CardTitle>Sprawdź swoją skrzynkę e-mail</CardTitle>
-          <CardDescription>
+          <CardDescription data-test-id="signup-form-success-message">
             Konto zostało utworzone.
           </CardDescription>
         </CardHeader>
@@ -106,7 +106,7 @@ export const SignupForm = () => {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-3">
-          <Button asChild className="w-full">
+          <Button asChild className="w-full" data-test-id="signup-form-success-login-button">
             <a href="/auth/login">Przejdź do logowania</a>
           </Button>
           <p className="text-xs text-muted-foreground text-center">
@@ -118,14 +118,14 @@ export const SignupForm = () => {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto" data-test-id="signup-form-container">
       <CardHeader>
         <CardTitle>Załóż konto</CardTitle>
         <CardDescription>
           Utwórz konto, aby adoptować psa i zarządzać wnioskami.
         </CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-test-id="signup-form">
         <CardContent>
           <div className="space-y-4">
             {error && (
@@ -133,6 +133,7 @@ export const SignupForm = () => {
                 className="p-3 rounded-md bg-destructive/10 text-destructive text-sm"
                 role="alert"
                 aria-live="polite"
+                data-test-id="signup-form-error"
               >
                 {error}
               </div>
@@ -149,6 +150,7 @@ export const SignupForm = () => {
                 disabled={isLoading}
                 required
                 autoComplete="email"
+                data-test-id="signup-form-email"
               />
             </div>
 
@@ -164,6 +166,7 @@ export const SignupForm = () => {
                 required
                 minLength={5}
                 autoComplete="new-password"
+                data-test-id="signup-form-password"
               />
               <p className="text-xs text-muted-foreground">
                 Minimum 5 znaków
@@ -182,6 +185,7 @@ export const SignupForm = () => {
                 required
                 minLength={5}
                 autoComplete="new-password"
+                data-test-id="signup-form-password-confirm"
               />
             </div>
 
@@ -192,6 +196,7 @@ export const SignupForm = () => {
                 onCheckedChange={(checked) => setGdprConsent(checked === true)}
                 disabled={isLoading}
                 required
+                data-test-id="signup-form-gdpr-checkbox"
               />
               <Label
                 htmlFor="gdpr"
@@ -220,6 +225,7 @@ export const SignupForm = () => {
             type="submit"
             className="w-full"
             disabled={isLoading}
+            data-test-id="signup-form-submit-button"
           >
             {isLoading ? 'Tworzenie konta...' : 'Utwórz konto'}
           </Button>
@@ -229,6 +235,7 @@ export const SignupForm = () => {
             <a
               href="/auth/login"
               className="text-primary hover:underline"
+              data-test-id="signup-form-login-link"
             >
               Zaloguj się
             </a>

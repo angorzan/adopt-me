@@ -42,7 +42,7 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 mb-8">
+    <div className="flex flex-col md:flex-row gap-4 mb-8" data-test-id="dog-filters">
       <Input
         type="search"
         placeholder="Szukaj po nazwie psa..."
@@ -50,13 +50,14 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
         value={filters.q}
         onChange={(e) => onFiltersChange({ q: e.target.value })}
         disabled={isLoading}
+        data-test-id="dog-filters-search"
       />
       <Select
         value={filters.city}
         onValueChange={(value) => onFiltersChange({ city: value })}
         disabled={isLoading || citiesLoading}
       >
-        <SelectTrigger className="w-full md:w-[180px]">
+        <SelectTrigger className="w-full md:w-[180px]" data-test-id="dog-filters-city">
           <SelectValue placeholder="Miasto" />
         </SelectTrigger>
         <SelectContent>
@@ -73,7 +74,7 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
         onValueChange={(value) => onFiltersChange({ size: value as DogFiltersViewModel['size'] })}
         disabled={isLoading}
       >
-        <SelectTrigger className="w-full md:w-[180px]">
+        <SelectTrigger className="w-full md:w-[180px]" data-test-id="dog-filters-size">
           <SelectValue placeholder="Rozmiar" />
         </SelectTrigger>
         <SelectContent>
@@ -88,7 +89,7 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
         onValueChange={(value) => onFiltersChange({ age_category: value as DogFiltersViewModel['age_category'] })}
         disabled={isLoading}
       >
-        <SelectTrigger className="w-full md:w-[180px]">
+        <SelectTrigger className="w-full md:w-[180px]" data-test-id="dog-filters-age">
           <SelectValue placeholder="Wiek" />
         </SelectTrigger>
         <SelectContent>
@@ -103,7 +104,7 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
         onValueChange={(value) => onFiltersChange({ shelter: value })}
         disabled={isLoading || sheltersLoading}
       >
-        <SelectTrigger className="w-full md:w-[180px]">
+        <SelectTrigger className="w-full md:w-[180px]" data-test-id="dog-filters-shelter">
           <SelectValue placeholder="Schronisko" />
         </SelectTrigger>
         <SelectContent>

@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import node from "@astrojs/node";
+import cloudflare from "@astrojs/cloudflare";
 import { fileURLToPath, URL } from "node:url";
 import tailwindcss from "@tailwindcss/postcss";
 import autoprefixer from "autoprefixer";
@@ -10,9 +10,7 @@ import autoprefixer from "autoprefixer";
 export default defineConfig({
   output: "server",
   integrations: [react()],
-  adapter: node({
-    mode: "standalone",
-  }),
+  adapter: cloudflare(),
   vite: {
     resolve: {
       alias: {

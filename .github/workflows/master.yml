@@ -1,0 +1,120 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: 🧹 Lint Code
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🔧 Setup and install
+        uses: ./.github/actions/setup-and-build
+
+      - name: 🧹 Run linter
+        run: npm run lint
+
+  unit-tests:
+    name: 🔬 Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    env:
+      CI: true
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🔧 Setup and install
+        uses: ./.github/actions/setup-and-build
+
+      - name: 🔬 Run unit tests with coverage
+        run: npm run test:coverage
+
+      - name: 📊 Upload unit test coverage
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: unit-test-coverage
+          path: coverage/
+          retention-days: 30
+
+  build:
+    name: 🏗️ Build Astro
+    runs-on: ubuntu-latest
+    needs: lint
+    env:
+      CI: true
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🔧 Setup and install
+        uses: ./.github/actions/setup-and-build
+
+      - name: 🏗️ Build Astro project
+        run: npm run build
+
+      - name: 📤 Upload build artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+
+  deploy:
+    name: 🚀 Deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    needs: [lint, unit-tests, build]
+    if: always() && needs.build.result == 'success'
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v5
+
+      - name: 🔧 Setup and install
+        uses: ./.github/actions/setup-and-build
+
+      - name: 🏗️ Build project
+        run: npm run build
+
+      - name: 🚀 Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  status-check:
+    name: ✅ Status Check
+    runs-on: ubuntu-latest
+    needs: [lint, unit-tests, build, deploy]
+    if: always()
+    permissions:
+      contents: read
+    steps:
+      - name: ✅ Check if all jobs passed
+        if: needs.lint.result != 'success' || needs.unit-tests.result != 'success' || needs.build.result != 'success'
+        run: exit 1
+
+      - name: 📢 All checks passed
+        if: success()
+        run: echo "✅ All checks passed! Deployment successful."

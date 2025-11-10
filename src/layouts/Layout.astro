@@ -19,8 +19,10 @@ const user = Astro.locals.user;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <script is:inline>
-      // Prevent flash of unstyled content (FOUC) by setting theme before page loads const theme =
-      localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      /* eslint-disable prettier/prettier */
+      // Prevent flash of unstyled content (FOUC) by setting theme before page loads
+      const theme =
+        localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
       document.documentElement.classList.toggle("dark", theme === "dark");
     </script>
   </head>

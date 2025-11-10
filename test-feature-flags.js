@@ -1,4 +1,5 @@
 // Quick test script for feature flags
+/* eslint-disable no-undef, no-console */
 import { isFeatureEnabled, getCurrentEnvironment } from "./src/features/index.ts";
 
 console.log("=== Feature Flags Test ===");

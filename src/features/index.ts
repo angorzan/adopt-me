@@ -39,7 +39,7 @@ export function getCurrentEnvironment(): EnvName {
   // - Variables prefixed with PUBLIC_ are exposed to the client and server.
   // - Non-prefixed variables are only available on the server.
 
-  const envFromClient = (import.meta as any).env?.PUBLIC_ENV_NAME as string | undefined;
+  const envFromClient = (import.meta as unknown as Record<string, unknown>).env?.PUBLIC_ENV_NAME as string | undefined;
   const envFromServer = typeof process !== "undefined" ? process.env.ENV_NAME : undefined;
 
   const name = (envFromClient || envFromServer || "local").toLowerCase();
@@ -50,7 +50,7 @@ export function getCurrentEnvironment(): EnvName {
 
   // Fallback to local for unknown values, but log a warning.
   /* eslint-disable no-console */
-  console.warn(`[FeatureFlags] Unknown ENV_NAME=\"${name}\" – defaulting to \"local\"`);
+  console.warn(`[FeatureFlags] Unknown ENV_NAME="${name}" – defaulting to "local"`);
   return "local";
 }
 
@@ -69,7 +69,7 @@ export function isFeatureEnabled(flagName: FeatureName): boolean {
   console.log(`[FeatureFlags] env=%s flag=%s enabled=%s`, env, flagName, enabled);
 
   if (featureFlags[flagName] === undefined) {
-    console.warn(`[FeatureFlags] Flag \"${flagName}\" not defined for env=\"${env}\" – returning false`);
+    console.warn(`[FeatureFlags] Flag "${flagName}" not defined for env="${env}" – returning false`);
   }
 
   return enabled;

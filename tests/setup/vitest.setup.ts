@@ -41,6 +41,27 @@ global.ResizeObserver = class ResizeObserver {
 } as unknown as typeof ResizeObserver;
 /* eslint-enable @typescript-eslint/no-empty-function */
 
+// Mock pointer capture methods for Radix UI components
+if (!Element.prototype.hasPointerCapture) {
+  Element.prototype.hasPointerCapture = vi.fn().mockReturnValue(false);
+}
+if (!Element.prototype.setPointerCapture) {
+  Element.prototype.setPointerCapture = vi.fn();
+}
+if (!Element.prototype.releasePointerCapture) {
+  Element.prototype.releasePointerCapture = vi.fn();
+}
+
+// Mock scrollIntoView for Radix UI Select
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = vi.fn();
+}
+
+// Mock getAnimations for Radix UI components
+if (!Element.prototype.getAnimations) {
+  Element.prototype.getAnimations = vi.fn().mockReturnValue([]);
+}
+
 // Environment variables for tests
 process.env.PUBLIC_SUPABASE_URL = "http://localhost:54321";
 process.env.PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";

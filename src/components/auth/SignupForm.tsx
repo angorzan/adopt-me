@@ -121,7 +121,7 @@ export const SignupForm = () => {
         <CardTitle>Załóż konto</CardTitle>
         <CardDescription>Utwórz konto, aby adoptować psa i zarządzać wnioskami.</CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit} data-test-id="signup-form">
+      <form onSubmit={handleSubmit} noValidate data-test-id="signup-form">
         <CardContent>
           <div className="space-y-4">
             {error && (

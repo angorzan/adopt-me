@@ -25,7 +25,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
       let data;
@@ -33,7 +33,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
         data = await response.json();
       } catch (parseError) {
         console.error("Failed to parse response:", parseError);
-        throw new Error(`Server returned invalid response (${response.status})`);
+        throw new Error(`Server zwrócił nieprawidłową odpowiedź (${response.status})`);
       }
 
       if (!response.ok) {
@@ -71,7 +71,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
         <CardTitle>Logowanie</CardTitle>
         <CardDescription>Zaloguj się do swojego konta AdoptMe</CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit} data-test-id="login-form">
+      <form onSubmit={handleSubmit} noValidate data-test-id="login-form">
         <CardContent>
           <div className="space-y-4">
             {error && (

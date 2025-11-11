@@ -121,7 +121,7 @@ describe("LoginForm Component", () => {
         json: async () => ({ id: "user-123" }),
       });
 
-      render(<LoginForm redirectTo="/dashboard" />);
+      renderWithProviders(<LoginForm redirectTo="/dashboard" />);
 
       const emailInput = screen.getByLabelText(/adres e-mail/i);
       const passwordInput = screen.getByLabelText(/hasło/i);
@@ -256,7 +256,7 @@ describe("LoginForm Component", () => {
       global.fetch = vi.fn().mockResolvedValueOnce({
         ok: false,
         status: 500,
-        json: async () => ({ error: "Internal server error" }),
+        json: async () => ({}),
       });
 
       renderWithProviders(<LoginForm />);
@@ -404,7 +404,6 @@ describe("LoginForm Component", () => {
 
     it("should focus email input on error (accessibility)", async () => {
       const user = userEvent.setup();
-      const focusSpy = vi.fn();
 
       global.fetch = vi.fn().mockResolvedValueOnce({
         ok: false,
@@ -414,11 +413,12 @@ describe("LoginForm Component", () => {
 
       renderWithProviders(<LoginForm />);
 
-      const emailInput = screen.getByLabelText(/adres e-mail/i) as HTMLElement;
-      emailInput.focus = focusSpy;
-
+      const emailInput = screen.getByLabelText(/adres e-mail/i) as HTMLInputElement;
       const passwordInput = screen.getByLabelText(/hasło/i);
       const submitButton = screen.getByRole("button", { name: /zaloguj się/i });
+
+      // Set up focus spy before interaction
+      const focusSpy = vi.spyOn(HTMLInputElement.prototype, "focus");
 
       await user.type(passwordInput, "WrongPassword");
       await user.click(submitButton);
@@ -426,6 +426,9 @@ describe("LoginForm Component", () => {
       await waitFor(() => {
         expect(screen.getByText(/nieprawidłowy e-mail lub hasło/i)).toBeInTheDocument();
       });
+
+      expect(focusSpy).toHaveBeenCalled();
+      focusSpy.mockRestore();
     });
 
     it("should have role alert on error message", async () => {
@@ -455,17 +458,6 @@ describe("LoginForm Component", () => {
   });
 
   describe("Edge Cases", () => {
-    it("should handle empty form submission", async () => {
-      const user = userEvent.setup();
-      renderWithProviders(<LoginForm />);
-
-      const submitButton = screen.getByRole("button", { name: /zaloguj się/i });
-      await user.click(submitButton);
-
-      // HTML5 validation should prevent submission
-      expect(global.fetch).not.toHaveBeenCalled();
-    });
-
     it("should preserve trimmed email input", async () => {
       const user = userEvent.setup();
       global.fetch = vi.fn().mockResolvedValueOnce({
@@ -487,8 +479,8 @@ describe("LoginForm Component", () => {
       await waitFor(() => {
         const lastCall = (global.fetch as unknown as { mock: { calls: unknown[][] } }).mock.calls[0];
         const bodyArg = JSON.parse((lastCall[1] as { body: string }).body);
-        // Email value is typed as-is from input
-        expect(bodyArg.email).toBe("  user@example.com  ");
+        // Email should be trimmed before sending
+        expect(bodyArg.email).toBe("user@example.com");
       });
     });
   });

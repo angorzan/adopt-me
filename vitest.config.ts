@@ -32,7 +32,7 @@ export default defineConfig({
     exclude: ["node_modules", "dist", ".astro", "tests/e2e"],
 
     // Watch configuration
-    watch: true,
+    watch: false,
 
     // Test timeout
     testTimeout: 10000,

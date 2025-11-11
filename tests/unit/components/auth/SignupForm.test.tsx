@@ -255,7 +255,7 @@ describe("SignupForm Component", () => {
       await user.click(submitButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/musisz zaakceptować przetwarzanie danych/i)).toBeInTheDocument();
+        expect(screen.getByText(/musisz zaakceptować przetwarzanie danych osobowych/i)).toBeInTheDocument();
       });
 
       expect(global.fetch).not.toHaveBeenCalled();
@@ -442,19 +442,22 @@ describe("SignupForm Component", () => {
       const user = userEvent.setup();
       renderWithProviders(<SignupForm />);
 
+      const emailInput = screen.getByLabelText(/adres e-mail/i);
       const passwordInput = screen.getByLabelText(/^hasło$/i);
       const confirmInput = screen.getByLabelText(/potwierdź hasło/i);
       const checkbox = screen.getByRole("checkbox");
       const submitButton = screen.getByRole("button", { name: /utwórz konto/i });
 
-      await user.type(passwordInput, "short");
-      await user.type(confirmInput, "short");
+      await user.type(emailInput, "test@example.com");
+      await user.type(passwordInput, "Pass");
+      await user.type(confirmInput, "Pass");
       await user.click(checkbox);
       await user.click(submitButton);
 
       await waitFor(() => {
         const errorAlert = screen.getByRole("alert");
         expect(errorAlert).toBeInTheDocument();
+        expect(errorAlert).toHaveAttribute("aria-live", "polite");
       });
     });
   });

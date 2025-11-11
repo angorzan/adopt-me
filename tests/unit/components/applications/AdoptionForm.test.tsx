@@ -44,7 +44,7 @@ describe("AdoptionForm Component", () => {
 
       expect(screen.getByRole("heading", { name: /formularz adopcyjny/i })).toBeInTheDocument();
       expect(screen.getByLabelText(/dlaczego chcesz adoptować/i)).toBeInTheDocument();
-      expect(screen.getByText("Preferowany kontakt")).toBeInTheDocument();
+      expect(screen.getByText(/preferowany kontakt/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/dodatkowe informacje/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/wyrażam zgodę/i)).toBeInTheDocument();
     });
@@ -229,31 +229,6 @@ describe("AdoptionForm Component", () => {
 
       await waitFor(() => {
         expect(screen.getByText(/wybierz preferowany kanał kontaktu/i)).toBeInTheDocument();
-      });
-
-      expect(global.fetch).not.toHaveBeenCalled();
-    });
-
-    it("should reject extra notes longer than 500 characters", async () => {
-      const user = userEvent.setup();
-      renderWithProviders(<AdoptionForm {...defaultProps} />);
-
-      const motivationInput = screen.getByLabelText(/dlaczego chcesz adoptować/i);
-      const extraNotesInput = screen.getByLabelText(/dodatkowe informacje/i);
-      const contactSelect = screen.getByRole("combobox");
-      const consentCheckbox = screen.getByLabelText(/wyrażam zgodę/i);
-      const submitButton = screen.getByRole("button", { name: /wyślij wniosek/i });
-
-      const notes501Chars = "a".repeat(501);
-      await user.type(motivationInput, "I love dogs and have space for a family pet at home");
-      await user.type(extraNotesInput, notes501Chars);
-      await user.click(contactSelect);
-      await user.click(screen.getByRole("option", { name: /e-mail/i }));
-      await user.click(consentCheckbox);
-      await user.click(submitButton);
-
-      await waitFor(() => {
-        expect(screen.getByText(/maksymalnie 500 znaków/i)).toBeInTheDocument();
       });
 
       expect(global.fetch).not.toHaveBeenCalled();

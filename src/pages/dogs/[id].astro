@@ -34,8 +34,8 @@ if (error || !dog) {
 
 const ageLabel =
   dog.age_years < 1
-    ? `${dog.age_years * 12} miesięcy`
-    : `${dog.age_years} ${dog.age_years === 1 ? "rok" : dog.age_years < 5 ? "lata" : "lat"}`;
+    ? `${(dog.age_years * 12).toFixed(1)} miesięcy`
+    : `${dog.age_years.toFixed(1)} ${dog.age_years === 1 ? "rok" : dog.age_years < 5 ? "lata" : "lat"}`;
 const sizeMap: Record<string, string> = { small: "Mały", medium: "Średni", large: "Duży" };
 const ageCategoryMap: Record<string, string> = { puppy: "Szczeniak", adult: "Dorosły", senior: "Senior" };
 ---
@@ -43,7 +43,7 @@ const ageCategoryMap: Record<string, string> = { puppy: "Szczeniak", adult: "Dor
 <Layout title={`${dog.name} - AdoptMe`}>
   <header class="border-b">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <a href="/" class="text-2xl font-bold hover:opacity-80 transition-opacity">AdoptMe</a>
+      <a href="/" class="text-2xl font-bold hover:opacity-80 transition-opacity dark:text-[rgb(16,185,129)]">AdoptMe</a>
       <ThemeToggle client:load />
     </div>
   </header>

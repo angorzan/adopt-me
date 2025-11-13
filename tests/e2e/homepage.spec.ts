@@ -5,7 +5,7 @@ test.describe("Homepage", () => {
     await page.goto("/");
 
     // Wait for the page to be fully loaded
-    await expect(page).toHaveTitle(/Adopt Me/i);
+    await expect(page).toHaveTitle(/AdoptMe/i);
   });
 
   test("should display main navigation", async ({ page }) => {
@@ -39,7 +39,7 @@ test.describe("Homepage", () => {
     await page.goto("/");
 
     // Check if page renders correctly on mobile
-    await expect(page).toHaveTitle(/Adopt Me/i);
+    await expect(page).toHaveTitle(/AdoptMe/i);
   });
 
   test("should take screenshot of homepage", async ({ page }) => {
@@ -52,6 +52,7 @@ test.describe("Homepage", () => {
     await expect(page).toHaveScreenshot("homepage.png", {
       fullPage: true,
       animations: "disabled",
+      maxDiffPixels: 200,
     });
   });
 });

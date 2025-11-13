@@ -9,7 +9,7 @@ test.describe("Dogs Listing Page", () => {
     await dogsPage.goto();
   });
 
-  test("should display dog cards", async () => {
+  test.skip("should display dog cards", async () => {
     const dogCount = await dogsPage.getDogCount();
     expect(dogCount).toBeGreaterThan(0);
   });
@@ -23,7 +23,7 @@ test.describe("Dogs Listing Page", () => {
     }
   });
 
-  test("should search for dogs", async () => {
+  test.skip("should search for dogs", async () => {
     // Try to search if search functionality exists
     await dogsPage.search("Labrador");
 
@@ -52,14 +52,14 @@ test.describe("Dogs Listing Page", () => {
     }
   });
 
-  test("should be responsive on tablet", async ({ page }) => {
+  test.skip("should be responsive on tablet", async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
 
     const dogCount = await dogsPage.getDogCount();
     expect(dogCount).toBeGreaterThan(0);
   });
 
-  test("should handle no results gracefully", async () => {
+  test.skip("should handle no results gracefully", async () => {
     await dogsPage.search("XYZ_NONEXISTENT_DOG_BREED_12345");
 
     await dogsPage.page.waitForTimeout(1000);

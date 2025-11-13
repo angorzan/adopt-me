@@ -54,12 +54,21 @@ export class SignupPage {
   async goto(): Promise<void> {
     await this.page.goto("/auth/signup");
     await this.page.waitForLoadState("networkidle");
+    // Wait for either the form container or success card to appear
+    await Promise.race([
+      this.formContainer.waitFor({ timeout: 10000 }),
+      this.successCard.waitFor({ timeout: 10000 })
+    ]).catch(() => {
+      // If both fail, continue anyway
+    });
+    await this.page.waitForTimeout(1000); // Give React time to render
   }
 
   /**
    * Fill email field
    */
   async fillEmail(email: string): Promise<void> {
+    await this.emailInput.waitFor({ timeout: 10000 });
     await this.emailInput.fill(email);
   }
 
@@ -67,6 +76,7 @@ export class SignupPage {
    * Fill password field
    */
   async fillPassword(password: string): Promise<void> {
+    await this.passwordInput.waitFor({ timeout: 10000 });
     await this.passwordInput.fill(password);
   }
 
@@ -74,6 +84,7 @@ export class SignupPage {
    * Fill password confirmation field
    */
   async fillPasswordConfirm(password: string): Promise<void> {
+    await this.passwordConfirmInput.waitFor({ timeout: 10000 });
     await this.passwordConfirmInput.fill(password);
   }
 
@@ -81,6 +92,7 @@ export class SignupPage {
    * Check the GDPR checkbox
    */
   async checkGdpr(): Promise<void> {
+    await this.gdprCheckbox.waitFor({ timeout: 10000 });
     await this.gdprCheckbox.check();
   }
 
@@ -206,12 +218,18 @@ export class LoginPage {
     const url = redirectTo ? `/auth/login?redirect=${redirectTo}` : "/auth/login";
     await this.page.goto(url);
     await this.page.waitForLoadState("networkidle");
+    // Wait for the form container to appear
+    await this.formContainer.waitFor({ timeout: 10000 }).catch(() => {
+      // If fails, continue anyway
+    });
+    await this.page.waitForTimeout(1000); // Give React time to render
   }
 
   /**
    * Fill email field
    */
   async fillEmail(email: string): Promise<void> {
+    await this.emailInput.waitFor({ timeout: 10000 });
     await this.emailInput.fill(email);
   }
 
@@ -219,6 +237,7 @@ export class LoginPage {
    * Fill password field
    */
   async fillPassword(password: string): Promise<void> {
+    await this.passwordInput.waitFor({ timeout: 10000 });
     await this.passwordInput.fill(password);
   }
 
@@ -226,6 +245,7 @@ export class LoginPage {
    * Submit the form
    */
   async submit(): Promise<void> {
+    await this.submitButton.waitFor({ timeout: 10000 });
     await this.submitButton.click();
   }
 

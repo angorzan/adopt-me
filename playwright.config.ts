@@ -65,7 +65,7 @@ export default defineConfig({
   webServer: {
     // Use test environment variables when starting dev server
     // Variables from .env.test are already loaded via dotenv.config()
-    command: "npm run dev",
+    command: "npm run dev:e2e",
     url: "http://localhost:4321",
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,

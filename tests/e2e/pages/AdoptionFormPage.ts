@@ -85,6 +85,14 @@ export class AdoptionFormPage {
   async goto(dogId: string): Promise<void> {
     await this.page.goto(`/dogs/${dogId}`);
     await this.page.waitForLoadState("networkidle");
+    // Wait for either the form container or unauthenticated card to appear
+    await Promise.race([
+      this.formContainer.waitFor({ timeout: 10000 }),
+      this.unauthenticatedCard.waitFor({ timeout: 10000 })
+    ]).catch(() => {
+      // If both fail, continue anyway
+    });
+    await this.page.waitForTimeout(1000); // Give React time to render
   }
 
   /**
@@ -126,6 +134,7 @@ export class AdoptionFormPage {
    * Fill the motivation field
    */
   async fillMotivation(text: string): Promise<void> {
+    await this.motivationTextarea.waitFor({ timeout: 10000 });
     await this.motivationTextarea.fill(text);
   }
 
@@ -133,11 +142,14 @@ export class AdoptionFormPage {
    * Select preferred contact method
    */
   async selectContactPreference(method: "email" | "phone"): Promise<void> {
+    await this.contactPreferenceSelect.waitFor({ timeout: 10000 });
     await this.contactPreferenceSelect.click();
 
     if (method === "email") {
+      await this.contactEmailOption.waitFor({ timeout: 10000 });
       await this.contactEmailOption.click();
     } else {
+      await this.contactPhoneOption.waitFor({ timeout: 10000 });
       await this.contactPhoneOption.click();
     }
   }
@@ -146,6 +158,7 @@ export class AdoptionFormPage {
    * Fill additional notes field
    */
   async fillExtraNotes(text: string): Promise<void> {
+    await this.extraNotesTextarea.waitFor({ timeout: 10000 });
     await this.extraNotesTextarea.fill(text);
   }
 
@@ -153,6 +166,7 @@ export class AdoptionFormPage {
    * Check the GDPR consent checkbox
    */
   async checkGdprConsent(): Promise<void> {
+    await this.gdprConsentCheckbox.waitFor({ timeout: 10000 });
     await this.gdprConsentCheckbox.check();
   }
 
@@ -160,6 +174,7 @@ export class AdoptionFormPage {
    * Uncheck the GDPR consent checkbox
    */
   async uncheckGdprConsent(): Promise<void> {
+    await this.gdprConsentCheckbox.waitFor({ timeout: 10000 });
     await this.gdprConsentCheckbox.uncheck();
   }
 
@@ -167,6 +182,7 @@ export class AdoptionFormPage {
    * Submit the form
    */
   async submit(): Promise<void> {
+    await this.submitButton.waitFor({ timeout: 10000 });
     await this.submitButton.click();
   }
 

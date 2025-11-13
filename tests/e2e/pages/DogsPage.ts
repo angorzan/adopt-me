@@ -48,7 +48,16 @@ export class DogsPage {
    */
   async goto(): Promise<void> {
     await this.page.goto("/");
+    // Wait for page to load and React component to render
     await this.page.waitForLoadState("networkidle");
+    // Wait for the catalog view to be present (either with dogs or error message)
+    await Promise.race([
+      this.catalogView.waitFor({ timeout: 10000 }),
+      this.catalogError.waitFor({ timeout: 10000 })
+    ]).catch(() => {
+      // If both fail, continue anyway
+    });
+    await this.page.waitForTimeout(2000); // Give React time to render and load data from API
   }
 
   /**
@@ -62,6 +71,7 @@ export class DogsPage {
    * Search for dogs by name or breed
    */
   async search(query: string): Promise<void> {
+    await this.searchInput.waitFor({ timeout: 10000 });
     await this.searchInput.fill(query);
     // Wait for debounce (500ms according to DogCatalogView)
     await this.page.waitForTimeout(600);
@@ -71,6 +81,7 @@ export class DogsPage {
    * Filter by city
    */
   async filterByCity(city: string): Promise<void> {
+    await this.cityFilter.waitFor({ timeout: 5000 });
     await this.cityFilter.click();
     await this.page.getByRole("option", { name: city }).click();
     await this.page.waitForTimeout(300);
@@ -80,6 +91,7 @@ export class DogsPage {
    * Filter by size
    */
   async filterBySize(size: "small" | "medium" | "large" | "all"): Promise<void> {
+    await this.sizeFilter.waitFor({ timeout: 5000 });
     await this.sizeFilter.click();
     const sizeLabels = {
       small: "Mały",
@@ -95,6 +107,7 @@ export class DogsPage {
    * Filter by age category
    */
   async filterByAge(age: "puppy" | "adult" | "senior" | "all"): Promise<void> {
+    await this.ageFilter.waitFor({ timeout: 5000 });
     await this.ageFilter.click();
     const ageLabels = {
       puppy: "Szczeniak",
@@ -110,6 +123,7 @@ export class DogsPage {
    * Click on a specific dog card by index
    */
   async clickDogCard(index: number): Promise<void> {
+    await this.dogCards.nth(index).waitFor({ timeout: 5000 });
     await this.dogCards.nth(index).click();
   }
 
@@ -118,6 +132,7 @@ export class DogsPage {
    */
   async clickViewDetails(index: number): Promise<void> {
     const card = this.dogCards.nth(index);
+    await card.waitFor({ timeout: 5000 });
     await card.getByTestId("dog-card-view-details-button").click();
   }
 

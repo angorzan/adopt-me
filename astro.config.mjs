@@ -14,6 +14,9 @@ export default defineConfig({
     platformProxy: {
       enabled: true,
     },
+    routes: {
+      strategy: "auto",
+    },
   }),
   vite: {
     resolve: {

@@ -54,7 +54,6 @@ export async function createApplication(
     .single();
 
   if (error) {
-    console.error("Failed to create application:", error);
     return { error: "server_error" };
   }
 

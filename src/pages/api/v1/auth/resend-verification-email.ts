@@ -40,9 +40,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const authService = new AuthService(supabase);
     try {
       await authService.resendVerificationEmail(data.email);
-    } catch (e) {
-      const errorMsg = e instanceof Error ? e.message : String(e);
-      console.log("Resend email error:", errorMsg);
+    } catch (_e) {
       // Nie przerywamy - mogą być błędy z Supabase ale email mógł być wysłany
     }
 
@@ -82,7 +80,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
-    console.error("Resend verification error:", error);
     return new Response(
       JSON.stringify({
         error: "Nie udało się wysłać maila weryfikacyjnego. Spróbuj ponownie później.",

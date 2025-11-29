@@ -88,7 +88,7 @@ export class AdoptionFormPage {
     // Wait for either the form container or unauthenticated card to appear
     await Promise.race([
       this.formContainer.waitFor({ timeout: 10000 }),
-      this.unauthenticatedCard.waitFor({ timeout: 10000 })
+      this.unauthenticatedCard.waitFor({ timeout: 10000 }),
     ]).catch(() => {
       // If both fail, continue anyway
     });

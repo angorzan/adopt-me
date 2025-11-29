@@ -23,8 +23,7 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
         setCities(data);
         setCitiesLoading(false);
       })
-      .catch((err) => {
-        console.error("Failed to load cities:", err);
+      .catch((_err) => {
         setCitiesLoading(false);
       });
 
@@ -35,8 +34,7 @@ export const DogFilters = ({ filters, onFiltersChange, isLoading }: DogFiltersPr
         setShelters(data);
         setSheltersLoading(false);
       })
-      .catch((err) => {
-        console.error("Failed to load shelters:", err);
+      .catch((_err) => {
         setSheltersLoading(false);
       });
   }, []);

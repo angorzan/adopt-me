@@ -81,7 +81,6 @@ export async function GET(ctx: APIContext): Promise<Response> {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Failed to fetch dogs:", error);
       return new Response(JSON.stringify({ error: "server_error", message: "Failed to fetch dogs" }), {
         status: 500,
         headers: {
@@ -112,8 +111,7 @@ export async function GET(ctx: APIContext): Promise<Response> {
         "Content-Type": "application/json",
       },
     });
-  } catch (error) {
-    console.error("Unexpected error in GET /api/v1/dogs:", error);
+  } catch (_error) {
     return new Response(JSON.stringify({ error: "server_error", message: "Unexpected error occurred" }), {
       status: 500,
       headers: {

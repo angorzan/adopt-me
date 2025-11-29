@@ -81,7 +81,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     }
 
     // Błędy nieznane
-    console.error("Forgot password error:", error);
     return new Response(
       JSON.stringify({
         error: "Wystąpił błąd serwera. Spróbuj ponownie później.",

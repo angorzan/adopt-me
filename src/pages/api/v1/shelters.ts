@@ -38,7 +38,6 @@ export const GET: APIRoute = async ({ cookies, request }) => {
       ) ?? [];
 
     if (error) {
-      console.error("Error fetching shelters:", error);
       return new Response(JSON.stringify({ error: "Failed to fetch shelters" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -49,8 +48,7 @@ export const GET: APIRoute = async ({ cookies, request }) => {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
-    console.error("Error in /api/v1/shelters:", error);
+  } catch (_error) {
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },

@@ -38,12 +38,10 @@ export class AuthService {
       .single();
 
     if (userError) {
-      console.error("Login fetch user error:", userError.message, "User ID:", authData.user.id);
       throw new Error("Nie udało się pobrać danych użytkownika");
     }
 
     if (!userData) {
-      console.error("Login no user data found for ID:", authData.user.id);
       throw new Error("Nie udało się pobrać danych użytkownika");
     }
 
@@ -106,7 +104,6 @@ export class AuthService {
 
     if (error) {
       // Celowo nie ujawniamy czy email istnieje (security best practice)
-      console.error("Forgot password error:", error);
     }
   }
 

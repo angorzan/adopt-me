@@ -57,7 +57,7 @@ export class SignupPage {
     // Wait for either the form container or success card to appear
     await Promise.race([
       this.formContainer.waitFor({ timeout: 10000 }),
-      this.successCard.waitFor({ timeout: 10000 })
+      this.successCard.waitFor({ timeout: 10000 }),
     ]).catch(() => {
       // If both fail, continue anyway
     });

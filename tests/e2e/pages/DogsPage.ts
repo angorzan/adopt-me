@@ -53,7 +53,7 @@ export class DogsPage {
     // Wait for the catalog view to be present (either with dogs or error message)
     await Promise.race([
       this.catalogView.waitFor({ timeout: 10000 }),
-      this.catalogError.waitFor({ timeout: 10000 })
+      this.catalogError.waitFor({ timeout: 10000 }),
     ]).catch(() => {
       // If both fail, continue anyway
     });

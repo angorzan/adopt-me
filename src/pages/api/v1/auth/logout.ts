@@ -19,7 +19,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
-      console.error("Logout error:", error);
       return new Response(
         JSON.stringify({
           error: "Nie udało się wylogować",
@@ -40,8 +39,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-  } catch (error) {
-    console.error("Logout error:", error);
+  } catch (_error) {
     return new Response(
       JSON.stringify({
         error: "Nie udało się wylogować. Spróbuj ponownie później.",

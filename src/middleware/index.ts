@@ -27,10 +27,10 @@ export const onRequest: MiddlewareHandler = async ({ locals, cookies, request },
     // Get user session from cookies (managed by @supabase/ssr)
     const {
       data: { user: authUser },
-      error,
+      error: _error,
     } = await supabaseSSR.auth.getUser();
 
-    if (authUser && !error) {
+    if (authUser && !_error) {
       // Fetch full user data from users table
       const { data: userData, error: userError } = await supabaseClient
         .from("users")
@@ -45,9 +45,8 @@ export const onRequest: MiddlewareHandler = async ({ locals, cookies, request },
         // We don't need to manually store them in context.locals
       }
     }
-  } catch (error) {
+  } catch (_error) {
     // Log error but don't block request
-    console.error("Middleware auth error:", error);
   }
 
   return next();

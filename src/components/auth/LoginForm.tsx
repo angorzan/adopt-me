@@ -31,8 +31,7 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
       let data;
       try {
         data = await response.json();
-      } catch (parseError) {
-        console.error("Failed to parse response:", parseError);
+      } catch (_parseError) {
         throw new Error(`Server zwrócił nieprawidłową odpowiedź (${response.status})`);
       }
 
@@ -53,7 +52,6 @@ export const LoginForm = ({ redirectTo }: LoginFormProps) => {
       // Używamy window.location.assign() dla full page reload
       window.location.assign(redirectTo || "/");
     } catch (err) {
-      console.error("Login error:", err);
       setError(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
       // Focus na input email po błędzie (accessibility)
       const emailInput = document.getElementById("email");

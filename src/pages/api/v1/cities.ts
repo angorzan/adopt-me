@@ -21,7 +21,6 @@ export async function GET(ctx: APIContext): Promise<Response> {
       .eq("dogs.adoption_status", "available");
 
     if (error) {
-      console.error("Failed to fetch cities:", error);
       return new Response(JSON.stringify({ error: "server_error", message: "Failed to fetch cities" }), {
         status: 500,
         headers: {
@@ -39,8 +38,7 @@ export async function GET(ctx: APIContext): Promise<Response> {
         "Content-Type": "application/json",
       },
     });
-  } catch (error) {
-    console.error("Unexpected error in GET /api/v1/cities:", error);
+  } catch (_error) {
     return new Response(JSON.stringify({ error: "server_error", message: "Unexpected error occurred" }), {
       status: 500,
       headers: {

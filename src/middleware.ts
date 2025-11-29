@@ -12,15 +12,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     // Pobierz aktualną sesję
     const {
       data: { session },
-      error,
+      error: _error,
     } = await supabase.auth.getSession();
-
-    console.log("Middleware: getSession result:", {
-      hasSession: !!session,
-      hasUser: !!session?.user,
-      email: session?.user?.email,
-      error: error?.message,
-    });
 
     if (session?.user) {
       // Jeśli user jest zalogowany, pobierz jego dane z tabeli users
@@ -30,26 +23,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
         .eq("id", session.user.id)
         .single();
 
-      console.log("Middleware: fetch user result:", {
-        hasData: !!userData,
-        error: userError?.message,
-        userId: userData?.id,
-      });
-
       if (userData && !userError) {
         // Ustaw user w Astro.locals
         context.locals.user = userData;
-        console.log("Middleware: User set in context.locals");
       } else {
         context.locals.user = null;
       }
     } else {
       // Brak sesji - user nie jest zalogowany
       context.locals.user = null;
-      console.log("Middleware: No session found");
     }
-  } catch (err) {
-    console.error("Middleware error:", err);
+  } catch (_err) {
     context.locals.user = null;
   }
 

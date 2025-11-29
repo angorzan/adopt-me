@@ -45,8 +45,7 @@ export async function POST(ctx: APIContext) {
         "Content-Type": "application/json",
       },
     });
-  } catch (error) {
-    console.error("Failed to process application:", error);
+  } catch (_error) {
     return new Response(JSON.stringify({ error: "server_error" }), { status: 500 });
   }
 }

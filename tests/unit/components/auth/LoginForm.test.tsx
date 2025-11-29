@@ -420,6 +420,7 @@ describe("LoginForm Component", () => {
       // Set up focus spy before interaction
       const focusSpy = vi.spyOn(HTMLInputElement.prototype, "focus");
 
+      await user.type(emailInput, "user@example.com");
       await user.type(passwordInput, "WrongPassword");
       await user.click(submitButton);
 

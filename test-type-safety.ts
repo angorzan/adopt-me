@@ -1,14 +1,9 @@
 // Test type safety for feature flags
 import { isFeatureEnabled, type FeatureName } from "./src/features/index.ts";
 
-console.log("=== Type Safety Test ===");
-
 // ✅ These should work (valid flags)
-const authEnabled: boolean = isFeatureEnabled("auth");
-const collectionsEnabled: boolean = isFeatureEnabled("collections");
-
-console.log("Auth enabled:", authEnabled);
-console.log("Collections enabled:", collectionsEnabled);
+const _authEnabled: boolean = isFeatureEnabled("auth");
+const _collectionsEnabled: boolean = isFeatureEnabled("collections");
 
 // ❌ This should cause TypeScript error (invalid flag)
 // Uncomment the line below to see the error:
@@ -17,11 +12,9 @@ console.log("Collections enabled:", collectionsEnabled);
 // ✅ Type-safe flag names
 const validFlags: FeatureName[] = ["auth", "collections"];
 validFlags.forEach((flag) => {
-  console.log(`${flag}:`, isFeatureEnabled(flag));
+  isFeatureEnabled(flag);
 });
 
 // ❌ This should cause TypeScript error (invalid flag in array)
 // Uncomment the line below to see the error:
 // const invalidFlags: FeatureName[] = ['auth', 'invalid-flag'];
-
-console.log("=== Type Safety Test Completed ===");

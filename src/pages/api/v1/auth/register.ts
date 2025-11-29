@@ -82,11 +82,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
-    console.error(
-      "Register error:",
-      error instanceof Error ? error.message : String(error),
-      error instanceof Error ? error.stack : ""
-    );
     return new Response(
       JSON.stringify({
         error: "Wystąpił błąd serwera. Spróbuj ponownie później.",

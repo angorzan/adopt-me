@@ -150,7 +150,6 @@ export class OpenRouterService {
       return models;
     } catch (error) {
       // Log error but don't fail - return empty array
-      console.error("Failed to fetch models:", error);
       this.onError.emit("openrouter-error", error instanceof Error ? error : new Error("Unknown error"));
       return [];
     }
@@ -214,8 +213,7 @@ export class OpenRouterService {
       }
 
       return total;
-    } catch (error) {
-      console.error("Failed to count tokens:", error);
+    } catch (_error) {
       // Fallback to rough estimation
       return Math.ceil(texts.reduce((sum, text) => sum + (text?.length ?? 0), 0) / 4);
     }
@@ -356,8 +354,7 @@ export class OpenRouterService {
         p_user_id: data.user_id,
         p_tokens: tokenCount,
       });
-    } catch (error) {
-      console.error("Failed to log AI usage:", error);
+    } catch (_error) {
       // Non-blocking - don't throw
     }
   }

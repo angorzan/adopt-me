@@ -158,8 +158,7 @@ export function AdoptionForm({ dogId, dogName, isAuthenticated }: AdoptionFormPr
       setContactPreference("");
       setExtraNotes("");
       setConsent(false);
-    } catch (error) {
-      console.error("Failed to submit adoption application", error);
+    } catch (_error) {
       setGlobalError("Wystąpił problem z połączeniem. Spróbuj ponownie później.");
       setStatus("idle");
     }

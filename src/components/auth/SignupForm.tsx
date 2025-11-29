@@ -61,8 +61,7 @@ export const SignupForm = () => {
       let data: { error?: string } | null = null;
       try {
         data = await response.json();
-      } catch (parseError) {
-        console.error("Register response parse error:", parseError);
+      } catch (_parseError) {
         throw new Error(`Serwer zwrócił nieprawidłową odpowiedź (${response.status})`);
       }
 
@@ -79,7 +78,6 @@ export const SignupForm = () => {
 
       setSuccess(true);
     } catch (err) {
-      console.error("Signup error:", err);
       setError(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
     } finally {
       setIsLoading(false);

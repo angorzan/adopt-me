@@ -74,8 +74,8 @@ Prerequisites:
 ### Setup Steps
 ```bash
 # clone repository
-git clone https://github.com/angorzan/10x-project-adopt-me.git
-cd adoptme
+git clone https://github.com/angorzan/adopt-me.git
+cd adopt-me
 
 # install dependencies
 npm install
